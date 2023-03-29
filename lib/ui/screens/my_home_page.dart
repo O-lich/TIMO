@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
@@ -38,7 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isDeleted = false; //manage undo floating action button visibility
   bool isMoveTo = false; //manage add floating action button visibility
   final scrollController = ScrollController();
-  final listController = TextEditingController();
   final dragController = DraggableScrollableController();
   bool isPanelDraggable = true;
   bool fabVisibility = true;
@@ -101,49 +98,56 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context, scrlCtrl) {
                     return TasksWidget(
                       onMoveToPressed: () {
-                        SlidingPanelHelper().onPressedShowBottomSheet(
-                          ListsPanelWidget(
-                            height: heightScreen,
-                            width: widthScreen,
-                            lists: widget.listsList,
-                            onTapClose: () {
-                              Navigator.pop(context);
-                              setState(() {
-                                isMoveTo = false;
-                              });
-                            },
-                            onAddNewListPressed: () {
-                              SlidingPanelHelper().onAddNewListPressed(
-                                widthScreen: widthScreen,
-                                heightScreen: heightScreen,
+                        context
+                            .read<AppBloc>()
+                            .add(const AppEventGoToMainView());
+                        context.read<AppBloc>().add(
+                              AppEventOpenListPanel(
                                 context: context,
-                                onBlackButtonTap: (listController) {
-                                  Navigator.pop(context);
-                                  context.read<AppBloc>().add(
-                                        AppEventAddNewListFromMainScreen(
-                                            listController: listController,
-                                            context: context),
-                                      );
-                                },
-                              );
-                            },
-                            onButtonPressed: () {
-                              Navigator.pop(context);
-                              context.read<AppBloc>().add(
-                                    AppEventMoveToTask(
-                                      taskModel:
-                                          widget.tasksList[selectedTaskIndex],
-                                    ),
-                                  );
+                                widget: ListsPanelWidget(
+                                  height: heightScreen,
+                                  width: widthScreen,
+                                  lists: widget.listsList,
+                                  onTapClose: () {
+                                    Navigator.pop(context);
+                                    setState(() {
+                                      isMoveTo = false;
+                                    });
+                                  },
+                                  onAddNewListPressed: () {
+                                    SlidingPanelHelper().onAddNewListPressed(
+                                      widthScreen: widthScreen,
+                                      heightScreen: heightScreen,
+                                      context: context,
+                                      onBlackButtonTap: (listController) {
+                                        Navigator.pop(context);
+                                        context.read<AppBloc>().add(
+                                          AppEventAddNewListFromMainScreen(
+                                              listController:
+                                              listController,
+                                              context: context),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  onButtonPressed: () {
+                                    Navigator.pop(context);
+                                    context.read<AppBloc>().add(
+                                      AppEventMoveToTask(
+                                        taskModel: widget
+                                            .tasksList[selectedTaskIndex],
+                                      ),
+                                    );
 
-                              setState(() {
-                                isMoveTo = false;
-                                selectedTaskIndex = -1;
-                              });
-                            },
-                          ),
-                          context,
-                        );
+                                    setState(() {
+                                      isMoveTo = false;
+                                      selectedTaskIndex = -1;
+                                    });
+                                  },
+                                ),
+                                listsList: widget.listsList,
+                              ),
+                            );
                         setState(() {
                           isMoveTo = true;
                         });

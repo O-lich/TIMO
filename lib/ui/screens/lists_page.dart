@@ -52,10 +52,8 @@ class _ListsPageState extends State<ListsPage> {
               context.read<AppBloc>().add(
                     AppEventAddNewListFromListScreen(
                       listController: myListController,
-                      context: context,
                     ),
                   );
-
             },
           );
         },

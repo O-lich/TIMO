@@ -229,7 +229,6 @@ Future<void> updateListColor({
           querySnapshot.docs.map((doc) => doc.data()).toList(),
       onError: (e) => log("Error completing: $e"),
     );
-
     currentLists = await ref;
     if (currentLists.isEmpty) {
       addToDoList();

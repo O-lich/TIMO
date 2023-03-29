@@ -6,6 +6,7 @@ import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/quote_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
+import '../helpers/sliding_panel_helper.dart';
 
 part 'app_event.dart';
 
@@ -35,12 +36,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
     on<AppEventGoToLists>((event, emit) async {
       final listsList = await getLists();
-      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
       emit(
-        LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList
-        ),
+        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList),
       );
     });
     on<AppEventGoToNewTask>((event, emit) async {
@@ -98,6 +97,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         SingleTaskAppState(taskModel: taskModel),
       );
     });
+
+    on<AppEventOpenListPanel>((event, emit) async {
+      final panel = SlidingPanelHelper().onPressedShowBottomSheet(
+          event.widget, event.context) as void Function();
+      final listsList = await getLists();
+      emit(
+        ListPanelAppState(panel: panel, listsList: listsList),
+      );
+    });
+
     on<AppEventGoToLanguage>((event, emit) async {
       emit(
         LanguageAppState(locale: currentUser.locale),
@@ -143,12 +152,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventDeleteList>((event, emit) async {
       await deleteList(oldList: event.listModel);
       final listsList = await getLists();
-      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
       emit(
-        LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList
-        ),
+        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList),
       );
     });
     on<AppEventUpdateListColor>((event, emit) async {
@@ -157,12 +164,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         listColorIndex: event.listColorIndex,
       );
       final listsList = await getLists();
-      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
       emit(
-        LoadedListsAppState(
-          listsList: listsList,
-          focusNodeList: focusNodeList
-        ),
+        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList),
       );
     });
     on<AppEventChangeList>((event, emit) async {
@@ -183,9 +188,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventAddNewListFromListScreen>((event, emit) async {
       await createNewList(listController: event.listController);
       final listsList = await getLists();
-      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
       emit(
-        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList,),
+        LoadedListsAppState(
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+        ),
       );
     });
 

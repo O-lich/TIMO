@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/l10n/locales.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
@@ -16,6 +17,7 @@ import 'package:todo_app_main_screen/ui/screens/new_task_page.dart';
 import 'package:todo_app_main_screen/ui/screens/settings_page.dart';
 import 'package:todo_app_main_screen/ui/screens/splash_view.dart';
 import 'package:todo_app_main_screen/ui/screens/task_page.dart';
+import 'package:todo_app_main_screen/ui/widgets/lists_panel_widget.dart';
 import 'bloc/app_bloc.dart';
 import 'firebase_options.dart';
 import 'generated/l10n.dart';
@@ -115,6 +117,14 @@ class MyApp extends StatelessWidget {
                     return TaskPage(
                       taskModel: appState.taskModel,
                     );
+                  } else if (appState is ListPanelAppState) {
+                    return ListsPanelWidget(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        lists: appState.listsList,
+                        onTapClose: () {},
+                        onAddNewListPressed: () {},
+                        onButtonPressed: () {});
                   } else {
                     return Container();
                   }

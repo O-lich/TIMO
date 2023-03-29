@@ -128,7 +128,6 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                                       height: widget.height,
                                       width: widget.width,
                                       onTapClose: () {
-
                                         context.read<AppBloc>().add(
                                               AppEventUpdateListColor(
                                                 listModel: widget

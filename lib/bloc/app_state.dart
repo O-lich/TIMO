@@ -42,6 +42,7 @@ class LoadedListsAppState extends AppState {
   final List<ListModel> listsList;
   final List <FocusNode> focusNodeList;
 
+
   const LoadedListsAppState({
     required this.listsList,
     required this.focusNodeList
@@ -51,6 +52,13 @@ class LoadedListsAppState extends AppState {
 @immutable
 class SettingsAppState extends AppState {
   const SettingsAppState();
+}
+
+@immutable
+class ListPanelAppState extends AppState {
+  final void Function() panel;
+  final List <ListModel> listsList;
+  const ListPanelAppState({required this.panel, required this.listsList});
 }
 
 @immutable
