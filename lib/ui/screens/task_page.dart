@@ -55,7 +55,15 @@ class _TaskPageState extends State<TaskPage> {
           context,
           (DateTime? dateTime) {
             context.read<AppBloc>().add(
-               AppEventUpdateReminderFromTaskPage(
+               AppEventSetReminderFromTaskPage(
+                  taskModel: widget.taskModel,
+                  dateTime: dateTime,
+                  context: context),
+            );
+          },
+              (DateTime? dateTime) {
+            context.read<AppBloc>().add(
+              AppEventDeleteReminderFromTaskPage(
                   taskModel: widget.taskModel,
                   dateTime: dateTime,
                   context: context),

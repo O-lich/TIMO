@@ -50,6 +50,7 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
   void dispose() {
     for (int i = 0; i < widget.lists.length; i++) {
       widget.focusNodeList[i].dispose();
+      widget.controllerList[i].dispose();
     }
     super.dispose();
   }

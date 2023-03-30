@@ -201,12 +201,12 @@ class AppEventChangeList implements AppEvent {
 }
 
 @immutable
-class AppEventUpdateReminderFromTaskPage implements AppEvent {
+class AppEventSetReminderFromTaskPage implements AppEvent {
   final TaskModel taskModel;
   final DateTime? dateTime;
   final BuildContext context;
 
-  const AppEventUpdateReminderFromTaskPage({
+  const AppEventSetReminderFromTaskPage({
     required this.taskModel,
     required this.dateTime,
     required this.context,
@@ -214,12 +214,37 @@ class AppEventUpdateReminderFromTaskPage implements AppEvent {
 }
 
 @immutable
-class AppEventUpdateReminderFromNewTaskPage implements AppEvent {
+class AppEventSetReminderFromNewTaskPage implements AppEvent {
   final TaskModel taskModel;
   final DateTime? dateTime;
   final BuildContext context;
 
-  const AppEventUpdateReminderFromNewTaskPage({
+  const AppEventSetReminderFromNewTaskPage({
+    required this.taskModel,
+    required this.dateTime,
+    required this.context,
+  }) : super();
+}
+@immutable
+class AppEventDeleteReminderFromTaskPage implements AppEvent {
+  final TaskModel taskModel;
+  final DateTime? dateTime;
+  final BuildContext context;
+
+  const AppEventDeleteReminderFromTaskPage({
+    required this.taskModel,
+    required this.dateTime,
+    required this.context,
+  }) : super();
+}
+
+@immutable
+class AppEventDeleteReminderFromNewTaskPage implements AppEvent {
+  final TaskModel taskModel;
+  final DateTime? dateTime;
+  final BuildContext context;
+
+  const AppEventDeleteReminderFromNewTaskPage({
     required this.taskModel,
     required this.dateTime,
     required this.context,

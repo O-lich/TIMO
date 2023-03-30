@@ -73,11 +73,19 @@ class _NewTaskPageState extends State<NewTaskPage> {
             context,
             (DateTime? dateTime) {
               context.read<AppBloc>().add(
-                    AppEventUpdateReminderFromNewTaskPage(
+                    AppEventSetReminderFromNewTaskPage(
                         taskModel: taskModel,
                         dateTime: dateTime,
                         context: context),
                   );
+            },
+            (DateTime? dateTime) {
+              context.read<AppBloc>().add(
+                AppEventDeleteReminderFromNewTaskPage(
+                    taskModel: taskModel,
+                    dateTime: dateTime,
+                    context: context),
+              );
             },
             taskModel,
           );

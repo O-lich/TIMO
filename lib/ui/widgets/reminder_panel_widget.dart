@@ -12,6 +12,7 @@ class ReminderPanelWidget extends StatefulWidget {
   final double width;
   final void Function() onCloseTap;
   final void Function(DateTime? chosenDateTime) onSaveTap;
+  final void Function(DateTime? chosenDateTime) onDeleteTap;
   final TaskModel taskModel;
 
   const ReminderPanelWidget({
@@ -21,6 +22,7 @@ class ReminderPanelWidget extends StatefulWidget {
     required this.onCloseTap,
     required this.onSaveTap,
     required this.taskModel,
+    required this.onDeleteTap,
   }) : super(key: key);
 
   @override
@@ -105,10 +107,7 @@ class _ReminderPanelWidgetState extends State<ReminderPanelWidget> {
                           ),
                           BlackButtonWidget(
                               onPressed: () {
-                                setState(() {
-                                  currentIsReminderActive = false;
-                                });
-                                Navigator.pop(context);
+                                widget.onDeleteTap(_chosenDateTime);
                               },
                               width: widget.width - 50,
                               borderRadius:

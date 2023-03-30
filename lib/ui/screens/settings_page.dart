@@ -42,9 +42,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   ExpandTapWidget(
                     tapPadding: const EdgeInsets.all(50.0),
-                    onTap: () => context.read<AppBloc>().add(
-                      const AppEventGoToLists(),
-                    ),
+                    onTap: () {
+                      context.read<AppBloc>().add(
+                        const AppEventGoToLists(),
+                      );
+                    },
                     child: Image.asset(
                       AppIcons.close,
                       scale: 3,
@@ -73,7 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 child: Center(
                     child: Stack(
-                  children: [
+                      children: [
                     Positioned(
                         child: Image.asset(
                       AppIcons.vector,

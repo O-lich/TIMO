@@ -267,9 +267,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
 
-    on<AppEventUpdateReminderFromTaskPage>((event, emit) async {
+    on<AppEventSetReminderFromTaskPage>((event, emit) async {
       final updatedTaskModel =
-      await reminderSingleTaskControl(
+      await singleTaskReminderSet(
           chosenDateTime: event.dateTime,
           taskModel: event.taskModel,
           context: event.context);
@@ -279,14 +279,37 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
 
-    on<AppEventUpdateReminderFromNewTaskPage>((event, emit) async {
-      reminderNewTaskControl(
+    on<AppEventSetReminderFromNewTaskPage>((event, emit) async {
+      newTaskReminderSet(
           chosenDateTime: event.dateTime,
           taskModel: event.taskModel,
           context: event.context);
       final listsList = await getLists();
       emit(
        AddNewTaskAppState(listsList: listsList, isReminderActive: currentIsReminderActive)
+      );
+    });
+
+    on<AppEventDeleteReminderFromTaskPage>((event, emit) async {
+      final updatedTaskModel =
+      await singleTaskReminderDelete(
+          chosenDateTime: event.dateTime,
+          taskModel: event.taskModel,
+          context: event.context);
+      final listsList = await getLists();
+      emit(
+        SingleTaskAppState(listsList: listsList, taskModel: updatedTaskModel),
+      );
+    });
+
+    on<AppEventDeleteReminderFromNewTaskPage>((event, emit) async {
+      newTaskReminderDelete(
+          chosenDateTime: event.dateTime,
+          taskModel: event.taskModel,
+          context: event.context);
+      final listsList = await getLists();
+      emit(
+          AddNewTaskAppState(listsList: listsList, isReminderActive: currentIsReminderActive)
       );
     });
   }

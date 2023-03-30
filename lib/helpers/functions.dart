@@ -337,7 +337,7 @@ Future<void> updateListText({
   docRef.update(updates);
 }
 
-void reminderNewTaskControl(
+void newTaskReminderSet(
     {required DateTime? chosenDateTime,
     required TaskModel taskModel,
     required BuildContext context}) {
@@ -349,8 +349,16 @@ void reminderNewTaskControl(
     Navigator.pop(context);
   }
 }
+void newTaskReminderDelete(
+    {required DateTime? chosenDateTime,
+      required TaskModel taskModel,
+      required BuildContext context}) {
+    currentDateTimeReminder = '2000-01-01 00:00:00';
+    currentIsReminderActive = false;
+    Navigator.pop(context);
+}
 
-Future<TaskModel> reminderSingleTaskControl(
+Future<TaskModel> singleTaskReminderSet(
     {required DateTime? chosenDateTime,
     required TaskModel taskModel,
     required BuildContext context}) async {
@@ -377,6 +385,33 @@ Future<TaskModel> reminderSingleTaskControl(
         .get();
     updatedTaskModel = ref.data()!;
   }
+  return updatedTaskModel;
+}
+
+Future<TaskModel> singleTaskReminderDelete(
+    {required DateTime? chosenDateTime,
+      required TaskModel taskModel,
+      required BuildContext context}) async {
+  TaskModel updatedTaskModel = taskModel;
+    Navigator.pop(context);
+    await updateTaskReminder(
+        updatedTask: taskModel,
+        dateTimeReminder: '2000-01-01 00:00:00',
+        isReminderActive: false);
+    final ref = await db
+        .collection("users")
+        .doc(currentUser.userID)
+        .collection("lists")
+        .doc(taskModel.listID)
+        .collection("tasks")
+        .doc(taskModel.taskID)
+        .withConverter(
+      fromFirestore: TaskModel.fromFirestore,
+      toFirestore: (TaskModel task, _) => task.toFirestore(),
+    )
+        .get();
+    updatedTaskModel = ref.data()!;
+
   return updatedTaskModel;
 }
 
