@@ -98,7 +98,7 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                       focusNode: widget.focusNode,
                       autofocus: false,
                       textAlign: TextAlign.center,
-                      maxLines: 1,
+                      maxLines: 2,
                       style: const TextStyle(
                         color: darkColor,
                         overflow: TextOverflow.ellipsis,
