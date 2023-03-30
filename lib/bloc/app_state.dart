@@ -29,24 +29,20 @@ class LoadedAppState extends AppState {
   final int selectedListIndex;
   final List<ListModel> listsList;
 
-  const LoadedAppState({
-    required this.selectedListIndex,
-    required this.tasksList,
-    required this.quoteModel,
-    required this.listsList
-  });
+  const LoadedAppState(
+      {required this.selectedListIndex,
+      required this.tasksList,
+      required this.quoteModel,
+      required this.listsList});
 }
 
 @immutable
 class LoadedListsAppState extends AppState {
   final List<ListModel> listsList;
-  final List <FocusNode> focusNodeList;
+  final List<FocusNode> focusNodeList;
 
-
-  const LoadedListsAppState({
-    required this.listsList,
-    required this.focusNodeList
-  });
+  const LoadedListsAppState(
+      {required this.listsList, required this.focusNodeList});
 }
 
 @immutable
@@ -55,15 +51,10 @@ class SettingsAppState extends AppState {
 }
 
 @immutable
-class ListPanelAppState extends AppState {
-  final void Function() panel;
-  final List <ListModel> listsList;
-  const ListPanelAppState({required this.panel, required this.listsList});
-}
-
-@immutable
 class AddNewTaskAppState extends AppState {
-  const AddNewTaskAppState();
+  final List<ListModel> listsList;
+
+  const AddNewTaskAppState({required this.listsList});
 }
 
 @immutable
@@ -81,6 +72,10 @@ class ErrorAppState extends AppState {
 @immutable
 class SingleTaskAppState extends AppState {
   final TaskModel taskModel;
+  final List<ListModel> listsList;
 
-  const SingleTaskAppState({required this.taskModel});
+  const SingleTaskAppState({
+    required this.listsList,
+    required this.taskModel,
+  });
 }

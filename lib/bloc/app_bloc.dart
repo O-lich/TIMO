@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
@@ -6,7 +8,6 @@ import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/quote_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
-import '../helpers/sliding_panel_helper.dart';
 
 part 'app_event.dart';
 
@@ -44,7 +45,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventGoToNewTask>((event, emit) async {
       emit(
-        const AddNewTaskAppState(),
+        AddNewTaskAppState(listsList: event.listsList),
       );
     });
     on<AppEventGoToMainView>((event, emit) async {
@@ -64,6 +65,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventAddNewTask>((event, emit) async {
       createNewTask(
         taskController: event.taskController,
+        currentList: event.listModel,
       );
       final listsList = await getLists();
       final tasksList = await getTasks(
@@ -85,28 +87,25 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventGoToSingleTask>((event, emit) async {
       final taskModel = event.taskModel;
+      final listsList = await getLists();
       emit(
-        SingleTaskAppState(taskModel: taskModel),
+        SingleTaskAppState(
+          taskModel: taskModel,
+          listsList: listsList,
+        ),
       );
     });
     on<AppEventAddNewListFromTaskScreen>((event, emit) async {
       await createNewList(listController: event.listController);
-      await getLists();
+      final listsList = await getLists();
       final taskModel = event.taskModel;
       emit(
-        SingleTaskAppState(taskModel: taskModel),
+        SingleTaskAppState(
+          taskModel: taskModel,
+          listsList: listsList,
+        ),
       );
     });
-
-    on<AppEventOpenListPanel>((event, emit) async {
-      final panel = SlidingPanelHelper().onPressedShowBottomSheet(
-          event.widget, event.context) as void Function();
-      final listsList = await getLists();
-      emit(
-        ListPanelAppState(panel: panel, listsList: listsList),
-      );
-    });
-
     on<AppEventGoToLanguage>((event, emit) async {
       emit(
         LanguageAppState(locale: currentUser.locale),
@@ -135,7 +134,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventMoveToTask>((event, emit) async {
-      await moveToFromMainScreenTask(updatedTask: event.taskModel);
+      await moveToFromMainScreenTask(
+        updatedTask: event.taskModel,
+        moveToListModel: event.moveToListModel,
+      );
       final listsList = await getLists();
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
@@ -170,6 +172,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList),
       );
     });
+    on<AppEventUpdateListText>((event, emit) async {
+      await updateListText(
+        oldList: event.listModel,
+        text: event.listText,
+      );
+      final listsList = await getLists();
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
+      emit(
+        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList),
+      );
+    });
     on<AppEventChangeList>((event, emit) async {
       selectedListIndex = event.index;
       final listsList = await getLists();
@@ -186,8 +200,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventAddNewListFromListScreen>((event, emit) async {
-      await createNewList(listController: event.listController);
-      final listsList = await getLists();
+      final listsList =
+          await createNewList(listController: event.listController);
       final focusNodeList =
           List.generate(listsList.length, (index) => FocusNode());
       emit(

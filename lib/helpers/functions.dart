@@ -13,10 +13,10 @@ import 'package:todo_app_main_screen/service/fetch_helper.dart';
 import 'package:todo_app_main_screen/service/locale_provider.dart';
 
 
-  Future<void> createNewList({
+  Future<List<ListModel>> createNewList({
     required TextEditingController listController,
   }) async {
-    String listID = UniqueKey().toString();
+    String listID = DateTime.now().millisecondsSinceEpoch.toString();
     final newList = ListModel(
       list: listController.text,
       listID: listID,
@@ -24,6 +24,25 @@ import 'package:todo_app_main_screen/service/locale_provider.dart';
     await addNewList(
       newList: newList,
     );
+    log('created $listController.text');
+
+    final ref = await db
+        .collection("users")
+        .doc(currentUser.userID)
+        .collection("lists")
+        .withConverter(
+      fromFirestore: ListModel.fromFirestore,
+      toFirestore: (ListModel list, _) => list.toFirestore(),
+    )
+        .get()
+        .then(
+          (querySnapshot) =>
+          querySnapshot.docs.map((doc) => doc.data()).toList(),
+      onError: (e) => log("Error completing: $e"),
+    );
+
+
+  return ref;
   }
 
   Future<void> addNewList({
@@ -91,12 +110,13 @@ Future<void> updateListColor({
 
   void createNewTask({
     required TextEditingController taskController,
+    required ListModel currentList,
   }) {
     if (taskController.text.isNotEmpty) {
       addNewTask(
         text: taskController.text,
-        taskID: UniqueKey().toString(),
-        listID: currentLists[selectedListIndex].listID,
+        taskID: DateTime.now().millisecondsSinceEpoch.toString(),
+        listID: currentList.listID,
         colorIndex: taskCurrentColorIndex,
         dateTimeReminder: currentDateTimeReminder,
         isReminderActive: currentIsReminderActive,
@@ -111,6 +131,7 @@ Future<void> updateListColor({
 
   Future<void> moveToFromMainScreenTask({
     required TaskModel updatedTask,
+    required ListModel moveToListModel,
   }) async {
     db
         .collection("users")
@@ -128,7 +149,7 @@ Future<void> updateListColor({
       newTask: TaskModel(
         task: updatedTask.task,
         colorIndex: updatedTask.colorIndex,
-        listID: currentLists[moveToListIndex].listID,
+        listID: moveToListModel.listID,
         dateTimeReminder: updatedTask.dateTimeReminder,
         userID: updatedTask.userID,
         isReminderActive: updatedTask.isReminderActive,
@@ -154,7 +175,6 @@ Future<void> updateListColor({
     )
         .doc(newTask.taskID);
     await docRef.set(newTask);
-    currentList = ListModel(list: 'ToDo', listID: 'ToDo');
   }
 
   Future<void> addNewTask({
@@ -162,7 +182,7 @@ Future<void> updateListColor({
     required String text,
     required String taskID,
     required int colorIndex,
-    String? listID,
+    required String listID,
     required String dateTimeReminder,
     bool? isReminderActive,
   }) async {
@@ -170,7 +190,7 @@ Future<void> updateListColor({
       task: text,
       userID: currentUser.userID,
       taskID: taskID,
-      listID: listID!.isNotEmpty ? listID : 'ToDo',
+      listID: listID,
       colorIndex: colorIndex,
       dateTimeReminder: dateTimeReminder,
       isReminderActive: isReminderActive ?? false,
@@ -215,7 +235,7 @@ Future<void> updateListColor({
   }
 
   Future<List<ListModel>> getLists() async {
-    final ref = db
+    final ref = await db
         .collection("users")
         .doc(currentUser.userID)
         .collection("lists")
@@ -229,22 +249,18 @@ Future<void> updateListColor({
           querySnapshot.docs.map((doc) => doc.data()).toList(),
       onError: (e) => log("Error completing: $e"),
     );
-    currentLists = await ref;
-    if (currentLists.isEmpty) {
+
+
+    if (ref.isEmpty) {
       addToDoList();
-      currentLists = [
-        ListModel(
-          listID: 'ToDo',
-          list: 'ToDo',
-        ),
-      ];
+
     }
-    return currentLists;
+    return ref;
   }
 
   Future<void> addToDoList() async {
     final list = ListModel(
-      listID: 'ToDo',
+      listID: DateTime.now().millisecondsSinceEpoch.toString(),
       list: 'ToDo',
     );
     final docRef = db
@@ -255,7 +271,7 @@ Future<void> updateListColor({
       toFirestore: (ListModel list, options) => list.toFirestore(),
       fromFirestore: ListModel.fromFirestore,
     )
-        .doc('ToDo');
+        .doc(list.listID);
     await docRef.set(list);
   }
 
@@ -314,16 +330,16 @@ Future<void> updateListColor({
 
 Future<void> updateListText({
   required ListModel oldList,
-  required TextEditingController controller
+  required String text,
 }) async {
   final docRef = db
       .collection("users")
-      .doc('testUser')
+      .doc(currentUser.userID)
       .collection('lists')
       .doc(oldList.listID);
 
   final updates = <String, String>{
-    "list": controller.text,
+    "list": text,
   };
   docRef.update(updates);
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
@@ -36,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isDeleted = false; //manage undo floating action button visibility
   bool isMoveTo = false; //manage add floating action button visibility
   final scrollController = ScrollController();
+  final listController = TextEditingController();
   final dragController = DraggableScrollableController();
   bool isPanelDraggable = true;
   bool fabVisibility = true;
@@ -97,57 +100,53 @@ class _MyHomePageState extends State<MyHomePage> {
                   initialChildSize: 0.59,
                   builder: (context, scrlCtrl) {
                     return TasksWidget(
+                      listModel: widget.listsList[selectedListIndex],
                       onMoveToPressed: () {
-                        context
-                            .read<AppBloc>()
-                            .add(const AppEventGoToMainView());
-                        context.read<AppBloc>().add(
-                              AppEventOpenListPanel(
+                        SlidingPanelHelper().onPressedShowBottomSheet(
+                          ListsPanelWidget(
+                            height: heightScreen,
+                            width: widthScreen,
+                            lists: widget.listsList,
+                            onTapClose: () {
+                              Navigator.pop(context);
+                              setState(() {
+                                isMoveTo = false;
+                              });
+                            },
+                            onAddNewListPressed: () {
+                              SlidingPanelHelper().onAddNewListPressed(
+                                widthScreen: widthScreen,
+                                heightScreen: heightScreen,
                                 context: context,
-                                widget: ListsPanelWidget(
-                                  height: heightScreen,
-                                  width: widthScreen,
-                                  lists: widget.listsList,
-                                  onTapClose: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      isMoveTo = false;
-                                    });
-                                  },
-                                  onAddNewListPressed: () {
-                                    SlidingPanelHelper().onAddNewListPressed(
-                                      widthScreen: widthScreen,
-                                      heightScreen: heightScreen,
-                                      context: context,
-                                      onBlackButtonTap: (listController) {
-                                        Navigator.pop(context);
-                                        context.read<AppBloc>().add(
-                                          AppEventAddNewListFromMainScreen(
-                                              listController:
-                                              listController,
-                                              context: context),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  onButtonPressed: () {
-                                    Navigator.pop(context);
-                                    context.read<AppBloc>().add(
-                                      AppEventMoveToTask(
-                                        taskModel: widget
-                                            .tasksList[selectedTaskIndex],
-                                      ),
-                                    );
+                                onBlackButtonTap: (listController) {
+                                  Navigator.pop(context);
+                                  context.read<AppBloc>().add(
+                                        AppEventAddNewListFromMainScreen(
+                                            listController: listController,
+                                            context: context),
+                                      );
+                                },
+                              );
+                            },
+                            onButtonPressed: () {
+                              Navigator.pop(context);
+                              context.read<AppBloc>().add(
+                                    AppEventMoveToTask(
+                                      taskModel:
+                                          widget.tasksList[selectedTaskIndex],
+                                      moveToListModel:
+                                          widget.listsList[moveToListIndex],
+                                    ),
+                                  );
 
-                                    setState(() {
-                                      isMoveTo = false;
-                                      selectedTaskIndex = -1;
-                                    });
-                                  },
-                                ),
-                                listsList: widget.listsList,
-                              ),
-                            );
+                              setState(() {
+                                isMoveTo = false;
+                                selectedTaskIndex = -1;
+                              });
+                            },
+                          ),
+                          context,
+                        );
                         setState(() {
                           isMoveTo = true;
                         });
@@ -161,6 +160,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       isMoveToPressed: isMoveTo,
                       dragController: dragController,
                       onTaskTap: () {},
+                      onNewTaskAddPressed: () {
+                        context.read<AppBloc>().add(
+                              AppEventGoToNewTask(
+                                listsList: widget.listsList,
+                              ),
+                            );
+                      },
                     );
                   }),
             ),
@@ -174,7 +180,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 backgroundColor: textColor,
                 onPressed: () {
                   context.read<AppBloc>().add(
-                        const AppEventGoToNewTask(),
+                        AppEventGoToNewTask(
+                          listsList: widget.listsList,
+                        ),
                       );
                 },
                 child: Image.asset(

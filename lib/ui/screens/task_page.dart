@@ -9,6 +9,7 @@ import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/helpers/functions.dart';
 import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
+import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/task_page_widgets/task_page_background_widget.dart';
@@ -16,9 +17,12 @@ import 'package:todo_app_main_screen/ui/widgets/task_page_widgets/task_page_back
 class TaskPage extends StatefulWidget {
   static const routeName = '/task_page';
   final TaskModel taskModel;
+  final List<ListModel> listsList;
 
   const TaskPage({
-    Key? key, required this.taskModel,
+    Key? key,
+    required this.taskModel,
+    required this.listsList,
   }) : super(key: key);
 
   @override
@@ -36,7 +40,6 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
@@ -64,9 +67,8 @@ class _TaskPageState extends State<TaskPage> {
           );
           //ToDo just for closing
           context.read<AppBloc>().add(
-            const AppEventGoToMainView(
-               ),
-          );
+                const AppEventGoToMainView(),
+              );
         },
       ),
       floatingActionButton: showFab
@@ -84,8 +86,8 @@ class _TaskPageState extends State<TaskPage> {
                     backgroundColor: removeColor,
                     onPressed: () {
                       context.read<AppBloc>().add(
-                        AppEventDeleteTask(taskModel: widget.taskModel),
-                      );
+                            AppEventDeleteTask(taskModel: widget.taskModel),
+                          );
                     },
                     child: Image.asset(
                       AppIcons.delete,
@@ -101,7 +103,7 @@ class _TaskPageState extends State<TaskPage> {
                       ListsPanelWidget(
                         height: heightScreen,
                         width: widthScreen,
-                        lists: currentLists,
+                        lists: widget.listsList,
                         onTapClose: Navigator.of(context).pop,
                         onAddNewListPressed: () {
                           SlidingPanelHelper().onAddNewListPressed(
@@ -111,10 +113,11 @@ class _TaskPageState extends State<TaskPage> {
                             onBlackButtonTap: (listController) {
                               Navigator.pop(context);
                               context.read<AppBloc>().add(
-                                AppEventAddNewListFromTaskScreen(
-                                    listController: listController,
-                                    context: context, taskModel: widget.taskModel),
-                              );
+                                    AppEventAddNewListFromTaskScreen(
+                                        listController: listController,
+                                        context: context,
+                                        taskModel: widget.taskModel),
+                                  );
                             },
                           );
                         },
@@ -133,8 +136,6 @@ class _TaskPageState extends State<TaskPage> {
           : null,
     );
   }
-
-
 
   Future<void> updateTask({
     required TaskModel updatedTask,
@@ -174,7 +175,7 @@ class _TaskPageState extends State<TaskPage> {
           colorIndex: (taskCurrentColorIndex == -1)
               ? updatedTask.colorIndex
               : taskCurrentColorIndex,
-          listID: currentLists[moveToListIndex].listID,
+          listID: widget.listsList[moveToListIndex].listID,
           dateTimeReminder: updatedTask.dateTimeReminder,
           userID: updatedTask.userID,
           isReminderActive: updatedTask.isReminderActive,
@@ -185,6 +186,4 @@ class _TaskPageState extends State<TaskPage> {
     moveToListIndex = -1;
     taskCurrentColorIndex = -1;
   }
-
-
 }

@@ -1,5 +1,7 @@
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
@@ -90,7 +92,8 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                   const SizedBox(
                     width: 5,
                   ),
-                  Expanded(
+                  Flexible(
+                    fit: FlexFit.tight,
                     child: TextField(
                       focusNode: widget.focusNode,
                       autofocus: false,
@@ -112,14 +115,15 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                           widget.focusNode.hasFocus;
                           shakeKey.currentState?.shake();
                         } else {
+                          context.read<AppBloc>().add(
+                                AppEventUpdateListText(
+                                  listModel: widget.listModel,
+                                  listText: controller.text,
+                                ),
+                              );
                           FocusManager.instance.primaryFocus?.unfocus();
                         }
                       },
-                      // onChanged: (text) {
-                      //   if (controller.text.isNotEmpty) {
-                      //
-                      //     }
-                      // },
                     ),
                   ),
                 ],
@@ -130,6 +134,4 @@ class _SingleListWidgetState extends State<SingleListWidget> {
       ),
     );
   }
-
-
 }
