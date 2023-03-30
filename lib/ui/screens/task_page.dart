@@ -53,7 +53,14 @@ class _TaskPageState extends State<TaskPage> {
           widthScreen,
           heightScreen,
           context,
-          () {},
+          (DateTime? dateTime) {
+            context.read<AppBloc>().add(
+               AppEventUpdateReminderFromTaskPage(
+                  taskModel: widget.taskModel,
+                  dateTime: dateTime,
+                  context: context),
+            );
+          },
           widget.taskModel,
         ),
         onTitleTap: () {},

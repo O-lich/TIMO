@@ -71,7 +71,14 @@ class _NewTaskPageState extends State<NewTaskPage> {
             widthScreen,
             heightScreen,
             context,
-            () {},
+            (DateTime? dateTime) {
+              context.read<AppBloc>().add(
+                    AppEventUpdateReminderFromNewTaskPage(
+                        taskModel: taskModel,
+                        dateTime: dateTime,
+                        context: context),
+                  );
+            },
             taskModel,
           );
         },

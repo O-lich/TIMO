@@ -127,10 +127,8 @@ class AppEventAddNewTask implements AppEvent {
 class AppEventAddNewListFromListScreen implements AppEvent {
   final TextEditingController listController;
 
-
   const AppEventAddNewListFromListScreen({
     required this.listController,
-
   });
 }
 
@@ -199,5 +197,31 @@ class AppEventChangeList implements AppEvent {
 
   const AppEventChangeList({
     required this.index,
+  }) : super();
+}
+
+@immutable
+class AppEventUpdateReminderFromTaskPage implements AppEvent {
+  final TaskModel taskModel;
+  final DateTime? dateTime;
+  final BuildContext context;
+
+  const AppEventUpdateReminderFromTaskPage({
+    required this.taskModel,
+    required this.dateTime,
+    required this.context,
+  }) : super();
+}
+
+@immutable
+class AppEventUpdateReminderFromNewTaskPage implements AppEvent {
+  final TaskModel taskModel;
+  final DateTime? dateTime;
+  final BuildContext context;
+
+  const AppEventUpdateReminderFromNewTaskPage({
+    required this.taskModel,
+    required this.dateTime,
+    required this.context,
   }) : super();
 }

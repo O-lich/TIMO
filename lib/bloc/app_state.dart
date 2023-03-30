@@ -40,10 +40,12 @@ class LoadedAppState extends AppState {
 class LoadedListsAppState extends AppState {
   final List<ListModel> listsList;
   final List<FocusNode> focusNodeList;
-  final List <TextEditingController> controllerList;
+  final List<TextEditingController> controllerList;
 
   const LoadedListsAppState(
-      {required this.listsList, required this.focusNodeList, required this.controllerList});
+      {required this.listsList,
+      required this.focusNodeList,
+      required this.controllerList});
 }
 
 @immutable
@@ -54,8 +56,12 @@ class SettingsAppState extends AppState {
 @immutable
 class AddNewTaskAppState extends AppState {
   final List<ListModel> listsList;
+  final bool isReminderActive;
 
-  const AddNewTaskAppState({required this.listsList});
+  const AddNewTaskAppState({
+    required this.listsList,
+    required this.isReminderActive,
+  });
 }
 
 @immutable

@@ -39,17 +39,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final listsList = await getLists();
       final focusNodeList =
           List.generate(listsList.length, (index) => FocusNode());
-      final controllerList = List.generate(listsList.length, (index) => TextEditingController());
+      final controllerList =
+          List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
       }
       emit(
-        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList, controllerList: controllerList),
+        LoadedListsAppState(
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList),
       );
     });
     on<AppEventGoToNewTask>((event, emit) async {
       emit(
-        AddNewTaskAppState(listsList: event.listsList),
+        AddNewTaskAppState(
+            listsList: event.listsList,
+            isReminderActive: currentIsReminderActive),
       );
     });
     on<AppEventGoToMainView>((event, emit) async {
@@ -160,12 +166,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final listsList = await getLists();
       final focusNodeList =
           List.generate(listsList.length, (index) => FocusNode());
-      final controllerList = List.generate(listsList.length, (index) => TextEditingController());
+      final controllerList =
+          List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
       }
       emit(
-        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList, controllerList: controllerList),
+        LoadedListsAppState(
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList),
       );
     });
     on<AppEventUpdateListColor>((event, emit) async {
@@ -176,12 +186,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final listsList = await getLists();
       final focusNodeList =
           List.generate(listsList.length, (index) => FocusNode());
-      final controllerList = List.generate(listsList.length, (index) => TextEditingController());
+      final controllerList =
+          List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
       }
       emit(
-        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList, controllerList: controllerList),
+        LoadedListsAppState(
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList),
       );
     });
     on<AppEventUpdateListText>((event, emit) async {
@@ -192,12 +206,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final listsList = await getLists();
       final focusNodeList =
           List.generate(listsList.length, (index) => FocusNode());
-      final controllerList = List.generate(listsList.length, (index) => TextEditingController());
+      final controllerList =
+          List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
       }
       emit(
-        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList, controllerList: controllerList),
+        LoadedListsAppState(
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList),
       );
     });
     on<AppEventChangeList>((event, emit) async {
@@ -220,16 +238,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           await createNewList(listController: event.listController);
       final focusNodeList =
           List.generate(listsList.length, (index) => FocusNode());
-      final controllerList = List.generate(listsList.length, (index) => TextEditingController());
+      final controllerList =
+          List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
       }
       emit(
         LoadedListsAppState(
-          listsList: listsList,
-          focusNodeList: focusNodeList,
-          controllerList: controllerList
-        ),
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList),
       );
     });
 
@@ -246,6 +264,29 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             quoteModel: quote,
             selectedListIndex: selectedListIndex,
             listsList: listsList),
+      );
+    });
+
+    on<AppEventUpdateReminderFromTaskPage>((event, emit) async {
+      final updatedTaskModel =
+      await reminderSingleTaskControl(
+          chosenDateTime: event.dateTime,
+          taskModel: event.taskModel,
+          context: event.context);
+      final listsList = await getLists();
+      emit(
+        SingleTaskAppState(listsList: listsList, taskModel: updatedTaskModel),
+      );
+    });
+
+    on<AppEventUpdateReminderFromNewTaskPage>((event, emit) async {
+      reminderNewTaskControl(
+          chosenDateTime: event.dateTime,
+          taskModel: event.taskModel,
+          context: event.context);
+      final listsList = await getLists();
+      emit(
+       AddNewTaskAppState(listsList: listsList, isReminderActive: currentIsReminderActive)
       );
     });
   }

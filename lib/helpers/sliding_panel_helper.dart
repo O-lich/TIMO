@@ -46,7 +46,7 @@ class SlidingPanelHelper {
     double widthScreen,
     double heightScreen,
     BuildContext context,
-    void Function() onSaveTap,
+    void Function(DateTime? dateTime) onSaveTap,
     TaskModel taskModel,
   ) {
     onPressedShowBottomSheet(
@@ -57,7 +57,9 @@ class SlidingPanelHelper {
             Navigator.of(context).pop();
           },
           width: widthScreen,
-          onSaveTap: onSaveTap,
+          onSaveTap: (dateTime) {
+            onSaveTap(dateTime);
+          },
         ),
         context);
   }
