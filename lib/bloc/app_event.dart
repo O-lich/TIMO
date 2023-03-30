@@ -77,8 +77,13 @@ class AppEventUpdateListColor implements AppEvent {
 }
 
 @immutable
-class AppEventUpdateList implements AppEvent {
-  const AppEventUpdateList();
+class AppEventUpdateListText implements AppEvent {
+  final ListModel listModel;
+  final String listText;
+  const AppEventUpdateListText({
+    required this.listModel,
+    required this.listText,
+  });
 }
 
 @immutable

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
@@ -165,6 +167,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
       );
     });
+    on<AppEventUpdateListText>((event, emit) async {
+      await updateListText(
+        oldList: event.listModel,
+       text: event.listText,
+      );
+      final listsList = await getLists();
+      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      emit(
+        LoadedListsAppState(
+            listsList: listsList,
+            focusNodeList: focusNodeList
+        ),
+      );
+    });
     on<AppEventChangeList>((event, emit) async {
       selectedListIndex = event.index;
       final listsList = await getLists();
@@ -181,8 +197,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventAddNewListFromListScreen>((event, emit) async {
-      await createNewList(listController: event.listController);
-      final listsList = await getLists();
+      final listsList = await createNewList(listController: event.listController);
       final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
       emit(
         LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList,),
