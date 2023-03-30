@@ -37,17 +37,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
     on<AppEventGoToLists>((event, emit) async {
       final listsList = await getLists();
-      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
       emit(
-        LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList
-        ),
+        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList),
       );
     });
     on<AppEventGoToNewTask>((event, emit) async {
       emit(
-        const AddNewTaskAppState(),
+        AddNewTaskAppState(listsList: event.listsList),
       );
     });
     on<AppEventGoToMainView>((event, emit) async {
@@ -67,6 +65,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventAddNewTask>((event, emit) async {
       createNewTask(
         taskController: event.taskController,
+        currentList: event.listModel,
       );
       final listsList = await getLists();
       final tasksList = await getTasks(
@@ -88,16 +87,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventGoToSingleTask>((event, emit) async {
       final taskModel = event.taskModel;
+      final listsList = await getLists();
       emit(
-        SingleTaskAppState(taskModel: taskModel),
+        SingleTaskAppState(
+          taskModel: taskModel,
+          listsList: listsList,
+        ),
       );
     });
     on<AppEventAddNewListFromTaskScreen>((event, emit) async {
       await createNewList(listController: event.listController);
-      await getLists();
+      final listsList = await getLists();
       final taskModel = event.taskModel;
       emit(
-        SingleTaskAppState(taskModel: taskModel),
+        SingleTaskAppState(
+          taskModel: taskModel,
+          listsList: listsList,
+        ),
       );
     });
     on<AppEventGoToLanguage>((event, emit) async {
@@ -128,7 +134,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventMoveToTask>((event, emit) async {
-      await moveToFromMainScreenTask(updatedTask: event.taskModel);
+      await moveToFromMainScreenTask(
+        updatedTask: event.taskModel,
+        moveToListModel: event.moveToListModel,
+      );
       final listsList = await getLists();
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
@@ -145,12 +154,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventDeleteList>((event, emit) async {
       await deleteList(oldList: event.listModel);
       final listsList = await getLists();
-      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
       emit(
-        LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList
-        ),
+        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList),
       );
     });
     on<AppEventUpdateListColor>((event, emit) async {
@@ -159,26 +166,22 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         listColorIndex: event.listColorIndex,
       );
       final listsList = await getLists();
-      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
       emit(
-        LoadedListsAppState(
-          listsList: listsList,
-          focusNodeList: focusNodeList
-        ),
+        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList),
       );
     });
     on<AppEventUpdateListText>((event, emit) async {
       await updateListText(
         oldList: event.listModel,
-       text: event.listText,
+        text: event.listText,
       );
       final listsList = await getLists();
-      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
       emit(
-        LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList
-        ),
+        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList),
       );
     });
     on<AppEventChangeList>((event, emit) async {
@@ -197,10 +200,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventAddNewListFromListScreen>((event, emit) async {
-      final listsList = await createNewList(listController: event.listController);
-      final focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      final listsList =
+          await createNewList(listController: event.listController);
+      final focusNodeList =
+          List.generate(listsList.length, (index) => FocusNode());
       emit(
-        LoadedListsAppState(listsList: listsList, focusNodeList: focusNodeList,),
+        LoadedListsAppState(
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+        ),
       );
     });
 

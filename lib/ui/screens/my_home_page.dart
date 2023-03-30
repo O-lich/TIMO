@@ -100,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   initialChildSize: 0.59,
                   builder: (context, scrlCtrl) {
                     return TasksWidget(
+                      listModel: widget.listsList[selectedListIndex],
                       onMoveToPressed: () {
                         SlidingPanelHelper().onPressedShowBottomSheet(
                           ListsPanelWidget(
@@ -133,6 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     AppEventMoveToTask(
                                       taskModel:
                                           widget.tasksList[selectedTaskIndex],
+                                      moveToListModel:
+                                          widget.listsList[moveToListIndex],
                                     ),
                                   );
 
@@ -157,6 +160,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       isMoveToPressed: isMoveTo,
                       dragController: dragController,
                       onTaskTap: () {},
+                      onNewTaskAddPressed: () {
+                        context.read<AppBloc>().add(
+                              AppEventGoToNewTask(
+                                listsList: widget.listsList,
+                              ),
+                            );
+                      },
                     );
                   }),
             ),
@@ -170,7 +180,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 backgroundColor: textColor,
                 onPressed: () {
                   context.read<AppBloc>().add(
-                        const AppEventGoToNewTask(),
+                        AppEventGoToNewTask(
+                          listsList: widget.listsList,
+                        ),
                       );
                 },
                 child: Image.asset(

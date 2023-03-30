@@ -80,6 +80,7 @@ class AppEventUpdateListColor implements AppEvent {
 class AppEventUpdateListText implements AppEvent {
   final ListModel listModel;
   final String listText;
+
   const AppEventUpdateListText({
     required this.listModel,
     required this.listText,
@@ -94,8 +95,10 @@ class AppEventUpdateTask implements AppEvent {
 @immutable
 class AppEventMoveToTask implements AppEvent {
   final TaskModel taskModel;
+  final ListModel moveToListModel;
 
   const AppEventMoveToTask({
+    required this.moveToListModel,
     required this.taskModel,
   });
 }
@@ -112,8 +115,10 @@ class AppEventDeleteTask implements AppEvent {
 @immutable
 class AppEventAddNewTask implements AppEvent {
   final TextEditingController taskController;
+  final ListModel listModel;
 
   const AppEventAddNewTask({
+    required this.listModel,
     required this.taskController,
   });
 }
@@ -146,16 +151,19 @@ class AppEventAddNewListFromTaskScreen implements AppEvent {
   final BuildContext context;
   final TaskModel taskModel;
 
-  const AppEventAddNewListFromTaskScreen({
-    required this.listController,
-    required this.context,
-    required this.taskModel
-  });
+  const AppEventAddNewListFromTaskScreen(
+      {required this.listController,
+      required this.context,
+      required this.taskModel});
 }
 
 @immutable
 class AppEventGoToNewTask implements AppEvent {
-  const AppEventGoToNewTask() : super();
+  final List<ListModel> listsList;
+
+  const AppEventGoToNewTask({
+    required this.listsList,
+  }) : super();
 }
 
 @immutable

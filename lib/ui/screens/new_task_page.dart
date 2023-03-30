@@ -5,14 +5,17 @@ import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
+import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/new_task_page_widgets/new_task_page_background_widget.dart';
 
 class NewTaskPage extends StatefulWidget {
+  final List<ListModel> listsList;
   static const routeName = '/new_task_page';
 
   const NewTaskPage({
     Key? key,
+    required this.listsList,
   }) : super(key: key);
 
   @override
@@ -48,6 +51,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
           context.read<AppBloc>().add(
                 AppEventAddNewTask(
                   taskController: taskController,
+                  listModel: widget.listsList[selectedListIndex],
                 ),
               );
         },
@@ -56,7 +60,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
             context,
             widthScreen,
             heightScreen,
-            currentLists,
+            widget.listsList,
             buttonColors,
             listController,
             taskCurrentColorIndex,

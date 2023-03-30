@@ -110,12 +110,13 @@ Future<void> updateListColor({
 
   void createNewTask({
     required TextEditingController taskController,
+    required ListModel currentList,
   }) {
     if (taskController.text.isNotEmpty) {
       addNewTask(
         text: taskController.text,
         taskID: DateTime.now().millisecondsSinceEpoch.toString(),
-        listID: currentLists[selectedListIndex].listID,
+        listID: currentList.listID,
         colorIndex: taskCurrentColorIndex,
         dateTimeReminder: currentDateTimeReminder,
         isReminderActive: currentIsReminderActive,
@@ -130,6 +131,7 @@ Future<void> updateListColor({
 
   Future<void> moveToFromMainScreenTask({
     required TaskModel updatedTask,
+    required ListModel moveToListModel,
   }) async {
     db
         .collection("users")
@@ -147,7 +149,7 @@ Future<void> updateListColor({
       newTask: TaskModel(
         task: updatedTask.task,
         colorIndex: updatedTask.colorIndex,
-        listID: currentLists[moveToListIndex].listID,
+        listID: moveToListModel.listID,
         dateTimeReminder: updatedTask.dateTimeReminder,
         userID: updatedTask.userID,
         isReminderActive: updatedTask.isReminderActive,
@@ -233,7 +235,7 @@ Future<void> updateListColor({
   }
 
   Future<List<ListModel>> getLists() async {
-    final ref = db
+    final ref = await db
         .collection("users")
         .doc(currentUser.userID)
         .collection("lists")
@@ -248,17 +250,12 @@ Future<void> updateListColor({
       onError: (e) => log("Error completing: $e"),
     );
 
-    currentLists = await ref;
-    if (currentLists.isEmpty) {
+
+    if (ref.isEmpty) {
       addToDoList();
-      currentLists = [
-        ListModel(
-          listID: DateTime.now().millisecondsSinceEpoch.toString(),
-          list: 'ToDo',
-        ),
-      ];
+
     }
-    return currentLists;
+    return ref;
   }
 
   Future<void> addToDoList() async {

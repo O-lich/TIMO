@@ -22,10 +22,8 @@ import 'generated/l10n.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 List<TaskModel> currentTasks = [];
-List<ListModel> currentLists = [];
 int taskCurrentColorIndex = -1;
 int listCurrentColorIndex = 0;
-ListModel currentList = ListModel(list: 'ToDo', listID: 'ToDo');
 UserModel currentUser = UserModel();
 int selectedListIndex = 0;
 int selectedTaskIndex = -1;
@@ -104,7 +102,7 @@ class MyApp extends StatelessWidget {
                       focusNodeList: appState.focusNodeList,
                     );
                   } else if (appState is AddNewTaskAppState) {
-                    return const NewTaskPage();
+                    return NewTaskPage(listsList: appState.listsList);
                   } else if (appState is SettingsAppState) {
                     return const SettingsPage();
                   } else if (appState is LanguageAppState) {
@@ -114,6 +112,7 @@ class MyApp extends StatelessWidget {
                   } else if (appState is SingleTaskAppState) {
                     return TaskPage(
                       taskModel: appState.taskModel,
+                      listsList: appState.listsList,
                     );
                   } else {
                     return Container();

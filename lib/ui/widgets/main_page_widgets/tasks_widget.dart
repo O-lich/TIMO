@@ -9,10 +9,12 @@ import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/main.dart';
+import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/main_page_widgets/single_task_widget.dart';
 
 class TasksWidget extends StatefulWidget {
+  final ListModel listModel;
   bool isPanelOpen;
   final double height;
   final List<TaskModel> tasksList;
@@ -20,21 +22,24 @@ class TasksWidget extends StatefulWidget {
   final DraggableScrollableController dragController;
   final void Function()? onMoveToPressed;
   final void Function() onTaskTap;
+  final void Function() onNewTaskAddPressed;
   final bool isMoveToPressed;
   bool isPanelDraggable;
 
-  TasksWidget(
-      {Key? key,
-      required this.isPanelOpen,
-      required this.tasksList,
-      required this.scrollController,
-      this.onMoveToPressed,
-      required this.height,
-      required this.isMoveToPressed,
-      this.isPanelDraggable = true,
-      required this.dragController,
-      required this.onTaskTap})
-      : super(key: key);
+  TasksWidget({
+    Key? key,
+    required this.listModel,
+    required this.isPanelOpen,
+    required this.tasksList,
+    required this.scrollController,
+    this.onMoveToPressed,
+    required this.height,
+    required this.isMoveToPressed,
+    this.isPanelDraggable = true,
+    required this.dragController,
+    required this.onTaskTap,
+    required this.onNewTaskAddPressed,
+  }) : super(key: key);
 
   @override
   State<TasksWidget> createState() => _TasksWidgetState();
@@ -82,11 +87,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextButton(
-                              onPressed: () {
-                                context.read<AppBloc>().add(
-                                      const AppEventGoToNewTask(),
-                                    );
-                              },
+                              onPressed: widget.onNewTaskAddPressed,
                               child: Text(
                                 S.of(context).letsDoSmth,
                                 style: const TextStyle(
@@ -190,9 +191,11 @@ class _TasksWidgetState extends State<TasksWidget> {
                                     taskModel: widget.tasksList[index],
                                     onSingleTaskTap: () {
                                       context.read<AppBloc>().add(
-                                          AppEventGoToSingleTask(
+                                            AppEventGoToSingleTask(
                                               taskModel:
-                                                  widget.tasksList[index]));
+                                                  widget.tasksList[index],
+                                            ),
+                                          );
                                     },
                                   ),
                                 ),
@@ -259,7 +262,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                   ),
                   Expanded(
                     child: Text(
-                      currentLists[selectedListIndex].list,
+                      widget.listModel.list,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Colors.grey,
