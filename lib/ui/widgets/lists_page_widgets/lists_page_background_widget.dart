@@ -20,6 +20,7 @@ class ListsPageBackgroundWidget extends StatefulWidget {
   final void Function() onAddButtonTap;
   final void Function() onSettingsButtonTap;
   final List <FocusNode> focusNodeList;
+  final List <TextEditingController> controllerList;
 
   const ListsPageBackgroundWidget({
     Key? key,
@@ -29,7 +30,7 @@ class ListsPageBackgroundWidget extends StatefulWidget {
     required this.lists,
     required this.onAddButtonTap,
     required this.onSettingsButtonTap,
-    required this.focusNodeList,
+    required this.focusNodeList, required this.controllerList,
   }) : super(key: key);
 
   @override
@@ -163,7 +164,8 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                                   widget.onAddButtonTap();
                                 },
                                 width: widget.width,
-                                focusNode: widget.focusNodeList[list.key],//ToDo for add new list
+                                focusNode: widget.focusNodeList[list.key],
+                                controller: widget.controllerList[list.key],//ToDo for add new list
                               ),
                             ),
                         AddButtonWidget(

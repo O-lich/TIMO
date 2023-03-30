@@ -17,7 +17,6 @@ import 'package:todo_app_main_screen/ui/screens/new_task_page.dart';
 import 'package:todo_app_main_screen/ui/screens/settings_page.dart';
 import 'package:todo_app_main_screen/ui/screens/splash_view.dart';
 import 'package:todo_app_main_screen/ui/screens/task_page.dart';
-import 'package:todo_app_main_screen/ui/widgets/lists_panel_widget.dart';
 import 'bloc/app_bloc.dart';
 import 'firebase_options.dart';
 import 'generated/l10n.dart';
@@ -102,6 +101,7 @@ class MyApp extends StatelessWidget {
                     return ListsPage(
                       listsList: appState.listsList,
                       focusNodeList: appState.focusNodeList,
+                      controllerList: appState.controllerList,
                     );
                   } else if (appState is AddNewTaskAppState) {
                     return NewTaskPage(listsList: appState.listsList);
@@ -116,14 +116,6 @@ class MyApp extends StatelessWidget {
                       taskModel: appState.taskModel,
                       listsList: appState.listsList,
                     );
-                  } else if (appState is ListPanelAppState) {
-                    return ListsPanelWidget(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        lists: appState.listsList,
-                        onTapClose: () {},
-                        onAddNewListPressed: () {},
-                        onButtonPressed: () {});
                   } else {
                     return Container();
                   }

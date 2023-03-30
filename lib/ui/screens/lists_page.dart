@@ -8,12 +8,13 @@ import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/lists_page_ba
 class ListsPage extends StatefulWidget {
   final List<ListModel> listsList;
   final List <FocusNode> focusNodeList;
+  final List <TextEditingController> controllerList;
 
   static const routeName = '/lists_page';
 
   const ListsPage({
     Key? key,
-    required this.listsList, required this.focusNodeList,
+    required this.listsList, required this.focusNodeList, required this.controllerList,
   }) : super(key: key);
 
   @override
@@ -62,6 +63,7 @@ class _ListsPageState extends State<ListsPage> {
                 const AppEventGoToSettings(),
               );
         }, focusNodeList: widget.focusNodeList,
+        controllerList: widget.controllerList,
       ),
     );
   }
