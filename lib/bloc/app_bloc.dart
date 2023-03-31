@@ -14,6 +14,9 @@ part 'app_event.dart';
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
+  List<FocusNode> focusNodeList = [];
+  List<TextEditingController> controllerList = [];
+
   AppBloc() : super(const AppStateSplashScreen()) {
     on<AppEventGetUser>(
       (event, emit) async {
@@ -37,9 +40,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
     on<AppEventGoToLists>((event, emit) async {
       final listsList = await getLists();
-      final focusNodeList =
-          List.generate(listsList.length, (index) => FocusNode());
-      final controllerList =
+      focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
@@ -164,9 +166,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventDeleteList>((event, emit) async {
       await deleteList(oldList: event.listModel);
       final listsList = await getLists();
-      final focusNodeList =
-          List.generate(listsList.length, (index) => FocusNode());
-      final controllerList =
+      focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
@@ -184,9 +185,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         listColorIndex: event.listColorIndex,
       );
       final listsList = await getLists();
-      final focusNodeList =
-          List.generate(listsList.length, (index) => FocusNode());
-      final controllerList =
+      focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
@@ -204,9 +204,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         text: event.listText,
       );
       final listsList = await getLists();
-      final focusNodeList =
-          List.generate(listsList.length, (index) => FocusNode());
-      final controllerList =
+      focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
@@ -236,9 +235,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventAddNewListFromListScreen>((event, emit) async {
       final listsList =
           await createNewList(listController: event.listController);
-      final focusNodeList =
-          List.generate(listsList.length, (index) => FocusNode());
-      final controllerList =
+      focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
@@ -268,8 +266,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventSetReminderFromTaskPage>((event, emit) async {
-      final updatedTaskModel =
-      await singleTaskReminderSet(
+      final updatedTaskModel = await singleTaskReminderSet(
           chosenDateTime: event.dateTime,
           taskModel: event.taskModel,
           context: event.context);
@@ -285,14 +282,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           taskModel: event.taskModel,
           context: event.context);
       final listsList = await getLists();
-      emit(
-       AddNewTaskAppState(listsList: listsList, isReminderActive: currentIsReminderActive)
-      );
+      emit(AddNewTaskAppState(
+          listsList: listsList, isReminderActive: currentIsReminderActive));
     });
 
     on<AppEventDeleteReminderFromTaskPage>((event, emit) async {
-      final updatedTaskModel =
-      await singleTaskReminderDelete(
+      final updatedTaskModel = await singleTaskReminderDelete(
           chosenDateTime: event.dateTime,
           taskModel: event.taskModel,
           context: event.context);
@@ -308,9 +303,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           taskModel: event.taskModel,
           context: event.context);
       final listsList = await getLists();
-      emit(
-          AddNewTaskAppState(listsList: listsList, isReminderActive: currentIsReminderActive)
-      );
+      emit(AddNewTaskAppState(
+          listsList: listsList, isReminderActive: currentIsReminderActive));
     });
+  }
+
+  @override
+  Future<void> close() {
+    for (var node in focusNodeList) {
+      node.dispose();
+    }
+    for (var controller in controllerList) {
+      controller.dispose();
+    }
+    return super.close();
   }
 }

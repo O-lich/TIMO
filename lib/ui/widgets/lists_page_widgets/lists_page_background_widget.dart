@@ -47,15 +47,6 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
   }
 
   @override
-  void dispose() {
-    for (int i = 0; i < widget.lists.length; i++) {
-      widget.focusNodeList[i].dispose();
-      widget.controllerList[i].dispose();
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
