@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/l10n/locales.dart';
-import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/models/user_model.dart';
 import 'package:todo_app_main_screen/service/locale_provider.dart';
 import 'package:todo_app_main_screen/ui/screens/language_page.dart';
 import 'package:todo_app_main_screen/ui/screens/lists_page.dart';
+import 'package:todo_app_main_screen/ui/screens/loading_view.dart';
 import 'package:todo_app_main_screen/ui/screens/my_home_page.dart';
 import 'package:todo_app_main_screen/ui/screens/new_task_page.dart';
 import 'package:todo_app_main_screen/ui/screens/settings_page.dart';
@@ -29,8 +28,7 @@ UserModel currentUser = UserModel();
 int selectedListIndex = 0;
 int selectedTaskIndex = -1;
 int moveToListIndex = -1;
-String currentDateTimeReminder = '2000-01-01 00:00:00';
-bool currentIsReminderActive = false;
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -104,7 +102,11 @@ class MyApp extends StatelessWidget {
                       controllerList: appState.controllerList,
                     );
                   } else if (appState is AddNewTaskAppState) {
-                    return NewTaskPage(listsList: appState.listsList);
+                    return NewTaskPage(
+                      listsList: appState.listsList,
+                      isReminderActive: appState.isReminderActive,
+                      dateTimeReminder: appState.dateTimeReminder,
+                    );
                   } else if (appState is SettingsAppState) {
                     return const SettingsPage();
                   } else if (appState is LanguageAppState) {
@@ -116,7 +118,10 @@ class MyApp extends StatelessWidget {
                       taskModel: appState.taskModel,
                       listsList: appState.listsList,
                     );
-                  } else {
+                  }  else if (appState is LoadingAppState) {
+                    return const LoadingView(
+                    );
+                  }else {
                     return Container();
                   }
                 },

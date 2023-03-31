@@ -27,8 +27,8 @@ class _ListColorsWidgetState extends State<ListColorsWidget> {
     return SizedBox(
       height: 60,
       child: Padding(
-        padding: EdgeInsets.only(right: widget.width * 0.15),
-        child: ListView.separated(
+        padding: EdgeInsets.only(right: widget.width * 0.115),
+        child: ListView.builder(
           shrinkWrap: true,
           itemCount: buttonColors.length,
           scrollDirection: Axis.horizontal,
@@ -42,20 +42,23 @@ class _ListColorsWidgetState extends State<ListColorsWidget> {
                   listCurrentColorIndex = widget.selectedListColorIndex;
                 });
               },
-              child: SingleColorWidget(
-                color: buttonColors[index],
-                bottomPadding: (widget.selectedListColorIndex == index)
-                    ? bottomPadding = 20
-                    : bottomPadding = 0,
-                topPadding: (widget.selectedListColorIndex == index)
-                    ? topPadding = 0
-                    : topPadding = 20,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: widget.width * 0.035),
+                child: SingleColorWidget(
+                  color: buttonColors[index],
+                  bottomPadding: (widget.selectedListColorIndex == index)
+                      ? bottomPadding = 20
+                      : bottomPadding = 0,
+                  topPadding: (widget.selectedListColorIndex == index)
+                      ? topPadding = 0
+                      : topPadding = 20,
+                ),
               ),
             );
           },
-          separatorBuilder: (BuildContext context, int index) => SizedBox(
-            width: widget.width * 0.07,
-          ),
+          // separatorBuilder: (BuildContext context, int index) => SizedBox(
+          //   width: widget.width * 0.07,
+          // ),
         ),
       ),
     );

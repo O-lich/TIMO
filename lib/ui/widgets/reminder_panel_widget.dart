@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
-import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/black_button_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/panel_close_widget.dart';
@@ -12,7 +11,7 @@ class ReminderPanelWidget extends StatefulWidget {
   final double width;
   final void Function() onCloseTap;
   final void Function(DateTime? chosenDateTime) onSaveTap;
-  final void Function(DateTime? chosenDateTime) onDeleteTap;
+  final void Function() onDeleteTap;
   final TaskModel taskModel;
 
   const ReminderPanelWidget({
@@ -99,7 +98,7 @@ class _ReminderPanelWidgetState extends State<ReminderPanelWidget> {
                           const TextStyle(color: backgroundColor, fontSize: 18),
                     ),
                   ),
-                  (currentIsReminderActive || widget.taskModel.isReminderActive == true)
+                  (widget.taskModel.isReminderActive == true)
                       ? Column(
                         children: [
                           const SizedBox(
@@ -107,7 +106,7 @@ class _ReminderPanelWidgetState extends State<ReminderPanelWidget> {
                           ),
                           BlackButtonWidget(
                               onPressed: () {
-                                widget.onDeleteTap(_chosenDateTime);
+                                widget.onDeleteTap();
                               },
                               width: widget.width - 50,
                               borderRadius:

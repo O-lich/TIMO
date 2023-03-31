@@ -14,6 +14,7 @@ class SingleColorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
       height: 56,
       width: 10,

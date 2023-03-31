@@ -6,7 +6,6 @@ import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
-import 'package:todo_app_main_screen/helpers/functions.dart';
 import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
@@ -50,26 +49,24 @@ class _TaskPageState extends State<TaskPage> {
         height: heightScreen,
         width: widthScreen,
         onReminderTap: () => SlidingPanelHelper().onReminderTap(
-          widthScreen,
-          heightScreen,
-          context,
-          (DateTime? dateTime) {
+          widthScreen: widthScreen,
+          heightScreen: heightScreen,
+          taskModel: widget.taskModel,
+          context: context,
+          onDeleteTap: () {
             context.read<AppBloc>().add(
-               AppEventSetReminderFromTaskPage(
-                  taskModel: widget.taskModel,
-                  dateTime: dateTime,
-                  context: context),
-            );
+                  AppEventDeleteReminderFromTaskPage(
+                      taskModel: widget.taskModel, context: context),
+                );
           },
-              (DateTime? dateTime) {
+          onSaveTap: (DateTime? dateTime) {
             context.read<AppBloc>().add(
-              AppEventDeleteReminderFromTaskPage(
-                  taskModel: widget.taskModel,
-                  dateTime: dateTime,
-                  context: context),
-            );
+                  AppEventSetReminderFromTaskPage(
+                      taskModel: widget.taskModel,
+                      dateTime: dateTime,
+                      context: context),
+                );
           },
-          widget.taskModel,
         ),
         onTitleTap: () {},
         onMoveToTap: () {},
@@ -77,12 +74,11 @@ class _TaskPageState extends State<TaskPage> {
         taskController: textController,
         taskModel: widget.taskModel,
         onCloseTap: () {
-          updateTask(
-            updatedTask: widget.taskModel,
-          );
-          //ToDo just for closing
           context.read<AppBloc>().add(
-                const AppEventGoToMainView(),
+                AppEventUpdateTask(
+                    taskModel: widget.taskModel,
+                    moveToListModel: moveToListIndex>=0 ?  widget.listsList[moveToListIndex] : null,
+                    textController: textController),
               );
         },
       ),
@@ -150,55 +146,5 @@ class _TaskPageState extends State<TaskPage> {
             )
           : null,
     );
-  }
-
-  Future<void> updateTask({
-    required TaskModel updatedTask,
-  }) async {
-    if (selectedListIndex == moveToListIndex || moveToListIndex == -1) {
-      final docRef = db
-          .collection("users")
-          .doc(updatedTask.userID)
-          .collection('lists')
-          .doc(updatedTask.listID)
-          .collection('tasks')
-          .doc(updatedTask.taskID);
-
-      final updates = <String, dynamic>{
-        'task': textController.text,
-        'colorIndex': (taskCurrentColorIndex == -1)
-            ? updatedTask.colorIndex
-            : taskCurrentColorIndex,
-      };
-      docRef.update(updates);
-    } else {
-      db
-          .collection("users")
-          .doc(updatedTask.userID)
-          .collection('lists')
-          .doc(updatedTask.listID)
-          .collection('tasks')
-          .doc(updatedTask.taskID)
-          .delete()
-          .then(
-            (doc) => log("Document deleted"),
-            onError: (e) => log("Error updating document $e"),
-          );
-      addNewTaskUpdate(
-        newTask: TaskModel(
-          task: textController.text,
-          colorIndex: (taskCurrentColorIndex == -1)
-              ? updatedTask.colorIndex
-              : taskCurrentColorIndex,
-          listID: widget.listsList[moveToListIndex].listID,
-          dateTimeReminder: updatedTask.dateTimeReminder,
-          userID: updatedTask.userID,
-          isReminderActive: updatedTask.isReminderActive,
-          taskID: updatedTask.taskID,
-        ),
-      );
-    }
-    moveToListIndex = -1;
-    taskCurrentColorIndex = -1;
   }
 }

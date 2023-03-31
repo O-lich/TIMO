@@ -10,6 +10,7 @@ class AppEventGetUser implements AppEvent {
   const AppEventGetUser() : super();
 }
 
+
 @immutable
 class AppEventGoToLists implements AppEvent {
   const AppEventGoToLists() : super();
@@ -27,10 +28,10 @@ class AppEventGoToLanguage implements AppEvent {
 
 @immutable
 class AppEventChangeLocale implements AppEvent {
-  BuildContext context;
-  int index;
+  final BuildContext context;
+  final int index;
 
-  AppEventChangeLocale({
+  const AppEventChangeLocale({
     required this.context,
     required this.index,
   }) : super();
@@ -89,7 +90,15 @@ class AppEventUpdateListText implements AppEvent {
 
 @immutable
 class AppEventUpdateTask implements AppEvent {
-  const AppEventUpdateTask();
+  final TaskModel taskModel;
+  final ListModel? moveToListModel;
+  final TextEditingController textController;
+
+  const AppEventUpdateTask({
+    required this.taskModel,
+    required this.moveToListModel,
+    required this.textController,
+  });
 }
 
 @immutable
@@ -116,8 +125,12 @@ class AppEventDeleteTask implements AppEvent {
 class AppEventAddNewTask implements AppEvent {
   final TextEditingController taskController;
   final ListModel listModel;
+  final bool isReminderActive;
+  final String dateTimeReminder;
 
   const AppEventAddNewTask({
+    required this.isReminderActive,
+    required this.dateTimeReminder,
     required this.listModel,
     required this.taskController,
   });
@@ -149,10 +162,11 @@ class AppEventAddNewListFromTaskScreen implements AppEvent {
   final BuildContext context;
   final TaskModel taskModel;
 
-  const AppEventAddNewListFromTaskScreen(
-      {required this.listController,
-      required this.context,
-      required this.taskModel});
+  const AppEventAddNewListFromTaskScreen({
+    required this.listController,
+    required this.context,
+    required this.taskModel,
+  });
 }
 
 @immutable
@@ -225,15 +239,14 @@ class AppEventSetReminderFromNewTaskPage implements AppEvent {
     required this.context,
   }) : super();
 }
+
 @immutable
 class AppEventDeleteReminderFromTaskPage implements AppEvent {
   final TaskModel taskModel;
-  final DateTime? dateTime;
   final BuildContext context;
 
   const AppEventDeleteReminderFromTaskPage({
     required this.taskModel,
-    required this.dateTime,
     required this.context,
   }) : super();
 }
@@ -241,12 +254,12 @@ class AppEventDeleteReminderFromTaskPage implements AppEvent {
 @immutable
 class AppEventDeleteReminderFromNewTaskPage implements AppEvent {
   final TaskModel taskModel;
-  final DateTime? dateTime;
   final BuildContext context;
 
   const AppEventDeleteReminderFromNewTaskPage({
     required this.taskModel,
-    required this.dateTime,
     required this.context,
   }) : super();
 }
+
+
