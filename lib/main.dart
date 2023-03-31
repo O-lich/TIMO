@@ -10,6 +10,7 @@ import 'package:todo_app_main_screen/models/user_model.dart';
 import 'package:todo_app_main_screen/service/locale_provider.dart';
 import 'package:todo_app_main_screen/ui/screens/language_page.dart';
 import 'package:todo_app_main_screen/ui/screens/lists_page.dart';
+import 'package:todo_app_main_screen/ui/screens/loading_view.dart';
 import 'package:todo_app_main_screen/ui/screens/my_home_page.dart';
 import 'package:todo_app_main_screen/ui/screens/new_task_page.dart';
 import 'package:todo_app_main_screen/ui/screens/settings_page.dart';
@@ -117,7 +118,10 @@ class MyApp extends StatelessWidget {
                       taskModel: appState.taskModel,
                       listsList: appState.listsList,
                     );
-                  } else {
+                  }  else if (appState is LoadingAppState) {
+                    return const LoadingView(
+                    );
+                  }else {
                     return Container();
                   }
                 },

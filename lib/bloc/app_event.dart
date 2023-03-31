@@ -10,6 +10,7 @@ class AppEventGetUser implements AppEvent {
   const AppEventGetUser() : super();
 }
 
+
 @immutable
 class AppEventGoToLists implements AppEvent {
   const AppEventGoToLists() : super();
@@ -89,7 +90,15 @@ class AppEventUpdateListText implements AppEvent {
 
 @immutable
 class AppEventUpdateTask implements AppEvent {
-  const AppEventUpdateTask();
+  final TaskModel taskModel;
+  final ListModel? moveToListModel;
+  final TextEditingController textController;
+
+  const AppEventUpdateTask({
+    required this.taskModel,
+    required this.moveToListModel,
+    required this.textController,
+  });
 }
 
 @immutable
@@ -252,3 +261,5 @@ class AppEventDeleteReminderFromNewTaskPage implements AppEvent {
     required this.context,
   }) : super();
 }
+
+

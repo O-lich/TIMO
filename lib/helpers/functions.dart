@@ -471,3 +471,57 @@ Future<void> updateTaskReminder({
   };
   docRef.update(updates);
 }
+
+
+Future<void> updateTask({
+  required TaskModel updatedTask,
+  required TextEditingController textController,
+  required ListModel? moveToListModel,
+
+}) async {
+  if (moveToListModel == null) {
+    final docRef = db
+        .collection("users")
+        .doc(updatedTask.userID)
+        .collection('lists')
+        .doc(updatedTask.listID)
+        .collection('tasks')
+        .doc(updatedTask.taskID);
+
+    final updates = <String, dynamic>{
+      'task': textController.text,
+      'colorIndex': (taskCurrentColorIndex == -1)
+          ? updatedTask.colorIndex
+          : taskCurrentColorIndex,
+    };
+    docRef.update(updates);
+  } else {
+    db
+        .collection("users")
+        .doc(updatedTask.userID)
+        .collection('lists')
+        .doc(updatedTask.listID)
+        .collection('tasks')
+        .doc(updatedTask.taskID)
+        .delete()
+        .then(
+          (doc) => log("Document deleted"),
+      onError: (e) => log("Error updating document $e"),
+    );
+    addNewTaskUpdate(
+      newTask: TaskModel(
+        task: textController.text,
+        colorIndex: (taskCurrentColorIndex == -1)
+            ? updatedTask.colorIndex
+            : taskCurrentColorIndex,
+        listID: moveToListModel.listID,
+        dateTimeReminder: updatedTask.dateTimeReminder,
+        userID: updatedTask.userID,
+        isReminderActive: updatedTask.isReminderActive,
+        taskID: updatedTask.taskID,
+      ),
+    );
+  }
+  moveToListIndex = -1;
+  taskCurrentColorIndex = -1;
+}

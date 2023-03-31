@@ -81,6 +81,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         dateTimeReminder: event.dateTimeReminder,
         isReminderActive: event.isReminderActive,
       );
+      emit(const LoadingAppState());
       final listsList = await getLists();
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
@@ -324,6 +325,28 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           isReminderActive: newTask.isReminderActive,
           dateTimeReminder: newTask.dateTimeReminder,
         ),
+      );
+    });
+
+    on<AppEventUpdateTask>((event, emit) async {
+      log("AppEventUpdateTask");
+      emit(const LoadingAppState());
+      await updateTask(
+        updatedTask: event.taskModel,
+        moveToListModel: event.moveToListModel,
+        textController: event.textController,
+      );
+      final listsList = await getLists();
+      final tasksList = await getTasks(
+        listModel: listsList[selectedListIndex],
+      );
+      final QuoteModel quote = await updateQuote();
+      emit(
+        LoadedAppState(
+            tasksList: tasksList,
+            quoteModel: quote,
+            selectedListIndex: selectedListIndex,
+            listsList: listsList),
       );
     });
   }
