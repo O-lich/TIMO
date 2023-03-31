@@ -108,6 +108,8 @@ Future<void> updateListColor(
 void createNewTask({
   required TextEditingController taskController,
   required ListModel currentList,
+  required String dateTimeReminder,
+  required bool isReminderActive,
 }) {
   if (taskController.text.isNotEmpty) {
     addNewTask(
@@ -115,14 +117,11 @@ void createNewTask({
       taskID: DateTime.now().millisecondsSinceEpoch.toString(),
       listID: currentList.listID,
       colorIndex: taskCurrentColorIndex,
-      dateTimeReminder: currentDateTimeReminder,
-      isReminderActive: currentIsReminderActive,
+      dateTimeReminder: dateTimeReminder,
+      isReminderActive: isReminderActive,
     );
-
     taskCurrentColorIndex = -1;
     listCurrentColorIndex = 0;
-    currentDateTimeReminder = '2000-01-01 00:00:00';
-    currentIsReminderActive = false;
   }
 }
 
@@ -337,31 +336,42 @@ Future<void> updateListText({
   docRef.update(updates);
 }
 
-void newTaskReminderSet(
-    {required DateTime? chosenDateTime,
-    required TaskModel taskModel,
-    required BuildContext context}) {
+TaskModel newTaskReminderSet({
+  required DateTime? chosenDateTime,
+  required TaskModel taskModel,
+  required BuildContext context,
+}) {
+  TaskModel newTaskModel = taskModel;
   if (chosenDateTime == null || chosenDateTime.isBefore(DateTime.now())) {
     wrongReminder(context: context);
   } else if (chosenDateTime.isAfter(DateTime.now())) {
-    currentDateTimeReminder = chosenDateTime.toString();
-    currentIsReminderActive = true;
+    //currentDateTimeReminder = chosenDateTime.toString();
+    //currentIsReminderActive = true;
+    newTaskModel.isReminderActive = true;
+    newTaskModel.dateTimeReminder = chosenDateTime.toString();
     Navigator.pop(context);
   }
-}
-void newTaskReminderDelete(
-    {required DateTime? chosenDateTime,
-      required TaskModel taskModel,
-      required BuildContext context}) {
-    currentDateTimeReminder = '2000-01-01 00:00:00';
-    currentIsReminderActive = false;
-    Navigator.pop(context);
+  return newTaskModel;
 }
 
-Future<TaskModel> singleTaskReminderSet(
-    {required DateTime? chosenDateTime,
-    required TaskModel taskModel,
-    required BuildContext context}) async {
+TaskModel newTaskReminderDelete({
+  required TaskModel taskModel,
+  required BuildContext context,
+}) {
+  TaskModel newTaskModel = taskModel;
+  newTaskModel.isReminderActive = false;
+  newTaskModel.dateTimeReminder = '2000-01-01 00:00:00';
+  //currentDateTimeReminder = '2000-01-01 00:00:00';
+  //currentIsReminderActive = false;
+  Navigator.pop(context);
+  return newTaskModel;
+}
+
+Future<TaskModel> singleTaskReminderSet({
+  required DateTime? chosenDateTime,
+  required TaskModel taskModel,
+  required BuildContext context,
+}) async {
   TaskModel updatedTaskModel = taskModel;
   if (chosenDateTime == null || chosenDateTime.isBefore(DateTime.now())) {
     wrongReminder(context: context);
@@ -388,29 +398,29 @@ Future<TaskModel> singleTaskReminderSet(
   return updatedTaskModel;
 }
 
-Future<TaskModel> singleTaskReminderDelete(
-    {required DateTime? chosenDateTime,
-      required TaskModel taskModel,
-      required BuildContext context}) async {
+Future<TaskModel> singleTaskReminderDelete({
+  required TaskModel taskModel,
+  required BuildContext context,
+}) async {
   TaskModel updatedTaskModel = taskModel;
-    Navigator.pop(context);
-    await updateTaskReminder(
-        updatedTask: taskModel,
-        dateTimeReminder: '2000-01-01 00:00:00',
-        isReminderActive: false);
-    final ref = await db
-        .collection("users")
-        .doc(currentUser.userID)
-        .collection("lists")
-        .doc(taskModel.listID)
-        .collection("tasks")
-        .doc(taskModel.taskID)
-        .withConverter(
-      fromFirestore: TaskModel.fromFirestore,
-      toFirestore: (TaskModel task, _) => task.toFirestore(),
-    )
-        .get();
-    updatedTaskModel = ref.data()!;
+  Navigator.pop(context);
+  await updateTaskReminder(
+      updatedTask: taskModel,
+      dateTimeReminder: '2000-01-01 00:00:00',
+      isReminderActive: false);
+  final ref = await db
+      .collection("users")
+      .doc(currentUser.userID)
+      .collection("lists")
+      .doc(taskModel.listID)
+      .collection("tasks")
+      .doc(taskModel.taskID)
+      .withConverter(
+        fromFirestore: TaskModel.fromFirestore,
+        toFirestore: (TaskModel task, _) => task.toFirestore(),
+      )
+      .get();
+  updatedTaskModel = ref.data()!;
 
   return updatedTaskModel;
 }

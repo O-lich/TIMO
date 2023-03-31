@@ -28,7 +28,8 @@ class SingleListWidget extends StatefulWidget {
     required this.onListTap,
     required this.onAddButtonTap,
     required this.width,
-    required this.focusNode, required this.controller,
+    required this.focusNode,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -68,7 +69,7 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                     right: 10,
                     top: 10,
                     child: ExpandTapWidget(
-                      tapPadding: const EdgeInsets.all(50.0),
+                      tapPadding: const EdgeInsets.all(30.0),
                       onTap: widget.onOptionsTap,
                       child: Image.asset(
                         AppIcons.options,
@@ -98,7 +99,7 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                       focusNode: widget.focusNode,
                       autofocus: false,
                       textAlign: TextAlign.center,
-                      maxLines: 2,
+                      maxLines: 1,
                       style: const TextStyle(
                         color: darkColor,
                         overflow: TextOverflow.ellipsis,
@@ -115,10 +116,19 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                           widget.focusNode.hasFocus;
                           shakeKey.currentState?.shake();
                         } else {
+                          widget.controller.text = widget.listModel.list;
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        }
+                      },
+                      onSubmitted: (text) { //ToDo
+                        if (widget.controller.text.isEmpty) {
+                          widget.focusNode.hasFocus;
+                          shakeKey.currentState?.shake();
+                        } else {
                           context.read<AppBloc>().add(
                                 AppEventUpdateListText(
                                   listModel: widget.listModel,
-                                  listText: widget.controller.text,
+                                  listText: text,
                                 ),
                               );
                           FocusManager.instance.primaryFocus?.unfocus();

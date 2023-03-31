@@ -57,8 +57,10 @@ class SettingsAppState extends AppState {
 class AddNewTaskAppState extends AppState {
   final List<ListModel> listsList;
   final bool isReminderActive;
+  final String dateTimeReminder;
 
-  const AddNewTaskAppState({
+  const AddNewTaskAppState( {
+    required this.dateTimeReminder,
     required this.listsList,
     required this.isReminderActive,
   });

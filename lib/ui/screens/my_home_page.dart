@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   controller: dragController,
                   minChildSize: 0.58,
                   maxChildSize: 0.95,
-                  initialChildSize: 0.59,
+                  initialChildSize: 0.581,
                   builder: (context, scrlCtrl) {
                     return TasksWidget(
                       listModel: widget.listsList[selectedListIndex],

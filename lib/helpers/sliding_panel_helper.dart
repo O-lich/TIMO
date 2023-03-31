@@ -42,14 +42,14 @@ class SlidingPanelHelper {
         context);
   }
 
-  void onReminderTap(
-    double widthScreen,
-    double heightScreen,
-    BuildContext context,
-    void Function(DateTime? dateTime) onSaveTap,
-    void Function(DateTime? dateTime) onDeleteTap,
-    TaskModel taskModel,
-  ) {
+  void onReminderTap({
+    required double widthScreen,
+    required double heightScreen,
+    required BuildContext context,
+    required void Function(DateTime? dateTime) onSaveTap,
+    required void Function() onDeleteTap,
+    required TaskModel taskModel,
+  }) {
     onPressedShowBottomSheet(
         ReminderPanelWidget(
           taskModel: taskModel,
@@ -61,8 +61,8 @@ class SlidingPanelHelper {
           onSaveTap: (dateTime) {
             onSaveTap(dateTime);
           },
-          onDeleteTap: (dateTime) {
-            onDeleteTap(dateTime);
+          onDeleteTap: () {
+            onDeleteTap();
           },
         ),
         context);

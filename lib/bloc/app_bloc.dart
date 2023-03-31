@@ -54,8 +54,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventGoToNewTask>((event, emit) async {
       emit(
         AddNewTaskAppState(
-            listsList: event.listsList,
-            isReminderActive: currentIsReminderActive),
+          listsList: event.listsList,
+          isReminderActive: false,
+          dateTimeReminder: '2000-01-01 00:00:00',
+        ),
       );
     });
     on<AppEventGoToMainView>((event, emit) async {
@@ -76,6 +78,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       createNewTask(
         taskController: event.taskController,
         currentList: event.listModel,
+        dateTimeReminder: event.dateTimeReminder,
+        isReminderActive: event.isReminderActive,
       );
       final listsList = await getLists();
       final tasksList = await getTasks(
@@ -268,48 +272,58 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventSetReminderFromTaskPage>((event, emit) async {
-      final updatedTaskModel =
-      await singleTaskReminderSet(
-          chosenDateTime: event.dateTime,
-          taskModel: event.taskModel,
-          context: event.context);
+      final updatedTaskModel = await singleTaskReminderSet(
+        chosenDateTime: event.dateTime,
+        taskModel: event.taskModel,
+        context: event.context,
+      );
       final listsList = await getLists();
       emit(
-        SingleTaskAppState(listsList: listsList, taskModel: updatedTaskModel),
+        SingleTaskAppState(
+          listsList: listsList,
+          taskModel: updatedTaskModel,
+        ),
       );
     });
 
     on<AppEventSetReminderFromNewTaskPage>((event, emit) async {
-      newTaskReminderSet(
-          chosenDateTime: event.dateTime,
-          taskModel: event.taskModel,
-          context: event.context);
-      final listsList = await getLists();
-      emit(
-       AddNewTaskAppState(listsList: listsList, isReminderActive: currentIsReminderActive)
+      final TaskModel newTask = newTaskReminderSet(
+        chosenDateTime: event.dateTime,
+        taskModel: event.taskModel,
+        context: event.context,
       );
+      final listsList = await getLists();
+      emit(AddNewTaskAppState(
+        listsList: listsList,
+        isReminderActive: newTask.isReminderActive,
+        dateTimeReminder: newTask.dateTimeReminder,
+      ));
     });
 
     on<AppEventDeleteReminderFromTaskPage>((event, emit) async {
-      final updatedTaskModel =
-      await singleTaskReminderDelete(
-          chosenDateTime: event.dateTime,
-          taskModel: event.taskModel,
-          context: event.context);
+      final updatedTaskModel = await singleTaskReminderDelete(
+          taskModel: event.taskModel, context: event.context);
       final listsList = await getLists();
       emit(
-        SingleTaskAppState(listsList: listsList, taskModel: updatedTaskModel),
+        SingleTaskAppState(
+          listsList: listsList,
+          taskModel: updatedTaskModel,
+        ),
       );
     });
 
     on<AppEventDeleteReminderFromNewTaskPage>((event, emit) async {
-      newTaskReminderDelete(
-          chosenDateTime: event.dateTime,
-          taskModel: event.taskModel,
-          context: event.context);
+      final TaskModel newTask = newTaskReminderDelete(
+        taskModel: event.taskModel,
+        context: event.context,
+      );
       final listsList = await getLists();
       emit(
-          AddNewTaskAppState(listsList: listsList, isReminderActive: currentIsReminderActive)
+        AddNewTaskAppState(
+          listsList: listsList,
+          isReminderActive: newTask.isReminderActive,
+          dateTimeReminder: newTask.dateTimeReminder,
+        ),
       );
     });
   }

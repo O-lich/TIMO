@@ -11,11 +11,16 @@ import 'package:todo_app_main_screen/ui/widgets/new_task_page_widgets/new_task_p
 
 class NewTaskPage extends StatefulWidget {
   final List<ListModel> listsList;
+  final bool isReminderActive;
+  final String dateTimeReminder;
+
   static const routeName = '/new_task_page';
 
   const NewTaskPage({
     Key? key,
     required this.listsList,
+    required this.isReminderActive,
+    required this.dateTimeReminder,
   }) : super(key: key);
 
   @override
@@ -45,6 +50,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
     return Scaffold(
       body: NewTaskPageBackgroundWidget(
         height: heightScreen,
+        isReminderActive: widget.isReminderActive,
         taskController: taskController,
         width: widthScreen,
         onBlackButtonPressed: () {
@@ -52,6 +58,8 @@ class _NewTaskPageState extends State<NewTaskPage> {
                 AppEventAddNewTask(
                   taskController: taskController,
                   listModel: widget.listsList[selectedListIndex],
+                  isReminderActive: widget.isReminderActive,
+                  dateTimeReminder: widget.dateTimeReminder,
                 ),
               );
         },
@@ -68,10 +76,11 @@ class _NewTaskPageState extends State<NewTaskPage> {
         },
         onReminderTap: () {
           SlidingPanelHelper().onReminderTap(
-            widthScreen,
-            heightScreen,
-            context,
-            (DateTime? dateTime) {
+            widthScreen: widthScreen,
+            heightScreen: heightScreen,
+            taskModel: taskModel,
+            context: context,
+            onSaveTap: (DateTime? dateTime) {
               context.read<AppBloc>().add(
                     AppEventSetReminderFromNewTaskPage(
                         taskModel: taskModel,
@@ -79,15 +88,12 @@ class _NewTaskPageState extends State<NewTaskPage> {
                         context: context),
                   );
             },
-            (DateTime? dateTime) {
+            onDeleteTap: () {
               context.read<AppBloc>().add(
-                AppEventDeleteReminderFromNewTaskPage(
-                    taskModel: taskModel,
-                    dateTime: dateTime,
-                    context: context),
-              );
+                    AppEventDeleteReminderFromNewTaskPage(
+                        taskModel: taskModel, context: context),
+                  );
             },
-            taskModel,
           );
         },
         onCloseTap: () {
