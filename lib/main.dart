@@ -29,7 +29,6 @@ int selectedListIndex = 0;
 int selectedTaskIndex = -1;
 int moveToListIndex = -1;
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -118,10 +117,12 @@ class MyApp extends StatelessWidget {
                       taskModel: appState.taskModel,
                       listsList: appState.listsList,
                     );
-                  }  else if (appState is LoadingAppState) {
-                    return const LoadingView(
+                  } else if (appState is LoadingAppState) {
+                    return LoadingView(
+                      selectedListIndex: appState.selectedListIndex,
+                      listsList: appState.listsList,
                     );
-                  }else {
+                  } else {
                     return Container();
                   }
                 },

@@ -19,8 +19,9 @@ class MyHomePage extends StatefulWidget {
   final QuoteModel quoteModel;
   final List<TaskModel> tasksList;
   final int selectedListIndex;
-  static const routeName = '/my_home_page';
   final List<ListModel> listsList;
+
+  static const routeName = '/my_home_page';
 
   const MyHomePage({
     Key? key,

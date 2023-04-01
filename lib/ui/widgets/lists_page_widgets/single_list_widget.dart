@@ -115,6 +115,7 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                         if (widget.controller.text.isEmpty) {
                           widget.focusNode.hasFocus;
                           shakeKey.currentState?.shake();
+                          widget.controller.text = widget.listModel.list;
                         } else {
                           widget.controller.text = widget.listModel.list;
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -124,6 +125,7 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                         if (widget.controller.text.isEmpty) {
                           widget.focusNode.hasFocus;
                           shakeKey.currentState?.shake();
+                          widget.controller.text = widget.listModel.list;
                         } else {
                           context.read<AppBloc>().add(
                                 AppEventUpdateListText(

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
@@ -8,7 +7,6 @@ import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/quote_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
-
 part 'app_event.dart';
 
 part 'app_state.dart';
@@ -64,6 +62,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventGoToMainView>((event, emit) async {
       final listsList = await getLists();
+      emit(
+         LoadingAppState(listsList: listsList, selectedListIndex: selectedListIndex)
+      );
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
       );
@@ -83,8 +84,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         dateTimeReminder: event.dateTimeReminder,
         isReminderActive: event.isReminderActive,
       );
-      emit(const LoadingAppState());
       final listsList = await getLists();
+      emit(LoadingAppState(listsList: listsList, selectedListIndex: selectedListIndex));
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
       );
@@ -328,13 +329,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventUpdateTask>((event, emit) async {
       log("AppEventUpdateTask");
-      emit(const LoadingAppState());
+      final listsList = await getLists();
+      emit(LoadingAppState(listsList: listsList, selectedListIndex: selectedListIndex));
       await updateTask(
         updatedTask: event.taskModel,
         moveToListModel: event.moveToListModel,
         textController: event.textController,
       );
-      final listsList = await getLists();
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
       );

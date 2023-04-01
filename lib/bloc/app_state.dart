@@ -14,7 +14,9 @@ class InitAppState extends AppState {
 
 @immutable
 class LoadingAppState extends AppState {
-  const LoadingAppState();
+  final List<ListModel> listsList;
+  final int selectedListIndex;
+  const LoadingAppState({required this.listsList, required this.selectedListIndex});
 }
 
 @immutable

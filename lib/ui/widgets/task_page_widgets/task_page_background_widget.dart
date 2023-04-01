@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
@@ -201,14 +203,10 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                     extentRatio: 0.35,
                     dismissible: DismissiblePane(
                       onDismissed: () {
-                        setState(() {
-                          _updateTaskReminder(
-                              updatedTask: widget.taskModel,
-                              dateTimeReminder:
-                                  widget.taskModel.dateTimeReminder,
-                              isReminderActive: false);
-                          widget.taskModel.isReminderActive = false;
-                        });
+                        context.read<AppBloc>().add(
+                          AppEventDeleteReminderFromTaskPage(
+                              taskModel: widget.taskModel, context: context),
+                        );
                       },
                     ),
                     motion: const ScrollMotion(),
@@ -218,10 +216,10 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                           left: 20,
                         ),
                         onPressed: (BuildContext context) {
-                          setState(() {
-                            _undo(widget.taskModel);
-                            widget.taskModel.isReminderActive = false;
-                          });
+                          context.read<AppBloc>().add(
+                            AppEventDeleteReminderFromTaskPage(
+                                taskModel: widget.taskModel, context: context),
+                          );
                         },
                         child: Image.asset(
                           AppIcons.delete,
@@ -342,76 +340,5 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
         isClosePanelTapped = prefs.getBool('bool')!;
       });
     }
-  }
-
-  Future<void> _updateTaskReminder({
-    required TaskModel updatedTask,
-    required dateTimeReminder,
-    required isReminderActive,
-  }) async {
-    final docRef = db
-        .collection("users")
-        .doc('testUser')
-        .collection('lists')
-        .doc(updatedTask.listID)
-        .collection('tasks')
-        .doc(updatedTask.taskID);
-
-    final updates = <String, dynamic>{
-      "dateTimeReminder": dateTimeReminder,
-      "isReminderActive": isReminderActive,
-    };
-    docRef.update(updates);
-  }
-
-  void _undo(TaskModel task) {
-    Duration duration = const Duration(seconds: 5);
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return TweenAnimationBuilder<Duration>(
-            duration: duration,
-            tween: Tween(begin: duration, end: Duration.zero),
-            onEnd: () {
-              _updateTaskReminder(
-                  updatedTask: task,
-                  dateTimeReminder: task.dateTimeReminder,
-                  isReminderActive: false);
-              Navigator.of(context).pop(true);
-            },
-            builder: (BuildContext context, Duration value, Widget? child) {
-              final seconds = value.inSeconds % 60;
-              return CupertinoAlertDialog(
-                title: Text(S.of(context).deletingReminder(seconds)),
-                actions: <CupertinoDialogAction>[
-                  CupertinoDialogAction(
-                      child: Text(S.of(context).undo),
-                      onPressed: () {
-                        setState(
-                          () {
-                            widget.taskModel.isReminderActive = true;
-                            _updateTaskReminder(
-                                updatedTask: task,
-                                dateTimeReminder: task.dateTimeReminder,
-                                isReminderActive: true);
-                          },
-                        );
-                        Navigator.of(context).pop();
-                      }),
-                  CupertinoDialogAction(
-                      isDestructiveAction: true,
-                      child: Text(S.of(context).delete),
-                      onPressed: () {
-                        _updateTaskReminder(
-                            updatedTask: task,
-                            dateTimeReminder: task.dateTimeReminder,
-                            isReminderActive: false);
-                        Navigator.of(context).pop();
-                      }),
-                ],
-              );
-            });
-      },
-    );
   }
 }

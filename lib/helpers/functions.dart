@@ -361,8 +361,6 @@ TaskModel newTaskReminderDelete({
   TaskModel newTaskModel = taskModel;
   newTaskModel.isReminderActive = false;
   newTaskModel.dateTimeReminder = '2000-01-01 00:00:00';
-  //currentDateTimeReminder = '2000-01-01 00:00:00';
-  //currentIsReminderActive = false;
   Navigator.pop(context);
   return newTaskModel;
 }
