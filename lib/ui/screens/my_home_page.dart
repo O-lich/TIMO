@@ -187,6 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                             .tasksList[
                                                                         selectedTaskIndex]),
                                                               );
+                                                          Navigator.pop(context);
                                                         }),
                                                   );
                                             },
@@ -201,6 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               taskModel: widget.tasksList[
                                                   selectedTaskIndex]),
                                         );
+                                    Navigator.pop(context);
                                   }),
                             );
                       },
