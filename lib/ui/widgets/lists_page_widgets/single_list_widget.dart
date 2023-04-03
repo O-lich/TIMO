@@ -111,7 +111,7 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                         border: InputBorder.none,
                       ),
                       onTapOutside: (_) {
-                        if (widget.controller.text.isEmpty) {
+                        if (widget.controller.text.isEmpty || widget.controller.text.trim().isEmpty) {
                           widget.focusNode.hasFocus;
                           shakeKey.currentState?.shake();
                           widget.controller.text = widget.listModel.list;
@@ -122,7 +122,7 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                       },
                       onSubmitted: (text) {
                         //ToDo
-                        if (widget.controller.text.isEmpty) {
+                        if (widget.controller.text.isEmpty || widget.controller.text.trim().isEmpty) {
                           widget.focusNode.hasFocus;
                           shakeKey.currentState?.shake();
                           widget.controller.text = widget.listModel.list;

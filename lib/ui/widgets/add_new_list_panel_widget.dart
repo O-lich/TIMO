@@ -90,7 +90,7 @@ class _AddNewListPanelWidgetState extends State<AddNewListPanelWidget> {
                 BlackButtonWidget(
                   height: widget.height * 0.05,
                   onPressed: () {
-                    if (controller.text.isNotEmpty) {
+                    if (controller.text.isNotEmpty && controller.text.trim().isNotEmpty) {
                       widget.onBlackButtonTap(controller);
                     } else {
                       FocusScope.of(context).requestFocus(focusNode);

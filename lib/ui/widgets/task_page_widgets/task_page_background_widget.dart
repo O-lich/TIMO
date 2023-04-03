@@ -70,7 +70,7 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
           PanelCloseWidget(
             alignment: Alignment.topLeft,
             onTapClose: () {
-              if (widget.taskController.text.isEmpty) {
+              if (widget.taskController.text.isEmpty || widget.taskController.text.trim().isEmpty) {
                 isTapped = true;
                 shakeKey.currentState?.shake();
               } else {

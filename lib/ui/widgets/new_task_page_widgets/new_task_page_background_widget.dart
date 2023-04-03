@@ -115,7 +115,7 @@ class _NewTaskPageBackgroundWidgetState
                 BlackButtonWidget(
                   height: widget.height * 0.05,
                   onPressed: () {
-                    if (widget.taskController.text.isEmpty) {
+                    if (widget.taskController.text.isEmpty || widget.taskController.text.trim().isEmpty) {
                       shakeKey.currentState?.shake();
                     } else {
                       widget.onBlackButtonPressed();
