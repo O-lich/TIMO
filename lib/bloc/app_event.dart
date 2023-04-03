@@ -364,3 +364,23 @@ class AppEventAddNewListPanelOpenFromListView implements AppEvent {
     required this.onBlackButtonPressed,
   }) : super();
 }
+
+@immutable
+class AppEventOpenReminderPanelFromTaskView implements AppEvent {
+  final BuildContext context;
+  final double heightScreen;
+  final double widthScreen;
+  final void Function(DateTime? dateTime) onSaveTap;
+  final void Function() onDeleteTap;
+  final TaskModel taskModel;
+
+  const AppEventOpenReminderPanelFromTaskView({
+    required this.context,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.taskModel,
+    required this.onSaveTap,
+    required this.onDeleteTap,
+  }) : super();
+}
+

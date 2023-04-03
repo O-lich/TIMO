@@ -10,6 +10,7 @@ import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/style.dart';
 import 'package:todo_app_main_screen/ui/widgets/add_new_list_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_panel_widget.dart';
+import 'package:todo_app_main_screen/ui/widgets/reminder_panel_widget.dart';
 
 part 'app_event.dart';
 
@@ -533,7 +534,37 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           focusNodeList: focusNodeList,
           controllerList: controllerList));
     });
+    on<AppEventOpenReminderPanelFromTaskView>((event, emit) async {
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: ReminderPanelWidget(
+            height: event.heightScreen,
+            width: event.widthScreen,
+            onCloseTap: Navigator.of(event.context).pop,
+            onSaveTap: (DateTime? chosenDateTime) {
+              event.onSaveTap(chosenDateTime);
+            },
+            taskModel: event.taskModel,
+            onDeleteTap: () {
+              event.onDeleteTap();
+              },
+          ),
+        ),
+      );
+      final listsList = await getLists();
+      emit(SingleTaskAppState(
+          listsList: listsList,
+          isClosePanelTapped: currentUser.isClosePanelTapped,
+          taskModel: event.taskModel));
+    });
   }
+
   @override
   Future<void> close() {
     for (var node in focusNodeList) {

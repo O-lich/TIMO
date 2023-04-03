@@ -50,26 +50,29 @@ class _TaskPageState extends State<TaskPage> {
         height: heightScreen,
         width: widthScreen,
         isClosePanelTapped: widget.isClosePanelTapped,
-        onReminderTap: () => SlidingPanelHelper().onReminderTap(
-          widthScreen: widthScreen,
-          heightScreen: heightScreen,
-          taskModel: widget.taskModel,
-          context: context,
-          onDeleteTap: () {
-            context.read<AppBloc>().add(
-                  AppEventDeleteReminderFromTaskPage(
-                      taskModel: widget.taskModel, context: context),
-                );
-          },
-          onSaveTap: (DateTime? dateTime) {
-            context.read<AppBloc>().add(
-                  AppEventSetReminderFromTaskPage(
-                      taskModel: widget.taskModel,
-                      dateTime: dateTime,
-                      context: context),
-                );
-          },
-        ),
+        onReminderTap: () {
+          context.read<AppBloc>().add(
+            AppEventOpenReminderPanelFromTaskView(
+                taskModel: widget.taskModel,
+                context: context,
+                heightScreen: heightScreen,
+                widthScreen: widthScreen,
+                onSaveTap: (DateTime? dateTime) {
+                  context.read<AppBloc>().add(
+                    AppEventSetReminderFromTaskPage(
+                        taskModel: widget.taskModel,
+                        dateTime: dateTime,
+                        context: context),
+                  );
+                },
+                onDeleteTap: () {
+                  context.read<AppBloc>().add(
+                    AppEventDeleteReminderFromTaskPage(
+                        taskModel: widget.taskModel, context: context),
+                  );
+                }),
+          );
+        },
         onTitleTap: () {},
         onMoveToTap: () {},
         colorsList: buttonColors,
