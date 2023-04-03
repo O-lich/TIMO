@@ -62,19 +62,19 @@ class _ListsPageState extends State<ListsPage> {
               );
         },
         onAddButtonTap: () {
-          SlidingPanelHelper().onAddNewListPressed(
-            widthScreen: widthScreen,
-            heightScreen: heightScreen,
-            context: context,
-            onBlackButtonTap: (TextEditingController myListController) {
-              Navigator.pop(context);
-              context.read<AppBloc>().add(
-                    AppEventAddNewListFromListScreen(
-                      listController: myListController,
-                    ),
-                  );
-            },
-          );
+          context.read<AppBloc>().add(AppEventAddNewListPanelOpenFromListView(
+              context: context,
+              heightScreen: heightScreen,
+              widthScreen: widthScreen,
+              onBlackButtonPressed: (TextEditingController controller) {
+                context.read<AppBloc>().add(
+                  AppEventAddNewListFromListScreen(
+                    listController: controller,
+                  ),
+                );
+                Navigator.pop(context);
+              }
+          ));
         },
         onListRenameSubmitted: (String text, int selectedIndex) {
           context.read<AppBloc>().add(

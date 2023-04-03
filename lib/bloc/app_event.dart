@@ -349,3 +349,18 @@ class AppEventAddNewListPanelOpenFromMainView implements AppEvent {
     required this.listModel,
   }) : super();
 }
+
+@immutable
+class AppEventAddNewListPanelOpenFromListView implements AppEvent {
+  final BuildContext context;
+  final double heightScreen;
+  final double widthScreen;
+  final void Function(TextEditingController controller) onBlackButtonPressed;
+
+  const AppEventAddNewListPanelOpenFromListView({
+    required this.context,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.onBlackButtonPressed,
+  }) : super();
+}

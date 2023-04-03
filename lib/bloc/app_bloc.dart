@@ -500,8 +500,40 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           quoteModel: quote,
           listsList: listsList));
     });
+    on<AppEventAddNewListPanelOpenFromListView>((event, emit) async {
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: AddNewListPanelWidget(
+            height: event.heightScreen,
+            onTapClose: () {
+              Navigator.of(event.context).pop();
+            },
+            width: event.widthScreen,
+            onBlackButtonTap: (controller) {
+              event.onBlackButtonPressed(controller);
+            },
+          ),
+        ),
+      );
+      final listsList = await getLists();
+      focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      controllerList =
+          List.generate(listsList.length, (index) => TextEditingController());
+      for (int i = 0; i < listsList.length; i++) {
+        controllerList[i].text = listsList[i].list;
+      }
+      emit(LoadedListsAppState(
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+          controllerList: controllerList));
+    });
   }
-
   @override
   Future<void> close() {
     for (var node in focusNodeList) {

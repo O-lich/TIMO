@@ -97,13 +97,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   minChildSize: 0.58,
                   maxChildSize: 0.95,
                   initialChildSize: 0.581,
-                  builder: (context, scrlCtrl) {
+                  builder: (context, scrollCtrl) {
                     return TasksWidget(
                       listModel: widget.listsList[selectedListIndex],
                       onMoveToPressed: () => onMoveToPressed(heightScreen, widthScreen, context),
                       isPanelOpen: fabVisibility,
                       tasksList: widget.tasksList,
-                      scrollController: scrlCtrl,
+                      scrollController: scrollCtrl,
                       height: fabVisibility == false
                           ? 0.95 * heightScreen
                           : 0.55 * heightScreen,
@@ -180,8 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 AppEventMoveToTask(
                     moveToListModel: widget
                         .listsList[moveToListIndex],
-                    taskModel: widget.tasksList[
-                    selectedTaskIndex]),
+                    taskModel: widget.tasksList[selectedTaskIndex]),
               );
               //Navigator.pop(context);
             }),
