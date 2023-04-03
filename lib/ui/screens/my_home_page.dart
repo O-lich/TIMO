@@ -100,112 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context, scrlCtrl) {
                     return TasksWidget(
                       listModel: widget.listsList[selectedListIndex],
-                      onMoveToPressed: () {
-                        context.read<AppBloc>().add(
-                              AppEventListPanelOpenFromMainView(
-                                  listModel:
-                                      widget.listsList[selectedListIndex],
-                                  context: context,
-                                  heightScreen: heightScreen,
-                                  widthScreen: widthScreen,
-                                  onAddNewList: () {
-                                    context.read<AppBloc>().add(
-                                          AppEventAddNewListPanelOpenFromMainView(
-                                            listModel: widget
-                                                .listsList[selectedListIndex],
-                                            context: context,
-                                            heightScreen: heightScreen,
-                                            widthScreen: widthScreen,
-                                            onBlackButtonPressed:
-                                                (TextEditingController
-                                                    controller) {
-                                              Navigator.pop(context);
-                                              context.read<AppBloc>().add(
-                                                      AppEventAddNewListFromMainScreen(
-                                                    listController: controller,
-                                                    context: context,
-                                                    listModel: widget.listsList[
-                                                        selectedListIndex],
-                                                  ));
-                                              Navigator.pop(context);
-                                              context.read<AppBloc>().add(
-                                                    AppEventListPanelOpenFromMainView(
-                                                        listModel: widget
-                                                                .listsList[
-                                                            selectedListIndex],
-                                                        context: context,
-                                                        heightScreen:
-                                                            heightScreen,
-                                                        widthScreen:
-                                                            widthScreen,
-                                                        onAddNewList: () {
-                                                          context
-                                                              .read<AppBloc>()
-                                                              .add(
-                                                                AppEventAddNewListPanelOpenFromMainView(
-                                                                  listModel: widget
-                                                                          .listsList[
-                                                                      selectedListIndex],
-                                                                  context:
-                                                                      context,
-                                                                  heightScreen:
-                                                                      heightScreen,
-                                                                  widthScreen:
-                                                                      widthScreen,
-                                                                  onBlackButtonPressed:
-                                                                      (TextEditingController
-                                                                          controller) {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                    context
-                                                                        .read<
-                                                                            AppBloc>()
-                                                                        .add(
-                                                                          AppEventAddNewListFromMainScreen(
-                                                                            listController:
-                                                                                controller,
-                                                                            context:
-                                                                                context,
-                                                                            listModel:
-                                                                                widget.listsList[selectedListIndex],
-                                                                          ),
-                                                                        );
-                                                                  },
-                                                                ),
-                                                              );
-                                                        },
-                                                        onMoveToButtonPressed:
-                                                            () {
-                                                          context
-                                                              .read<AppBloc>()
-                                                              .add(
-                                                                AppEventMoveToTask(
-                                                                    moveToListModel:
-                                                                        widget.listsList[
-                                                                            moveToListIndex],
-                                                                    taskModel: widget
-                                                                            .tasksList[
-                                                                        selectedTaskIndex]),
-                                                              );
-                                                          Navigator.pop(context);
-                                                        }),
-                                                  );
-                                            },
-                                          ),
-                                        );
-                                  },
-                                  onMoveToButtonPressed: () {
-                                    context.read<AppBloc>().add(
-                                          AppEventMoveToTask(
-                                              moveToListModel: widget
-                                                  .listsList[moveToListIndex],
-                                              taskModel: widget.tasksList[
-                                                  selectedTaskIndex]),
-                                        );
-                                    Navigator.pop(context);
-                                  }),
-                            );
-                      },
+                      onMoveToPressed: () => onMoveToPressed(heightScreen, widthScreen, context),
                       isPanelOpen: fabVisibility,
                       tasksList: widget.tasksList,
                       scrollController: scrlCtrl,
@@ -246,5 +141,49 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
       );
     });
+  }
+  void onMoveToPressed(double heightScreen, double widthScreen, BuildContext context) {
+      context.read<AppBloc>().add(
+        AppEventListPanelOpenFromMainView(
+            listModel: widget.listsList[selectedListIndex],
+            context: context,
+            heightScreen: heightScreen,
+            widthScreen: widthScreen,
+            onAddNewList: () {
+              context.read<AppBloc>().add(
+                AppEventAddNewListPanelOpenFromMainView(
+                  listModel: widget
+                      .listsList[selectedListIndex],
+                  context: context,
+                  heightScreen: heightScreen,
+                  widthScreen: widthScreen,
+                  onBlackButtonPressed:
+                      (TextEditingController
+                  controller) {
+                    Navigator.pop(context);
+                    context.read<AppBloc>().add(
+                        AppEventAddNewListFromMainScreen(
+                          listController: controller,
+                          context: context,
+                          listModel: widget.listsList[
+                          selectedListIndex],
+                        ));
+                    Navigator.pop(context);
+                    onMoveToPressed(heightScreen, widthScreen, context);
+                  },
+                ),
+              );
+            },
+            onMoveToButtonPressed: () {
+              context.read<AppBloc>().add(
+                AppEventMoveToTask(
+                    moveToListModel: widget
+                        .listsList[moveToListIndex],
+                    taskModel: widget.tasksList[
+                    selectedTaskIndex]),
+              );
+              //Navigator.pop(context);
+            }),
+      );
   }
 }

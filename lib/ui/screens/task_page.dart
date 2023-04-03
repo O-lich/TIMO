@@ -10,7 +10,6 @@ import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
-import 'package:todo_app_main_screen/ui/widgets/lists_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/task_page_widgets/task_page_background_widget.dart';
 
 class TaskPage extends StatefulWidget {
@@ -123,59 +122,7 @@ class _TaskPageState extends State<TaskPage> {
                     heroTag: 'moveBtn',
                     elevation: 0,
                     backgroundColor: textColor,
-                    onPressed: () {
-                      context
-                          .read<AppBloc>()
-                          .add(AppEventListPanelOpenFromTaskView(
-                        taskModel: widget.taskModel,
-                        context: context,
-                        heightScreen: heightScreen,
-                        widthScreen: widthScreen,
-                      onAddNewList: () {
-                        context.read<AppBloc>().add(
-                            AppEventAddNewListPanelOpenFromTaskView(
-                              taskModel: widget.taskModel,
-                              context: context,
-                              heightScreen: heightScreen,
-                              widthScreen: widthScreen,
-                              onBlackButtonPressed:
-                                  (TextEditingController controller) {
-                                Navigator.pop(context);
-                                context.read<AppBloc>().add(
-                                    AppEventAddNewListFromTaskScreen(
-                                        listController: controller,
-                                        context: context,
-                                        taskModel: widget.taskModel));
-                                Navigator.pop(context);
-                                context
-                                    .read<AppBloc>()
-                                    .add(AppEventListPanelOpenFromTaskView(
-                                    taskModel: widget.taskModel,
-                                    context: context,
-                                    heightScreen: heightScreen,
-                                    widthScreen: widthScreen,
-                                    onAddNewList: () {
-                                      context.read<AppBloc>().add(
-                                          AppEventAddNewListPanelOpenFromTaskView(
-                                            taskModel: widget.taskModel,
-                                            context: context,
-                                            heightScreen: heightScreen,
-                                            widthScreen: widthScreen,
-                                            onBlackButtonPressed:
-                                                (TextEditingController controller) {
-                                              Navigator.pop(context);
-                                              context.read<AppBloc>().add(
-                                                  AppEventAddNewListFromTaskScreen(
-                                                      listController: controller,
-                                                      context: context,
-                                                      taskModel: widget.taskModel));
-                                            },
-                                          ));
-                                    }));
-                              },
-                            ));
-                      }));
-                    },
+                    onPressed: () => onMoveToPressed(heightScreen, widthScreen, context),
                     child: Image.asset(
                       AppIcons.moveTo,
                       scale: 3,
@@ -186,5 +133,31 @@ class _TaskPageState extends State<TaskPage> {
             )
           : null,
     );
+  }
+
+  void onMoveToPressed(
+      double heightScreen, double widthScreen, BuildContext context) {
+    context.read<AppBloc>().add(AppEventListPanelOpenFromTaskView(
+        taskModel: widget.taskModel,
+        context: context,
+        heightScreen: heightScreen,
+        widthScreen: widthScreen,
+        onAddNewList: () {
+          context.read<AppBloc>().add(AppEventAddNewListPanelOpenFromTaskView(
+                taskModel: widget.taskModel,
+                context: context,
+                heightScreen: heightScreen,
+                widthScreen: widthScreen,
+                onBlackButtonPressed: (TextEditingController controller) {
+                  Navigator.pop(context);
+                  context.read<AppBloc>().add(AppEventAddNewListFromTaskScreen(
+                      listController: controller,
+                      context: context,
+                      taskModel: widget.taskModel));
+                  Navigator.pop(context);
+                  onMoveToPressed(heightScreen, widthScreen, context);
+                },
+              ));
+        }));
   }
 }
