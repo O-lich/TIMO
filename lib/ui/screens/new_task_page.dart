@@ -98,7 +98,8 @@ class _NewTaskPageState extends State<NewTaskPage> {
         },
         onCloseTap: () {
           context.read<AppBloc>().add(
-                const AppEventGoToMainView(),
+                AppEventGoToMainView(
+                    listModel: widget.listsList[selectedListIndex]),
               );
         },
       ),

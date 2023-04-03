@@ -118,7 +118,7 @@ class MyApp extends StatelessWidget {
                   } else if (appState is LoadingAppState) {
                     return LoadingView(
                       selectedListIndex: appState.selectedListIndex,
-                      listsList: appState.listsList,
+                      listModel: appState.listModel,
                     );
                   } else {
                     return Container();

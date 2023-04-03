@@ -14,11 +14,13 @@ class InitAppState extends AppState {
 
 @immutable
 class LoadingAppState extends AppState {
-  final List<ListModel> listsList;
+  final ListModel listModel;
   final int selectedListIndex;
 
-  const LoadingAppState(
-      {required this.listsList, required this.selectedListIndex});
+  const LoadingAppState({
+    required this.listModel,
+    required this.selectedListIndex,
+  });
 }
 
 @immutable

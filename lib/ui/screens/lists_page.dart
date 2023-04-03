@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
+import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/lists_page_background_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/options_panel_widget.dart';
@@ -43,7 +44,8 @@ class _ListsPageState extends State<ListsPage> {
         controllerList: widget.controllerList,
         onPressedClose: () {
           context.read<AppBloc>().add(
-                const AppEventGoToMainView(),
+                AppEventGoToMainView(
+                    listModel: widget.listsList[selectedListIndex]),
               );
         },
         onSettingsButtonTap: () {
@@ -53,8 +55,11 @@ class _ListsPageState extends State<ListsPage> {
         },
         onListTap: (int selectedIndex) {
           context.read<AppBloc>().add(
-            AppEventChangeList(index: selectedIndex),
-          );
+                AppEventChangeList(
+                  index: selectedIndex,
+                  listModel: widget.listsList[selectedIndex],
+                ),
+              );
         },
         onAddButtonTap: () {
           SlidingPanelHelper().onAddNewListPressed(
@@ -71,7 +76,6 @@ class _ListsPageState extends State<ListsPage> {
             },
           );
         },
-
         onListRenameSubmitted: (String text, int selectedIndex) {
           context.read<AppBloc>().add(
                 AppEventUpdateListText(
@@ -80,7 +84,6 @@ class _ListsPageState extends State<ListsPage> {
                 ),
               );
         },
-
         onOptionsTap: (int selectedIndex, BuildContext context) {
           SlidingPanelHelper().onPressedShowBottomSheet(
             OptionsPanelWidget(

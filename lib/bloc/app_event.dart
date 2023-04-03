@@ -103,8 +103,10 @@ class AppEventUpdateTask implements AppEvent {
   final TaskModel taskModel;
   final ListModel? moveToListModel;
   final TextEditingController textController;
+  final ListModel listModel;
 
   const AppEventUpdateTask({
+    required this.listModel,
     required this.taskModel,
     required this.moveToListModel,
     required this.textController,
@@ -203,7 +205,9 @@ class AppEventOpenListPanel implements AppEvent {
 
 @immutable
 class AppEventGoToMainView implements AppEvent {
-  const AppEventGoToMainView() : super();
+  final ListModel listModel;
+
+  const AppEventGoToMainView({required this.listModel}) : super();
 }
 
 @immutable
@@ -217,9 +221,11 @@ class AppEventGoToSingleTask implements AppEvent {
 
 @immutable
 class AppEventChangeList implements AppEvent {
+  final ListModel listModel;
   final int index;
 
   const AppEventChangeList({
+    required this.listModel,
     required this.index,
   }) : super();
 }

@@ -6,23 +6,27 @@ import 'package:todo_app_main_screen/models/list_model.dart';
 
 class LoadingView extends StatefulWidget {
   final int selectedListIndex;
-  final List<ListModel> listsList;
+  final ListModel listModel;
 
-  const LoadingView(
-      {Key? key, required this.selectedListIndex, required this.listsList})
-      : super(key: key);
+  const LoadingView({
+    Key? key,
+    required this.selectedListIndex,
+    required this.listModel,
+  }) : super(key: key);
 
   @override
   State<LoadingView> createState() => _LoadingViewState();
 }
 
-class _LoadingViewState extends State<LoadingView> with SingleTickerProviderStateMixin {
+class _LoadingViewState extends State<LoadingView>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 700));
     _animationController.forward();
   }
 
@@ -46,16 +50,18 @@ class _LoadingViewState extends State<LoadingView> with SingleTickerProviderStat
               width: widthScreen,
               height: heightScreen * 0.42,
               decoration: BoxDecoration(
-                  color:
-                  buttonColors[widget.listsList[widget.selectedListIndex].listColorIndex]),
+                  color: buttonColors[widget.listModel.listColorIndex]),
             ),
             Positioned(
               top: heightScreen * 0.42,
               child: Container(
                 width: widthScreen,
                 height: heightScreen * 0.58,
-                decoration:  const BoxDecoration(
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(21), topLeft:Radius.circular(21),),
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(21),
+                      topLeft: Radius.circular(21),
+                    ),
                     color: Colors.white),
               ),
             ),

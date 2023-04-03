@@ -79,6 +79,7 @@ class _TaskPageState extends State<TaskPage> {
         onCloseTap: () {
           context.read<AppBloc>().add(
                 AppEventUpdateTask(
+                    listModel: widget.listsList[selectedListIndex],
                     taskModel: widget.taskModel,
                     moveToListModel: moveToListIndex >= 0
                         ? widget.listsList[moveToListIndex]

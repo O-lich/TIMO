@@ -62,9 +62,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventGoToMainView>((event, emit) async {
+      emit(
+        LoadingAppState(
+          listModel: event.listModel,
+          selectedListIndex: selectedListIndex,
+        ),
+      );
       final listsList = await getLists();
-      emit(LoadingAppState(
-          listsList: listsList, selectedListIndex: selectedListIndex));
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
       );
@@ -85,8 +89,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         isReminderActive: event.isReminderActive,
       );
       final listsList = await getLists();
-      emit(LoadingAppState(
-          listsList: listsList, selectedListIndex: selectedListIndex));
+      // emit(LoadingAppState(
+      //     listsList: listsList, selectedListIndex: selectedListIndex));
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
       );
@@ -227,8 +231,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventChangeList>((event, emit) async {
+      emit(LoadingAppState(
+        selectedListIndex: selectedListIndex,
+        listModel: event.listModel,
+      ));
       selectedListIndex = event.index;
       final listsList = await getLists();
+
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
       );
@@ -343,10 +352,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventUpdateTask>((event, emit) async {
-      log("AppEventUpdateTask");
-      final listsList = await getLists();
       emit(LoadingAppState(
-          listsList: listsList, selectedListIndex: selectedListIndex));
+          selectedListIndex: selectedListIndex, listModel: event.listModel,));
+      final listsList = await getLists();
+
       await updateTask(
         updatedTask: event.taskModel,
         moveToListModel: event.moveToListModel,

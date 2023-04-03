@@ -27,7 +27,7 @@ class UserModel {
     return {
       "locale": locale,
       "userID": userID,
-    "isClosePanelTapped": isClosePanelTapped,
+      "isClosePanelTapped": isClosePanelTapped,
     };
   }
 
@@ -40,6 +40,10 @@ class UserModel {
       userID = UniqueKey().toString();
       await prefs.setString('userID', userID);
     }
-    return UserModel(userID: userID, locale: locale, isClosePanelTapped: isClosePanelTapped);
+    return UserModel(
+      userID: userID,
+      locale: locale,
+      isClosePanelTapped: isClosePanelTapped,
+    );
   }
 }

@@ -41,7 +41,7 @@ class ListsPageBackgroundWidget extends StatefulWidget {
 }
 
 class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
-  int _selectedIndex = 0;
+
 
   @override
   void initState() {
