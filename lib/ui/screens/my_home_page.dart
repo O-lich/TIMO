@@ -6,6 +6,7 @@ import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
+import 'package:todo_app_main_screen/helpers/functions.dart';
 import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
@@ -103,50 +104,52 @@ class _MyHomePageState extends State<MyHomePage> {
                     return TasksWidget(
                       listModel: widget.listsList[selectedListIndex],
                       onMoveToPressed: () {
-                        SlidingPanelHelper().onPressedShowBottomSheet(
-                          ListsPanelWidget(
-                            height: heightScreen,
-                            width: widthScreen,
-                            lists: widget.listsList,
-                            onTapClose: () {
-                              Navigator.pop(context);
-                              setState(() {
-                                isMoveTo = false;
-                              });
-                            },
-                            onAddNewListPressed: () {
-                              SlidingPanelHelper().onAddNewListPressed(
-                                widthScreen: widthScreen,
-                                heightScreen: heightScreen,
-                                context: context,
-                                onBlackButtonTap: (listController) {
+                        context.read<AppBloc>().add(
+                          AppEventListPanelOpenFromMainView(
+                            context: context,
+                              widget: ListsPanelWidget(
+                                height: heightScreen,
+                                width: widthScreen,
+                                lists: widget.listsList,
+                                onTapClose: () {
                                   Navigator.pop(context);
-                                  context.read<AppBloc>().add(
+                                  setState(() {
+                                    isMoveTo = false;
+                                  });
+                                },
+                                onAddNewListPressed: () {
+                                  SlidingPanelHelper().onAddNewListPressed(
+                                    widthScreen: widthScreen,
+                                    heightScreen: heightScreen,
+                                    context: context,
+                                    onBlackButtonTap: (listController) {
+                                      Navigator.pop(context);
+                                      context.read<AppBloc>().add(
                                         AppEventAddNewListFromMainScreen(
                                             listController: listController,
                                             context: context),
                                       );
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            onButtonPressed: () {
-                              Navigator.pop(context);
-                              context.read<AppBloc>().add(
+                                onButtonPressed: () {
+                                  Navigator.pop(context);
+                                  context.read<AppBloc>().add(
                                     AppEventMoveToTask(
                                       taskModel:
-                                          widget.tasksList[selectedTaskIndex],
+                                      widget.tasksList[selectedTaskIndex],
                                       moveToListModel:
-                                          widget.listsList[moveToListIndex],
+                                      widget.listsList[moveToListIndex],
                                     ),
                                   );
 
-                              setState(() {
-                                isMoveTo = false;
-                                selectedTaskIndex = -1;
-                              });
-                            },
+                                  setState(() {
+                                    isMoveTo = false;
+                                    selectedTaskIndex = -1;
+                                  });
+                                },
+                              ),
                           ),
-                          context,
                         );
                         setState(() {
                           isMoveTo = true;

@@ -123,33 +123,59 @@ class _TaskPageState extends State<TaskPage> {
                     heroTag: 'moveBtn',
                     elevation: 0,
                     backgroundColor: textColor,
-                    onPressed: () =>
-                        SlidingPanelHelper().onPressedShowBottomSheet(
-                      ListsPanelWidget(
-                        height: heightScreen,
-                        width: widthScreen,
-                        lists: widget.listsList,
-                        onTapClose: Navigator.of(context).pop,
-                        onAddNewListPressed: () {
-                          SlidingPanelHelper().onAddNewListPressed(
-                            widthScreen: widthScreen,
-                            heightScreen: heightScreen,
-                            context: context,
-                            onBlackButtonTap: (listController) {
-                              Navigator.pop(context);
-                              context.read<AppBloc>().add(
+                    onPressed: () {
+                      context
+                          .read<AppBloc>()
+                          .add(AppEventListPanelOpenFromTaskView(
+                        taskModel: widget.taskModel,
+                        context: context,
+                        heightScreen: heightScreen,
+                        widthScreen: widthScreen,
+                      onAddNewList: () {
+                        context.read<AppBloc>().add(
+                            AppEventAddNewListPanelOpenFromTaskView(
+                              taskModel: widget.taskModel,
+                              context: context,
+                              heightScreen: heightScreen,
+                              widthScreen: widthScreen,
+                              onBlackButtonPressed:
+                                  (TextEditingController controller) {
+                                Navigator.pop(context);
+                                context.read<AppBloc>().add(
                                     AppEventAddNewListFromTaskScreen(
-                                        listController: listController,
+                                        listController: controller,
                                         context: context,
-                                        taskModel: widget.taskModel),
-                                  );
-                            },
-                          );
-                        },
-                        onButtonPressed: Navigator.of(context).pop,
-                      ),
-                      context,
-                    ),
+                                        taskModel: widget.taskModel));
+                                Navigator.pop(context);
+                                context
+                                    .read<AppBloc>()
+                                    .add(AppEventListPanelOpenFromTaskView(
+                                    taskModel: widget.taskModel,
+                                    context: context,
+                                    heightScreen: heightScreen,
+                                    widthScreen: widthScreen,
+                                    onAddNewList: () {
+                                      context.read<AppBloc>().add(
+                                          AppEventAddNewListPanelOpenFromTaskView(
+                                            taskModel: widget.taskModel,
+                                            context: context,
+                                            heightScreen: heightScreen,
+                                            widthScreen: widthScreen,
+                                            onBlackButtonPressed:
+                                                (TextEditingController controller) {
+                                              Navigator.pop(context);
+                                              context.read<AppBloc>().add(
+                                                  AppEventAddNewListFromTaskScreen(
+                                                      listController: controller,
+                                                      context: context,
+                                                      taskModel: widget.taskModel));
+                                            },
+                                          ));
+                                    }));
+                              },
+                            ));
+                      }));
+                    },
                     child: Image.asset(
                       AppIcons.moveTo,
                       scale: 3,

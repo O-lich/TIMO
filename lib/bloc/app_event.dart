@@ -277,3 +277,56 @@ class AppEventDeleteReminderFromNewTaskPage implements AppEvent {
     required this.context,
   }) : super();
 }
+
+@immutable
+class AppEventListPanelOpenFromMainView implements AppEvent {
+  final Widget widget;
+  final BuildContext context;
+
+  const AppEventListPanelOpenFromMainView({
+    required this.widget,
+    required this.context,
+  }) : super();
+}
+
+@immutable
+class AppEventListPanelOpenFromTaskView implements AppEvent {
+  final BuildContext context;
+  final TaskModel taskModel;
+  final double heightScreen;
+  final double widthScreen;
+  final void Function() onAddNewList;
+
+  const AppEventListPanelOpenFromTaskView({
+    required this.context,
+    required this.taskModel,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.onAddNewList,
+  }) : super();
+}
+
+@immutable
+class AppEventAddNewListPanelOpenFromTaskView implements AppEvent {
+  final BuildContext context;
+  final double heightScreen;
+  final double widthScreen;
+  final void Function(TextEditingController controller) onBlackButtonPressed;
+  final TaskModel taskModel;
+
+  const AppEventAddNewListPanelOpenFromTaskView({
+    required this.context,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.onBlackButtonPressed,
+    required this.taskModel,
+  }) : super();
+}
+// @immutable
+// class AppEventAddNewListPanelOpenFromMainView implements AppEvent {
+//
+//
+//   const AppEventAddNewListPanelOpenFromMainView({
+//
+//   }) : super();
+// }

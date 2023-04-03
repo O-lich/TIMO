@@ -1,12 +1,15 @@
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:meta/meta.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todo_app_main_screen/helpers/functions.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/quote_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
+import 'package:todo_app_main_screen/ui/style.dart';
+import 'package:todo_app_main_screen/ui/widgets/add_new_list_panel_widget.dart';
+import 'package:todo_app_main_screen/ui/widgets/lists_panel_widget.dart';
 
 part 'app_event.dart';
 
@@ -22,12 +25,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         emit(
           const AppStateSplashScreen(),
         );
+        final QuoteModel quote = await updateQuote();
         await getUsers();
         final listsList = await getLists();
         final tasksList = await getTasks(
           listModel: listsList[selectedListIndex],
         );
-        final QuoteModel quote = await updateQuote();
         emit(
           LoadedAppState(
               tasksList: tasksList,
@@ -120,6 +123,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventAddNewListFromTaskScreen>((event, emit) async {
+      log('AppEventAddNewListFromTaskScreen');
       await createNewList(listController: event.listController);
       final listsList = await getLists();
       final taskModel = event.taskModel;
@@ -353,7 +357,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventUpdateTask>((event, emit) async {
       emit(LoadingAppState(
-          selectedListIndex: selectedListIndex, listModel: event.listModel,));
+        selectedListIndex: selectedListIndex,
+        listModel: event.listModel,
+      ));
       final listsList = await getLists();
 
       await updateTask(
@@ -372,6 +378,88 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             selectedListIndex: selectedListIndex,
             listsList: listsList),
       );
+    });
+
+    on<AppEventListPanelOpenFromMainView>((event, emit) async {
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: event.widget,
+        ),
+      );
+      final listsList = await getLists();
+      final tasksList = await getTasks(
+        listModel: listsList[selectedListIndex],
+      );
+      final QuoteModel quote = await updateQuote();
+      emit(LoadedAppState(
+          selectedListIndex: selectedListIndex,
+          tasksList: tasksList,
+          quoteModel: quote,
+          listsList: listsList));
+    });
+
+    on<AppEventListPanelOpenFromTaskView>((event, emit) async {
+      log('AppEventListPanelOpenFromTaskView');
+      final listsList = await getLists();
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: ListsPanelWidget(
+            onButtonPressed: Navigator.of(context).pop,
+            height: event.heightScreen,
+            width: event.widthScreen,
+            lists: listsList,
+            onTapClose: Navigator.of(context).pop,
+            onAddNewListPressed: () {
+              event.onAddNewList();
+            },
+          ),
+        ),
+      );
+      emit(SingleTaskAppState(
+          isClosePanelTapped: currentUser.isClosePanelTapped,
+          listsList: listsList,
+          taskModel: event.taskModel));
+    });
+
+    on<AppEventAddNewListPanelOpenFromTaskView>((event, emit) async {
+      log('AppEventAddNewListPanelOpenFromTaskView');
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: AddNewListPanelWidget(
+            height: event.heightScreen,
+            onTapClose: () {
+              Navigator.of(event.context).pop();
+            },
+            width: event.widthScreen,
+            onBlackButtonTap: (controller) {
+              event.onBlackButtonPressed(controller);
+            },
+          ),
+        ),
+      );
+      final listsList = await getLists();
+      emit(SingleTaskAppState(
+          isClosePanelTapped: currentUser.isClosePanelTapped,
+          listsList: listsList,
+          taskModel: event.taskModel));
     });
   }
 

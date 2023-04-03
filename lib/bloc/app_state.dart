@@ -95,4 +95,10 @@ class SingleTaskAppState extends AppState {
     required this.listsList,
     required this.taskModel,
   });
+
+}
+
+@immutable
+class OpenListPanelAppState extends AppState {
+  const OpenListPanelAppState();
 }
