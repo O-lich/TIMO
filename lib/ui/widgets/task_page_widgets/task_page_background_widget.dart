@@ -24,6 +24,8 @@ class TaskPageBackgroundWidget extends StatefulWidget {
   final void Function() onCloseTap;
   final List<Color> colorsList;
   final TextEditingController taskController;
+  final bool isClosePanelTapped;
+  final void Function() onClosePanelTap;
 
   const TaskPageBackgroundWidget({
     Key? key,
@@ -35,7 +37,7 @@ class TaskPageBackgroundWidget extends StatefulWidget {
     required this.colorsList,
     required this.taskController,
     required this.taskModel,
-    required this.onCloseTap,
+    required this.onCloseTap, required this.isClosePanelTapped, required this.onClosePanelTap,
   }) : super(key: key);
 
   @override
@@ -46,12 +48,10 @@ class TaskPageBackgroundWidget extends StatefulWidget {
 class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
   bool isTapped = false;
   final shakeKey = GlobalKey<ShakeWidgetState>();
-  bool isClosePanelTapped = false;
 
   @override
   void initState() {
     shakeKey.currentState?.deactivate();
-    loadBool();
     super.initState();
     widget.taskController.text = widget.taskModel.task;
   }
@@ -257,7 +257,7 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                 SizedBox(
                   height: widget.height * 0.02,
                 ),
-                isClosePanelTapped == false
+                widget.isClosePanelTapped == false
                     ? Container(
                         decoration: BoxDecoration(
                           color: separatorColor,
@@ -304,12 +304,7 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                                 width: widget.width * 0.05,
                               ),
                               InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    isClosePanelTapped = !isClosePanelTapped;
-                                    updateBool(isTapped: isClosePanelTapped);
-                                  });
-                                },
+                                onTap: widget.onClosePanelTap,
                                 child: Image.asset(
                                   AppIcons.closeButton,
                                   scale: 3,
@@ -328,17 +323,7 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
     );
   }
 
-  void updateBool({required bool isTapped}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('bool', isTapped);
-  }
 
-  void loadBool() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if(prefs.getBool('bool') != null) {
-      setState(() {
-        isClosePanelTapped = prefs.getBool('bool')!;
-      });
-    }
-  }
+
+
 }

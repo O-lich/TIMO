@@ -21,7 +21,6 @@ import 'firebase_options.dart';
 import 'generated/l10n.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
-List<TaskModel> currentTasks = [];
 int taskCurrentColorIndex = -1;
 int listCurrentColorIndex = 0;
 UserModel currentUser = UserModel();
@@ -116,6 +115,7 @@ class MyApp extends StatelessWidget {
                     return TaskPage(
                       taskModel: appState.taskModel,
                       listsList: appState.listsList,
+                      isClosePanelTapped: appState.isClosePanelTapped,
                     );
                   } else if (appState is LoadingAppState) {
                     return LoadingView(

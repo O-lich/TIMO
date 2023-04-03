@@ -10,7 +10,6 @@ class AppEventGetUser implements AppEvent {
   const AppEventGetUser() : super();
 }
 
-
 @immutable
 class AppEventGoToLists implements AppEvent {
   const AppEventGoToLists() : super();
@@ -34,6 +33,17 @@ class AppEventChangeLocale implements AppEvent {
   const AppEventChangeLocale({
     required this.context,
     required this.index,
+  }) : super();
+}
+
+@immutable
+class AppEventChangePanelTapped implements AppEvent {
+  final bool isClosePanelTapped;
+  final TaskModel taskModel;
+
+  const AppEventChangePanelTapped({
+    required this.taskModel,
+    required this.isClosePanelTapped,
   }) : super();
 }
 
@@ -261,5 +271,3 @@ class AppEventDeleteReminderFromNewTaskPage implements AppEvent {
     required this.context,
   }) : super();
 }
-
-

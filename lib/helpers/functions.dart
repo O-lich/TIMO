@@ -208,7 +208,6 @@ Future<void> addNewTask({
 Future<List<TaskModel>> getTasks({
   required ListModel listModel,
 }) async {
-  currentTasks.clear();
   await getLists();
   final tasksRef = db
       .collection("users")
@@ -245,12 +244,14 @@ Future<List<ListModel>> getLists() async {
       );
 
   if (ref.isEmpty) {
-    addToDoList();
+    return [await addToDoList()];
   }
-  return ref;
+  else {
+    return ref;
+  }
 }
 
-Future<void> addToDoList() async {
+Future<ListModel> addToDoList() async {
   final list = ListModel(
     listID: DateTime.now().millisecondsSinceEpoch.toString(),
     list: 'ToDo',
@@ -265,7 +266,21 @@ Future<void> addToDoList() async {
       )
       .doc(list.listID);
   await docRef.set(list);
+
+  final ref = await db
+      .collection("users")
+      .doc(currentUser.userID)
+      .collection("lists")
+      .doc(list.listID)
+      .withConverter(
+        fromFirestore: ListModel.fromFirestore,
+        toFirestore: (ListModel list, _) => list.toFirestore(),
+      )
+      .get();
+  return ref.data()!;
 }
+
+
 
 //ToDo move to main
 Future<void> getUsers() async {
@@ -297,13 +312,13 @@ int changeLocale({required BuildContext context, required int index}) {
   final provider = Provider.of<LocaleProvider>(context, listen: false);
   final locale = Locales.allLocales[index];
   provider.setLocale(locale);
-  updateUser(locale: index);
+  updateUserLocale(locale: index);
 
   currentUser.locale = index;
   return index;
 }
 
-Future<void> updateUser({
+Future<void> updateUserLocale({
   required int locale,
 }) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -314,6 +329,18 @@ Future<void> updateUser({
   };
   await docRef.update(updates);
 }
+
+Future<void> updateUserPanelTapped() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('isClosePanelTapped', true);
+  final docRef = db.collection("users").doc(currentUser.userID);
+  final updates = <String, dynamic>{
+    'isClosePanelTapped': true,
+  };
+  await docRef.update(updates);
+  await getUsers();
+}
+
 
 Future<QuoteModel> updateQuote() async {
   final dataDecoded = await FetchHelper().getData();
@@ -345,8 +372,6 @@ TaskModel newTaskReminderSet({
   if (chosenDateTime == null || chosenDateTime.isBefore(DateTime.now())) {
     wrongReminder(context: context);
   } else if (chosenDateTime.isAfter(DateTime.now())) {
-    //currentDateTimeReminder = chosenDateTime.toString();
-    //currentIsReminderActive = true;
     newTaskModel.isReminderActive = true;
     newTaskModel.dateTimeReminder = chosenDateTime.toString();
     Navigator.pop(context);

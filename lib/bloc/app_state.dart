@@ -16,7 +16,9 @@ class InitAppState extends AppState {
 class LoadingAppState extends AppState {
   final List<ListModel> listsList;
   final int selectedListIndex;
-  const LoadingAppState({required this.listsList, required this.selectedListIndex});
+
+  const LoadingAppState(
+      {required this.listsList, required this.selectedListIndex});
 }
 
 @immutable
@@ -61,7 +63,7 @@ class AddNewTaskAppState extends AppState {
   final bool isReminderActive;
   final String dateTimeReminder;
 
-  const AddNewTaskAppState( {
+  const AddNewTaskAppState({
     required this.dateTimeReminder,
     required this.listsList,
     required this.isReminderActive,
@@ -84,8 +86,10 @@ class ErrorAppState extends AppState {
 class SingleTaskAppState extends AppState {
   final TaskModel taskModel;
   final List<ListModel> listsList;
+  final bool isClosePanelTapped;
 
   const SingleTaskAppState({
+    required this.isClosePanelTapped,
     required this.listsList,
     required this.taskModel,
   });

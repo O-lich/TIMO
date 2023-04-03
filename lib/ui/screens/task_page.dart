@@ -17,11 +17,13 @@ class TaskPage extends StatefulWidget {
   static const routeName = '/task_page';
   final TaskModel taskModel;
   final List<ListModel> listsList;
+  final bool isClosePanelTapped;
 
   const TaskPage({
     Key? key,
     required this.taskModel,
     required this.listsList,
+    required this.isClosePanelTapped,
   }) : super(key: key);
 
   @override
@@ -48,6 +50,7 @@ class _TaskPageState extends State<TaskPage> {
       body: TaskPageBackgroundWidget(
         height: heightScreen,
         width: widthScreen,
+        isClosePanelTapped: widget.isClosePanelTapped,
         onReminderTap: () => SlidingPanelHelper().onReminderTap(
           widthScreen: widthScreen,
           heightScreen: heightScreen,
@@ -77,8 +80,18 @@ class _TaskPageState extends State<TaskPage> {
           context.read<AppBloc>().add(
                 AppEventUpdateTask(
                     taskModel: widget.taskModel,
-                    moveToListModel: moveToListIndex>=0 ?  widget.listsList[moveToListIndex] : null,
+                    moveToListModel: moveToListIndex >= 0
+                        ? widget.listsList[moveToListIndex]
+                        : null,
                     textController: textController),
+              );
+        },
+        onClosePanelTap: () {
+          context.read<AppBloc>().add(
+                AppEventChangePanelTapped(
+                  taskModel: widget.taskModel,
+                  isClosePanelTapped: true,
+                ),
               );
         },
       ),
