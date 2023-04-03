@@ -175,6 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
             onMoveToButtonPressed: () {
+              moveToListIndex == -1 ? isMoveTo = false :
               context.read<AppBloc>().add(
                 AppEventMoveToTask(
                     moveToListModel: widget
