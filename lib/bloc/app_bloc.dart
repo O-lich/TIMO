@@ -85,6 +85,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventAddNewTask>((event, emit) async {
+      emit(LoadingAppState(
+          selectedListIndex: selectedListIndex,
+          listModel: event.listModel));
       createNewTask(
         taskController: event.taskController,
         currentList: event.listModel,
@@ -92,8 +95,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         isReminderActive: event.isReminderActive,
       );
       final listsList = await getLists();
-      // emit(LoadingAppState(
-      //     listsList: listsList, selectedListIndex: selectedListIndex));
       final tasksList = await getTasks(
         listModel: listsList[selectedListIndex],
       );
@@ -123,7 +124,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventAddNewListFromTaskScreen>((event, emit) async {
-      log('AppEventAddNewListFromTaskScreen');
       await createNewList(listController: event.listController);
       final listsList = await getLists();
       final taskModel = event.taskModel;
@@ -381,6 +381,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventListPanelOpenFromMainView>((event, emit) async {
+      final listsList = await getLists();
+      final tasksList = await getTasks(listModel: event.listModel);
+      final QuoteModel quote = await updateQuote();
       showMaterialModalBottomSheet(
         shape: const RoundedRectangleBorder(
           borderRadius: commonBorderRadius,
@@ -389,14 +392,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         context: event.context,
         builder: (context) => SingleChildScrollView(
           controller: ModalScrollController.of(context),
-          child: event.widget,
+          child: ListsPanelWidget(
+            onButtonPressed: Navigator.of(context).pop,
+            height: event.heightScreen,
+            width: event.widthScreen,
+            lists: listsList,
+            onTapClose: Navigator.of(context).pop,
+            onAddNewListPressed: () {
+              event.onAddNewList();
+            },
+          ),
         ),
       );
-      final listsList = await getLists();
-      final tasksList = await getTasks(
-        listModel: listsList[selectedListIndex],
-      );
-      final QuoteModel quote = await updateQuote();
       emit(LoadedAppState(
           selectedListIndex: selectedListIndex,
           tasksList: tasksList,
@@ -405,7 +412,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventListPanelOpenFromTaskView>((event, emit) async {
-      log('AppEventListPanelOpenFromTaskView');
       final listsList = await getLists();
       showMaterialModalBottomSheet(
         shape: const RoundedRectangleBorder(
@@ -434,7 +440,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventAddNewListPanelOpenFromTaskView>((event, emit) async {
-      log('AppEventAddNewListPanelOpenFromTaskView');
       showMaterialModalBottomSheet(
         shape: const RoundedRectangleBorder(
           borderRadius: commonBorderRadius,
@@ -460,6 +465,37 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           isClosePanelTapped: currentUser.isClosePanelTapped,
           listsList: listsList,
           taskModel: event.taskModel));
+    });
+
+    on<AppEventAddNewListPanelOpenFromMainView>((event, emit) async {
+      final tasksList = await getTasks(listModel: event.listModel);
+      final QuoteModel quote = await updateQuote();
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: AddNewListPanelWidget(
+            height: event.heightScreen,
+            onTapClose: () {
+              Navigator.of(event.context).pop();
+            },
+            width: event.widthScreen,
+            onBlackButtonTap: (controller) {
+              event.onBlackButtonPressed(controller);
+            },
+          ),
+        ),
+      );
+      final listsList = await getLists();
+      emit(LoadedAppState(
+          selectedListIndex: selectedListIndex,
+          tasksList: tasksList,
+          quoteModel: quote,
+          listsList: listsList));
     });
   }
 

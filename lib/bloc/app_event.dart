@@ -161,10 +161,12 @@ class AppEventAddNewListFromListScreen implements AppEvent {
 class AppEventAddNewListFromMainScreen implements AppEvent {
   final TextEditingController listController;
   final BuildContext context;
+  final ListModel listModel;
 
   const AppEventAddNewListFromMainScreen({
     required this.listController,
     required this.context,
+    required this.listModel,
   });
 }
 
@@ -279,17 +281,6 @@ class AppEventDeleteReminderFromNewTaskPage implements AppEvent {
 }
 
 @immutable
-class AppEventListPanelOpenFromMainView implements AppEvent {
-  final Widget widget;
-  final BuildContext context;
-
-  const AppEventListPanelOpenFromMainView({
-    required this.widget,
-    required this.context,
-  }) : super();
-}
-
-@immutable
 class AppEventListPanelOpenFromTaskView implements AppEvent {
   final BuildContext context;
   final TaskModel taskModel;
@@ -322,11 +313,36 @@ class AppEventAddNewListPanelOpenFromTaskView implements AppEvent {
     required this.taskModel,
   }) : super();
 }
-// @immutable
-// class AppEventAddNewListPanelOpenFromMainView implements AppEvent {
-//
-//
-//   const AppEventAddNewListPanelOpenFromMainView({
-//
-//   }) : super();
-// }
+
+@immutable
+class AppEventListPanelOpenFromMainView implements AppEvent {
+  final BuildContext context;
+  final ListModel listModel;
+  final double heightScreen;
+  final double widthScreen;
+  final void Function() onAddNewList;
+
+  const AppEventListPanelOpenFromMainView({
+    required this.context,
+    required this.listModel,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.onAddNewList,
+  }) : super();
+}
+@immutable
+class AppEventAddNewListPanelOpenFromMainView implements AppEvent {
+  final BuildContext context;
+  final double heightScreen;
+  final double widthScreen;
+  final void Function(TextEditingController controller) onBlackButtonPressed;
+  final ListModel listModel;
+
+  const AppEventAddNewListPanelOpenFromMainView({
+    required this.context,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.onBlackButtonPressed,
+    required this.listModel,
+  }) : super();
+}
