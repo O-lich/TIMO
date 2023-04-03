@@ -121,7 +121,6 @@ void createNewTask({
       isReminderActive: isReminderActive,
     );
     taskCurrentColorIndex = -1;
-    listCurrentColorIndex = 0;
   }
 }
 

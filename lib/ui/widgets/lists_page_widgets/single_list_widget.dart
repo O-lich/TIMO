@@ -1,7 +1,5 @@
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
@@ -14,6 +12,7 @@ class SingleListWidget extends StatefulWidget {
   final void Function() onOptionsTap;
   final void Function() onListTap;
   final void Function() onAddButtonTap;
+  final void Function(String text) onListRenameSubmitted;
   final bool isTapped;
   final FocusNode focusNode;
   ListModel listModel;
@@ -30,6 +29,7 @@ class SingleListWidget extends StatefulWidget {
     required this.width,
     required this.focusNode,
     required this.controller,
+    required this.onListRenameSubmitted,
   }) : super(key: key);
 
   @override
@@ -37,7 +37,6 @@ class SingleListWidget extends StatefulWidget {
 }
 
 class _SingleListWidgetState extends State<SingleListWidget> {
-  //TextEditingController controller = TextEditingController();
   final shakeKey = GlobalKey<ShakeWidgetState>();
 
   @override
@@ -121,18 +120,14 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                           FocusManager.instance.primaryFocus?.unfocus();
                         }
                       },
-                      onSubmitted: (text) { //ToDo
+                      onSubmitted: (text) {
+                        //ToDo
                         if (widget.controller.text.isEmpty) {
                           widget.focusNode.hasFocus;
                           shakeKey.currentState?.shake();
                           widget.controller.text = widget.listModel.list;
                         } else {
-                          context.read<AppBloc>().add(
-                                AppEventUpdateListText(
-                                  listModel: widget.listModel,
-                                  listText: text,
-                                ),
-                              );
+                          widget.onListRenameSubmitted(text);
                           FocusManager.instance.primaryFocus?.unfocus();
                         }
                       },

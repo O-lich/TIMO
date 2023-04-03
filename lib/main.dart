@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app_main_screen/l10n/locales.dart';
-import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/models/user_model.dart';
 import 'package:todo_app_main_screen/service/locale_provider.dart';
 import 'package:todo_app_main_screen/ui/screens/language_page.dart';
@@ -22,7 +21,6 @@ import 'generated/l10n.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 int taskCurrentColorIndex = -1;
-int listCurrentColorIndex = 0;
 UserModel currentUser = UserModel();
 int selectedListIndex = 0;
 int selectedTaskIndex = -1;

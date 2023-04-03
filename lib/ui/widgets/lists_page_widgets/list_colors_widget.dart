@@ -1,17 +1,18 @@
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
-import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/ui/widgets/single_color_widget.dart';
 
 class ListColorsWidget extends StatefulWidget {
   int selectedListColorIndex;
+  final void Function(int index) changeListColor;
   final double width;
 
   ListColorsWidget({
     Key? key,
     required this.width,
     this.selectedListColorIndex = 0,
+    required this.changeListColor,
   }) : super(key: key);
 
   @override
@@ -36,14 +37,17 @@ class _ListColorsWidgetState extends State<ListColorsWidget> {
             return ExpandTapWidget(
               tapPadding: const EdgeInsets.all(20.0),
               onTap: () {
-                setState(() {
-                  (widget.selectedListColorIndex != index) ?
-                  widget.selectedListColorIndex = index : widget.selectedListColorIndex = 0;
-                  listCurrentColorIndex = widget.selectedListColorIndex;
+                setState(() { //ToDo rewrite
+                  (widget.selectedListColorIndex != index)
+                      ? widget.selectedListColorIndex = index
+                      : widget.selectedListColorIndex = 0;
                 });
+                widget.changeListColor(index);
               },
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: widget.width * 0.035),
+                padding: EdgeInsets.symmetric(
+                  horizontal: widget.width * 0.035,
+                ),
                 child: SingleColorWidget(
                   color: buttonColors[index],
                   bottomPadding: (widget.selectedListColorIndex == index)
@@ -56,13 +60,8 @@ class _ListColorsWidgetState extends State<ListColorsWidget> {
               ),
             );
           },
-          // separatorBuilder: (BuildContext context, int index) => SizedBox(
-          //   width: widget.width * 0.07,
-          // ),
         ),
       ),
     );
   }
-
-
 }

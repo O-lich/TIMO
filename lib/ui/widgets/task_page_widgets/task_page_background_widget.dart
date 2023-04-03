@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
-import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/colors_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/panel_close_widget.dart';
@@ -37,7 +35,9 @@ class TaskPageBackgroundWidget extends StatefulWidget {
     required this.colorsList,
     required this.taskController,
     required this.taskModel,
-    required this.onCloseTap, required this.isClosePanelTapped, required this.onClosePanelTap,
+    required this.onCloseTap,
+    required this.isClosePanelTapped,
+    required this.onClosePanelTap,
   }) : super(key: key);
 
   @override
@@ -204,9 +204,10 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                     dismissible: DismissiblePane(
                       onDismissed: () {
                         context.read<AppBloc>().add(
-                          AppEventDeleteReminderFromTaskPage(
-                              taskModel: widget.taskModel, context: context),
-                        );
+                              AppEventDeleteReminderFromTaskPage(
+                                  taskModel: widget.taskModel,
+                                  context: context),
+                            );
                       },
                     ),
                     motion: const ScrollMotion(),
@@ -217,9 +218,10 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                         ),
                         onPressed: (BuildContext context) {
                           context.read<AppBloc>().add(
-                            AppEventDeleteReminderFromTaskPage(
-                                taskModel: widget.taskModel, context: context),
-                          );
+                                AppEventDeleteReminderFromTaskPage(
+                                    taskModel: widget.taskModel,
+                                    context: context),
+                              );
                         },
                         child: Image.asset(
                           AppIcons.delete,
@@ -322,8 +324,4 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
       ),
     );
   }
-
-
-
-
 }

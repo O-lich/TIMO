@@ -1,13 +1,8 @@
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app_main_screen/bloc/app_bloc.dart';
-import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
-import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
-import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/options_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/single_list_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/nav_bar_widget.dart';
 import 'add_button_widget.dart';
@@ -15,22 +10,29 @@ import 'add_button_widget.dart';
 class ListsPageBackgroundWidget extends StatefulWidget {
   final double height;
   final double width;
-  final void Function() onPressed;
+  final void Function() onPressedClose;
   final List<ListModel> lists;
   final void Function() onAddButtonTap;
   final void Function() onSettingsButtonTap;
-  final List <FocusNode> focusNodeList;
-  final List <TextEditingController> controllerList;
+  final List<FocusNode> focusNodeList;
+  final List<TextEditingController> controllerList;
+  final void Function(String text, int selectedIndex) onListRenameSubmitted;
+  final void Function(int selectedIndex) onListTap;
+  final void Function(int selectedIndex, BuildContext context) onOptionsTap;
 
   const ListsPageBackgroundWidget({
     Key? key,
     required this.height,
     required this.width,
-    required this.onPressed,
+    required this.onPressedClose,
     required this.lists,
     required this.onAddButtonTap,
     required this.onSettingsButtonTap,
-    required this.focusNodeList, required this.controllerList,
+    required this.focusNodeList,
+    required this.controllerList,
+    required this.onListRenameSubmitted,
+    required this.onListTap,
+    required this.onOptionsTap,
   }) : super(key: key);
 
   @override
@@ -71,7 +73,7 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                 ),
                 NavBarWidget(
                   height: widget.height,
-                  onPressed: widget.onPressed,
+                  onPressed: widget.onPressedClose,
                   width: widget.width,
                   titleColor: backgroundColor,
                   buttonColor: darkColor,
@@ -107,48 +109,11 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                         ...widget.lists.asMap().entries.map(
                               (list) => SingleListWidget(
                                 onListTap: () {
-                                  context.read<AppBloc>().add(
-                                        AppEventChangeList(index: list.key),
-                                      );
+                                  widget.onListTap(list.key);
                                 },
                                 height: widget.height,
                                 onOptionsTap: () {
-                                  _selectedIndex = list.key;
-                                  SlidingPanelHelper().onPressedShowBottomSheet(
-                                    OptionsPanelWidget(
-                                      selectedListColorIndex: widget
-                                          .lists[_selectedIndex].listColorIndex,
-                                      height: widget.height,
-                                      width: widget.width,
-                                      onTapClose: () {
-                                        context.read<AppBloc>().add(
-                                              AppEventUpdateListColor(
-                                                listModel: widget
-                                                    .lists[_selectedIndex],
-                                                listColorIndex:
-                                                    listCurrentColorIndex,
-                                              ),
-                                            );
-                                        Navigator.pop(context);
-                                      },
-                                      colors: buttonColors,
-                                      onRenameTap: () {
-                                        FocusScope.of(context).requestFocus(
-                                            widget.focusNodeList[list.key]);
-                                        Navigator.pop(context);
-                                      },
-                                      onDeleteTap: () {
-                                        Navigator.pop(context);
-                                        context.read<AppBloc>().add(
-                                              AppEventDeleteList(
-                                                listModel: widget
-                                                    .lists[_selectedIndex],
-                                              ),
-                                            );
-                                      },
-                                    ),
-                                    context,
-                                  );
+                                  widget.onOptionsTap(list.key, context);
                                 },
                                 listModel: list.value,
                                 isTapped: selectedListIndex == list.key,
@@ -157,7 +122,10 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                                 },
                                 width: widget.width,
                                 focusNode: widget.focusNodeList[list.key],
-                                controller: widget.controllerList[list.key],//ToDo for add new list
+                                controller: widget.controllerList[list.key],
+                                onListRenameSubmitted: (String text) {
+                                  widget.onListRenameSubmitted(text, list.key);
+                                },
                               ),
                             ),
                         AddButtonWidget(

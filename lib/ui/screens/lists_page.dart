@@ -4,6 +4,7 @@ import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/lists_page_background_widget.dart';
+import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/options_panel_widget.dart';
 
 class ListsPage extends StatefulWidget {
   final List<ListModel> listsList;
@@ -37,12 +38,24 @@ class _ListsPageState extends State<ListsPage> {
       body: ListsPageBackgroundWidget(
         height: heightScreen,
         width: widthScreen,
-        onPressed: () {
+        lists: widget.listsList,
+        focusNodeList: widget.focusNodeList,
+        controllerList: widget.controllerList,
+        onPressedClose: () {
           context.read<AppBloc>().add(
                 const AppEventGoToMainView(),
               );
         },
-        lists: widget.listsList,
+        onSettingsButtonTap: () {
+          context.read<AppBloc>().add(
+                const AppEventGoToSettings(),
+              );
+        },
+        onListTap: (int selectedIndex) {
+          context.read<AppBloc>().add(
+            AppEventChangeList(index: selectedIndex),
+          );
+        },
         onAddButtonTap: () {
           SlidingPanelHelper().onAddNewListPressed(
             widthScreen: widthScreen,
@@ -58,13 +71,51 @@ class _ListsPageState extends State<ListsPage> {
             },
           );
         },
-        onSettingsButtonTap: () {
+
+        onListRenameSubmitted: (String text, int selectedIndex) {
           context.read<AppBloc>().add(
-                const AppEventGoToSettings(),
+                AppEventUpdateListText(
+                  listModel: widget.listsList[selectedIndex],
+                  listText: text,
+                ),
               );
         },
-        focusNodeList: widget.focusNodeList,
-        controllerList: widget.controllerList,
+
+        onOptionsTap: (int selectedIndex, BuildContext context) {
+          SlidingPanelHelper().onPressedShowBottomSheet(
+            OptionsPanelWidget(
+              selectedListColorIndex:
+                  widget.listsList[selectedIndex].listColorIndex,
+              height: heightScreen,
+              width: widthScreen,
+              onTapClose: () {
+                Navigator.pop(context);
+              },
+              onRenameTap: () {
+                FocusScope.of(context)
+                    .requestFocus(widget.focusNodeList[selectedIndex]);
+                Navigator.pop(context);
+              },
+              onDeleteTap: () {
+                Navigator.pop(context);
+                context.read<AppBloc>().add(
+                      AppEventDeleteList(
+                        listModel: widget.listsList[selectedIndex],
+                      ),
+                    );
+              },
+              changeListColor: (int index) {
+                context.read<AppBloc>().add(
+                      AppEventUpdateListColor(
+                        listModel: widget.listsList[selectedIndex],
+                        listColorIndex: index,
+                      ),
+                    );
+              },
+            ),
+            context,
+          );
+        },
       ),
     );
   }
