@@ -321,8 +321,10 @@ class AppEventListPanelOpenFromMainView implements AppEvent {
   final double heightScreen;
   final double widthScreen;
   final void Function() onAddNewList;
+  final void Function() onMoveToButtonPressed;
 
   const AppEventListPanelOpenFromMainView({
+    required this.onMoveToButtonPressed,
     required this.context,
     required this.listModel,
     required this.heightScreen,
@@ -330,6 +332,7 @@ class AppEventListPanelOpenFromMainView implements AppEvent {
     required this.onAddNewList,
   }) : super();
 }
+
 @immutable
 class AppEventAddNewListPanelOpenFromMainView implements AppEvent {
   final BuildContext context;

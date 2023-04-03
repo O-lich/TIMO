@@ -393,7 +393,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         builder: (context) => SingleChildScrollView(
           controller: ModalScrollController.of(context),
           child: ListsPanelWidget(
-            onButtonPressed: Navigator.of(context).pop,
+            onButtonPressed: () {
+              Navigator
+                  .of(context)
+                  .pop;
+              event.onMoveToButtonPressed();
+            },
             height: event.heightScreen,
             width: event.widthScreen,
             lists: listsList,
