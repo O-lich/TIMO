@@ -552,12 +552,17 @@ Future<void> updateListImage({
       .collection('lists')
       .doc(listID);
 
-  final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+  final pickedFile = await ImagePicker().pickImage(
+    source: ImageSource.gallery,
+    imageQuality: 5,
+  );
   if (pickedFile == null) return;
 
   final File imageFile = File(pickedFile.path);
-  final Reference storageRef =
-      FirebaseStorage.instance.ref().child(currentUser.userID).child('$listID.jpg');
+  final Reference storageRef = FirebaseStorage.instance
+      .ref()
+      .child(currentUser.userID)
+      .child('$listID.jpg');
 
   final UploadTask uploadTask = storageRef.putFile(imageFile);
   final TaskSnapshot downloadUrl = await uploadTask.whenComplete(() {});
