@@ -59,6 +59,9 @@ class _NewTaskViewState extends State<NewTaskView> {
                   dateTimeReminder: widget.dateTimeReminder,
                 ),
               );
+          if (moveToListIndex >= 0) {
+            selectedListIndex = moveToListIndex;
+          }
         },
         onListsTap: () {
           onListTap(heightScreen, widthScreen, context);

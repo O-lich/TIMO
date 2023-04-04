@@ -17,91 +17,91 @@
 //     );
 //   }
 //
-//   // void onAddNewListPressed({
-//   //   required double widthScreen,
-//   //   required double heightScreen,
-//   //   required BuildContext context,
-//   //   required void Function(TextEditingController controller) onBlackButtonTap,
-//   // }) {
-//   //   onPressedShowBottomSheet(
-//   //       AddNewListPanelWidget(
-//   //         height: heightScreen,
-//   //         onTapClose: () {
-//   //           Navigator.of(context).pop();
-//   //         },
-//   //         width: widthScreen,
-//   //         onBlackButtonTap: (controller) {
-//   //           onBlackButtonTap(controller);
-//   //         },
-//   //       ),
-//   //       context);
-//   // }
-//
-//   // void onReminderTap({
-//   //   required double widthScreen,
-//   //   required double heightScreen,
-//   //   required BuildContext context,
-//   //   required void Function(DateTime? dateTime) onSaveTap,
-//   //   required void Function() onDeleteTap,
-//   //   required TaskModel taskModel,
-//   // }) {
-//   //   onPressedShowBottomSheet(
-//   //       ReminderPanelWidget(
-//   //         taskModel: taskModel,
-//   //         height: heightScreen,
-//   //         onCloseTap: () {
-//   //           Navigator.of(context).pop();
-//   //         },
-//   //         width: widthScreen,
-//   //         onSaveTap: (dateTime) {
-//   //           onSaveTap(dateTime);
-//   //         },
-//   //         onDeleteTap: () {
-//   //           onDeleteTap();
-//   //         },
-//   //       ),
-//   //       context);
-//   // }
-//
-//   // void onListsTap(
-//   //     BuildContext context,
-//   //     double widthScreen,
-//   //     double heightScreen,
-//   //     List<ListModel> lists,
-//   //     List<Color> buttonColors,
-//   //     TextEditingController controller,
-//   //     int selectedIndex) {
-//   //   SlidingPanelHelper().onPressedShowBottomSheet(
-//   //     ColorsPanelWidget(
-//   //       selectedTaskColorIndex: selectedIndex,
-//   //       height: heightScreen,
-//   //       width: widthScreen,
-//   //       onTapClose: Navigator.of(context).pop,
-//   //       lists: lists,
-//   //       colorsList: buttonColors,
-//   //       onAddNewListPressed: () {
-//   //         SlidingPanelHelper().onAddNewListPressed(
-//   //           widthScreen: widthScreen,
-//   //           heightScreen: heightScreen,
-//   //           context: context,
-//   //           onBlackButtonTap: (listController) {},
-//   //         );
-//   //       },
-//   //     ),
-//   //     context,
-//   //   );
-//   // }
-//
-// // void onOptionsTap(BuildContext context, double widthScreen,
-// //     double heightScreen, List<Color> buttonColors, void Function() onRenameTap) {
-// //   SlidingPanelHelper().onPressedShowBottomSheet(
-// //     OptionsPanelWidget(
-// //       height: heightScreen,
-// //       width: widthScreen,
-// //       onTapClose: Navigator.of(context).pop,
-// //       colors: buttonColors,
-// //       onRenameTap: onRenameTap,),
-// //     context,
-// //   );
-// // }
+// void onAddNewListPressed({
+//   required double widthScreen,
+//   required double heightScreen,
+//   required BuildContext context,
+//   required void Function(TextEditingController controller) onBlackButtonTap,
+// }) {
+//   onPressedShowBottomSheet(
+//       AddNewListPanelWidget(
+//         height: heightScreen,
+//         onTapClose: () {
+//           Navigator.of(context).pop();
+//         },
+//         width: widthScreen,
+//         onBlackButtonTap: (controller) {
+//           onBlackButtonTap(controller);
+//         },
+//       ),
+//       context);
 // }
+
+// void onReminderTap({
+//   required double widthScreen,
+//   required double heightScreen,
+//   required BuildContext context,
+//   required void Function(DateTime? dateTime) onSaveTap,
+//   required void Function() onDeleteTap,
+//   required TaskModel taskModel,
+// }) {
+//   onPressedShowBottomSheet(
+//       ReminderPanelWidget(
+//         taskModel: taskModel,
+//         height: heightScreen,
+//         onCloseTap: () {
+//           Navigator.of(context).pop();
+//         },
+//         width: widthScreen,
+//         onSaveTap: (dateTime) {
+//           onSaveTap(dateTime);
+//         },
+//         onDeleteTap: () {
+//           onDeleteTap();
+//         },
+//       ),
+//       context);
+// }
+
+// void onListsTap(
+//     BuildContext context,
+//     double widthScreen,
+//     double heightScreen,
+//     List<ListModel> lists,
+//     List<Color> buttonColors,
+//     TextEditingController controller,
+//     int selectedIndex) {
+//   SlidingPanelHelper().onPressedShowBottomSheet(
+//     ColorsPanelWidget(
+//       selectedTaskColorIndex: selectedIndex,
+//       height: heightScreen,
+//       width: widthScreen,
+//       onTapClose: Navigator.of(context).pop,
+//       lists: lists,
+//       colorsList: buttonColors,
+//       onAddNewListPressed: () {
+//         SlidingPanelHelper().onAddNewListPressed(
+//           widthScreen: widthScreen,
+//           heightScreen: heightScreen,
+//           context: context,
+//           onBlackButtonTap: (listController) {},
+//         );
+//       },
+//     ),
+//     context,
+//   );
+// }
+
+// void onOptionsTap(BuildContext context, double widthScreen,
+//     double heightScreen, List<Color> buttonColors, void Function() onRenameTap) {
+//   SlidingPanelHelper().onPressedShowBottomSheet(
+//     OptionsPanelWidget(
+//       height: heightScreen,
+//       width: widthScreen,
+//       onTapClose: Navigator.of(context).pop,
+//       colors: buttonColors,
+//       onRenameTap: onRenameTap,),
+//     context,
+//   );
+// }
+//}
