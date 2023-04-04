@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
@@ -17,27 +14,25 @@ class TaskPageBackgroundWidget extends StatefulWidget {
   final double width;
   final TaskModel taskModel;
   final void Function() onReminderTap;
-  final void Function() onTitleTap;
-  final void Function() onMoveToTap;
   final void Function() onCloseTap;
   final List<Color> colorsList;
   final TextEditingController taskController;
   final bool isClosePanelTapped;
   final void Function() onClosePanelTap;
+  final void Function(BuildContext context) onDeleteReminderSlide;
 
   const TaskPageBackgroundWidget({
     Key? key,
     required this.height,
     required this.width,
     required this.onReminderTap,
-    required this.onTitleTap,
-    required this.onMoveToTap,
     required this.colorsList,
     required this.taskController,
     required this.taskModel,
     required this.onCloseTap,
     required this.isClosePanelTapped,
     required this.onClosePanelTap,
+    required this.onDeleteReminderSlide,
   }) : super(key: key);
 
   @override
@@ -70,7 +65,8 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
           PanelCloseWidget(
             alignment: Alignment.topLeft,
             onTapClose: () {
-              if (widget.taskController.text.isEmpty || widget.taskController.text.trim().isEmpty) {
+              if (widget.taskController.text.isEmpty ||
+                  widget.taskController.text.trim().isEmpty) {
                 isTapped = true;
                 shakeKey.currentState?.shake();
               } else {
@@ -203,11 +199,7 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                     extentRatio: 0.35,
                     dismissible: DismissiblePane(
                       onDismissed: () {
-                        context.read<AppBloc>().add(
-                              AppEventDeleteReminderFromTaskPage(
-                                  taskModel: widget.taskModel,
-                                  context: context),
-                            );
+                        widget.onDeleteReminderSlide(context);
                       },
                     ),
                     motion: const ScrollMotion(),
@@ -217,11 +209,7 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                           left: 20,
                         ),
                         onPressed: (BuildContext context) {
-                          context.read<AppBloc>().add(
-                                AppEventDeleteReminderFromTaskPage(
-                                    taskModel: widget.taskModel,
-                                    context: context),
-                              );
+                          widget.onDeleteReminderSlide(context);
                         },
                         child: Image.asset(
                           AppIcons.delete,

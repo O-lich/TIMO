@@ -139,12 +139,14 @@ class AppEventAddNewTask implements AppEvent {
   final ListModel listModel;
   final bool isReminderActive;
   final String dateTimeReminder;
+  final int taskColorIndex;
 
   const AppEventAddNewTask({
     required this.isReminderActive,
     required this.dateTimeReminder,
     required this.listModel,
     required this.taskController,
+    required this.taskColorIndex,
   });
 }
 

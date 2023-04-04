@@ -1,4 +1,4 @@
-//import 'dart:developer';
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -37,7 +37,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           LoadedAppState(
               tasksList: tasksList,
               quoteModel: quote,
-              selectedListIndex: selectedListIndex,
+              listModel: listsList[selectedListIndex],
               listsList: listsList),
         );
       },
@@ -70,7 +70,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(
         LoadingAppState(
           listModel: event.listModel,
-          selectedListIndex: selectedListIndex,
         ),
       );
       final listsList = await getLists();
@@ -82,29 +81,29 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         LoadedAppState(
             tasksList: tasksList,
             quoteModel: quote,
-            selectedListIndex: selectedListIndex,
+            listModel: event.listModel,
             listsList: listsList),
       );
     });
     on<AppEventAddNewTask>((event, emit) async {
-      emit(LoadingAppState(
-          selectedListIndex: selectedListIndex, listModel: event.listModel));
+      emit(LoadingAppState(listModel: event.listModel));
       createNewTask(
         taskController: event.taskController,
         currentList: event.listModel,
         dateTimeReminder: event.dateTimeReminder,
         isReminderActive: event.isReminderActive,
+        taskColorIndex: event.taskColorIndex,
       );
       final listsList = await getLists();
       final tasksList = await getTasks(
-        listModel: listsList[selectedListIndex],
+        listModel: event.listModel,
       );
       final QuoteModel quote = await updateQuote();
       emit(
         LoadedAppState(
             tasksList: tasksList,
             quoteModel: quote,
-            selectedListIndex: selectedListIndex,
+            listModel: event.listModel,
             listsList: listsList),
       );
     });
@@ -159,7 +158,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         LoadedAppState(
             tasksList: tasksList,
             quoteModel: quote,
-            selectedListIndex: selectedListIndex,
+            listModel: listsList[selectedListIndex],
             listsList: listsList),
       );
     });
@@ -177,7 +176,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         LoadedAppState(
             tasksList: tasksList,
             quoteModel: quote,
-            selectedListIndex: selectedListIndex,
+            listModel: listsList[selectedListIndex],
             listsList: listsList),
       );
     });
@@ -237,21 +236,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventChangeList>((event, emit) async {
       emit(LoadingAppState(
-        selectedListIndex: selectedListIndex,
         listModel: event.listModel,
       ));
       selectedListIndex = event.index;
       final listsList = await getLists();
 
       final tasksList = await getTasks(
-        listModel: listsList[selectedListIndex],
+        listModel: event.listModel,
       );
       final QuoteModel quote = await updateQuote();
       emit(
         LoadedAppState(
             tasksList: tasksList,
             quoteModel: quote,
-            selectedListIndex: selectedListIndex,
+            listModel: event.listModel,
             listsList: listsList),
       );
     });
@@ -283,7 +281,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         LoadedAppState(
             tasksList: tasksList,
             quoteModel: quote,
-            selectedListIndex: selectedListIndex,
+            listModel: listsList[selectedListIndex],
             listsList: listsList),
       );
     });
@@ -358,7 +356,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventUpdateTask>((event, emit) async {
       emit(LoadingAppState(
-        selectedListIndex: selectedListIndex,
         listModel: event.listModel,
       ));
       final listsList = await getLists();
@@ -369,14 +366,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         textController: event.textController,
       );
       final tasksList = await getTasks(
-        listModel: listsList[selectedListIndex],
+        listModel: event.listModel,
       );
       final QuoteModel quote = await updateQuote();
       emit(
         LoadedAppState(
             tasksList: tasksList,
             quoteModel: quote,
-            selectedListIndex: selectedListIndex,
+            listModel: event.listModel,
             listsList: listsList),
       );
     });
@@ -409,7 +406,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
       );
       emit(LoadedAppState(
-          selectedListIndex: selectedListIndex,
+          listModel: event.listModel,
           tasksList: tasksList,
           quoteModel: quote,
           listsList: listsList));
@@ -496,7 +493,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
       final listsList = await getLists();
       emit(LoadedAppState(
-          selectedListIndex: selectedListIndex,
+          listModel: event.listModel,
           tasksList: tasksList,
           quoteModel: quote,
           listsList: listsList));

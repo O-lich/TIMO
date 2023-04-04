@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
                     return MyHomePage(
                       quoteModel: appState.quoteModel,
                       tasksList: appState.tasksList,
-                      selectedListIndex: appState.selectedListIndex,
+                      listModel: appState.listModel,
                       listsList: appState.listsList,
                     );
                   } else if (appState is LoadedListsAppState) {
@@ -117,7 +117,6 @@ class MyApp extends StatelessWidget {
                     );
                   } else if (appState is LoadingAppState) {
                     return LoadingView(
-                      selectedListIndex: appState.selectedListIndex,
                       listModel: appState.listModel,
                     );
                   } else {

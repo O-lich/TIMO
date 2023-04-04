@@ -5,12 +5,10 @@ import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 
 class LoadingView extends StatefulWidget {
-  final int selectedListIndex;
   final ListModel listModel;
 
   const LoadingView({
     Key? key,
-    required this.selectedListIndex,
     required this.listModel,
   }) : super(key: key);
 

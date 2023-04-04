@@ -50,8 +50,11 @@ class _NewTaskPageState extends State<NewTaskPage> {
         onBlackButtonPressed: () {
           context.read<AppBloc>().add(
                 AppEventAddNewTask(
+                  taskColorIndex: taskCurrentColorIndex,
                   taskController: taskController,
-                  listModel: widget.listsList[selectedListIndex],
+                  listModel: moveToListIndex >= 0
+                      ? widget.listsList[moveToListIndex]
+                      : widget.listsList[selectedListIndex],
                   isReminderActive: widget.isReminderActive,
                   dateTimeReminder: widget.dateTimeReminder,
                 ),

@@ -15,11 +15,9 @@ class InitAppState extends AppState {
 @immutable
 class LoadingAppState extends AppState {
   final ListModel listModel;
-  final int selectedListIndex;
 
   const LoadingAppState({
     required this.listModel,
-    required this.selectedListIndex,
   });
 }
 
@@ -32,11 +30,11 @@ class AppStateSplashScreen extends AppState {
 class LoadedAppState extends AppState {
   final QuoteModel quoteModel;
   final List<TaskModel> tasksList;
-  final int selectedListIndex;
+  final ListModel listModel;
   final List<ListModel> listsList;
 
   const LoadedAppState(
-      {required this.selectedListIndex,
+      {required this.listModel,
       required this.tasksList,
       required this.quoteModel,
       required this.listsList});
@@ -95,7 +93,6 @@ class SingleTaskAppState extends AppState {
     required this.listsList,
     required this.taskModel,
   });
-
 }
 
 @immutable

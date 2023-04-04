@@ -16,7 +16,7 @@ import 'package:todo_app_main_screen/ui/widgets/main_page_widgets/tasks_widget.d
 class MyHomePage extends StatefulWidget {
   final QuoteModel quoteModel;
   final List<TaskModel> tasksList;
-  final int selectedListIndex;
+  final ListModel listModel;
   final List<ListModel> listsList;
 
   static const routeName = '/my_home_page';
@@ -25,8 +25,8 @@ class MyHomePage extends StatefulWidget {
     Key? key,
     required this.quoteModel,
     required this.tasksList,
-    required this.selectedListIndex,
     required this.listsList,
+    required this.listModel,
   }) : super(key: key);
 
   @override
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ? Colors.white
             : (widget.listsList.isNotEmpty)
                 ? buttonColors[
-                    widget.listsList[widget.selectedListIndex].listColorIndex]
+                    widget.listModel.listColorIndex]
                 : buttonColors[0],
         body: Stack(
           fit: StackFit.expand,
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
               quoteModel: widget.quoteModel,
               buttonColor: (widget.listsList.isNotEmpty)
                   ? buttonColors[
-                      widget.listsList[widget.selectedListIndex].listColorIndex]
+                      widget.listModel.listColorIndex]
                   : buttonColors[0],
             ),
             NotificationListener<DraggableScrollableNotification>(

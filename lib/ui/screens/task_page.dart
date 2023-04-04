@@ -6,7 +6,6 @@ import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
-import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
@@ -52,29 +51,27 @@ class _TaskPageState extends State<TaskPage> {
         isClosePanelTapped: widget.isClosePanelTapped,
         onReminderTap: () {
           context.read<AppBloc>().add(
-            AppEventOpenReminderPanelFromTaskView(
-                taskModel: widget.taskModel,
-                context: context,
-                heightScreen: heightScreen,
-                widthScreen: widthScreen,
-                onSaveTap: (DateTime? dateTime) {
-                  context.read<AppBloc>().add(
-                    AppEventSetReminderFromTaskPage(
-                        taskModel: widget.taskModel,
-                        dateTime: dateTime,
-                        context: context),
-                  );
-                },
-                onDeleteTap: () {
-                  context.read<AppBloc>().add(
-                    AppEventDeleteReminderFromTaskPage(
-                        taskModel: widget.taskModel, context: context),
-                  );
-                }),
-          );
+                AppEventOpenReminderPanelFromTaskView(
+                    taskModel: widget.taskModel,
+                    context: context,
+                    heightScreen: heightScreen,
+                    widthScreen: widthScreen,
+                    onSaveTap: (DateTime? dateTime) {
+                      context.read<AppBloc>().add(
+                            AppEventSetReminderFromTaskPage(
+                                taskModel: widget.taskModel,
+                                dateTime: dateTime,
+                                context: context),
+                          );
+                    },
+                    onDeleteTap: () {
+                      context.read<AppBloc>().add(
+                            AppEventDeleteReminderFromTaskPage(
+                                taskModel: widget.taskModel, context: context),
+                          );
+                    }),
+              );
         },
-        onTitleTap: () {},
-        onMoveToTap: () {},
         colorsList: buttonColors,
         taskController: textController,
         taskModel: widget.taskModel,
@@ -95,6 +92,12 @@ class _TaskPageState extends State<TaskPage> {
                   taskModel: widget.taskModel,
                   isClosePanelTapped: true,
                 ),
+              );
+        },
+        onDeleteReminderSlide: (BuildContext context) {
+          context.read<AppBloc>().add(
+                AppEventDeleteReminderFromTaskPage(
+                    taskModel: widget.taskModel, context: context),
               );
         },
       ),
@@ -125,7 +128,8 @@ class _TaskPageState extends State<TaskPage> {
                     heroTag: 'moveBtn',
                     elevation: 0,
                     backgroundColor: textColor,
-                    onPressed: () => onMoveToPressed(heightScreen, widthScreen, context),
+                    onPressed: () =>
+                        onMoveToPressed(heightScreen, widthScreen, context),
                     child: Image.asset(
                       AppIcons.moveTo,
                       scale: 3,

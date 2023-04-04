@@ -109,18 +109,20 @@ void createNewTask({
   required ListModel currentList,
   required String dateTimeReminder,
   required bool isReminderActive,
+  required int taskColorIndex
 }) {
   if (taskController.text.isNotEmpty) {
     addNewTask(
       text: taskController.text,
       taskID: DateTime.now().millisecondsSinceEpoch.toString(),
       listID: currentList.listID,
-      colorIndex: taskCurrentColorIndex,
+      colorIndex: taskColorIndex,
       dateTimeReminder: dateTimeReminder,
       isReminderActive: isReminderActive,
     );
-    taskCurrentColorIndex = -1;
+
   }
+  moveToListIndex = -1;
 }
 
 Future<void> moveToFromMainScreenTask({
@@ -243,8 +245,7 @@ Future<List<ListModel>> getLists() async {
 
   if (ref.isEmpty) {
     return [await addToDoList()];
-  }
-  else {
+  } else {
     return ref;
   }
 }
@@ -277,8 +278,6 @@ Future<ListModel> addToDoList() async {
       .get();
   return ref.data()!;
 }
-
-
 
 //ToDo move to main
 Future<void> getUsers() async {
@@ -338,7 +337,6 @@ Future<void> updateUserPanelTapped() async {
   await docRef.update(updates);
   await getUsers();
 }
-
 
 Future<QuoteModel> updateQuote() async {
   final dataDecoded = await FetchHelper().getData();
@@ -424,7 +422,6 @@ Future<TaskModel> singleTaskReminderDelete({
   required BuildContext context,
 }) async {
   TaskModel updatedTaskModel = taskModel;
-  Navigator.pop(context);
   await updateTaskReminder(
       updatedTask: taskModel,
       dateTimeReminder: '2000-01-01 00:00:00',
@@ -493,12 +490,10 @@ Future<void> updateTaskReminder({
   docRef.update(updates);
 }
 
-
 Future<void> updateTask({
   required TaskModel updatedTask,
   required TextEditingController textController,
   required ListModel? moveToListModel,
-
 }) async {
   if (moveToListModel == null) {
     final docRef = db
@@ -527,8 +522,8 @@ Future<void> updateTask({
         .delete()
         .then(
           (doc) => log("Document deleted"),
-      onError: (e) => log("Error updating document $e"),
-    );
+          onError: (e) => log("Error updating document $e"),
+        );
     addNewTaskUpdate(
       newTask: TaskModel(
         task: textController.text,
