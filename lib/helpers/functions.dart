@@ -107,13 +107,12 @@ Future<void> updateListColor(
   docRef.update(updates);
 }
 
-void createNewTask({
-  required TextEditingController taskController,
-  required ListModel currentList,
-  required String dateTimeReminder,
-  required bool isReminderActive,
-  required int taskColorIndex
-}) {
+void createNewTask(
+    {required TextEditingController taskController,
+    required ListModel currentList,
+    required String dateTimeReminder,
+    required bool isReminderActive,
+    required int taskColorIndex}) {
   if (taskController.text.isNotEmpty) {
     addNewTask(
       text: taskController.text,
@@ -123,7 +122,6 @@ void createNewTask({
       dateTimeReminder: dateTimeReminder,
       isReminderActive: isReminderActive,
     );
-
   }
   moveToListIndex = -1;
 }
@@ -255,9 +253,9 @@ Future<List<ListModel>> getLists() async {
 
 Future<ListModel> addToDoList() async {
   final list = ListModel(
-    listID: DateTime.now().millisecondsSinceEpoch.toString(),
-    list: 'ToDo',
-  );
+      listID: DateTime.now().millisecondsSinceEpoch.toString(),
+      list: 'ToDo',
+      listImageUrl: "url");
   final docRef = db
       .collection("users")
       .doc(currentUser.userID)
@@ -545,10 +543,12 @@ Future<void> updateTask({
   taskCurrentColorIndex = -1;
 }
 
-Future<void> updateListImage({required String listID}) async {
+Future<void> updateListImage({
+  required String listID,
+}) async {
   final docRef = db
       .collection("users")
-      .doc('testUser')
+      .doc(currentUser.userID)
       .collection('lists')
       .doc(listID);
 
@@ -556,16 +556,14 @@ Future<void> updateListImage({required String listID}) async {
   if (pickedFile == null) return;
 
   final File imageFile = File(pickedFile.path);
-  final Reference storageRef = FirebaseStorage.instance
-      .ref()
-      .child('list_images')
-      .child('$listID.jpg');
+  final Reference storageRef =
+      FirebaseStorage.instance.ref().child(currentUser.userID).child('$listID.jpg');
 
   final UploadTask uploadTask = storageRef.putFile(imageFile);
   final TaskSnapshot downloadUrl = await uploadTask.whenComplete(() {});
   final String imageUrl = await downloadUrl.ref.getDownloadURL();
   final updates = <String, String>{
-    "listImageURL": imageUrl,
+    "listImageUrl": imageUrl,
   };
   docRef.update(updates);
 }
