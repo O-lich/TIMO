@@ -46,6 +46,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete": MessageLookupByLibrary.simpleMessage("Cancellare"),
         "deletingReminder": m0,
         "deletingTask": m1,
+        "error": MessageLookupByLibrary.simpleMessage(
+            "Nessuna connessione internet"),
         "getPremium": MessageLookupByLibrary.simpleMessage("Diventa premium"),
         "goPremium": MessageLookupByLibrary.simpleMessage("Vai Premium"),
         "hintTaskText":

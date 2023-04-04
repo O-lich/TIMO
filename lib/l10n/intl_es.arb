@@ -43,5 +43,6 @@
   "letsDoSmth": "Creemos una tarea",
   "wrongReminder": "Hora de recordatorio incorrecta",
   "deletingReminder": "El recordatorio se eliminará en {seconds}",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "error": "Sin conexión a Internet"
 }

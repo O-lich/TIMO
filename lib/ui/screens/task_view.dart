@@ -11,13 +11,13 @@ import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/task_page_widgets/task_page_background_widget.dart';
 
-class TaskPage extends StatefulWidget {
+class TaskView extends StatefulWidget {
   static const routeName = '/task_page';
   final TaskModel taskModel;
   final List<ListModel> listsList;
   final bool isClosePanelTapped;
 
-  const TaskPage({
+  const TaskView({
     Key? key,
     required this.taskModel,
     required this.listsList,
@@ -25,10 +25,10 @@ class TaskPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TaskPage> createState() => _TaskPageState();
+  State<TaskView> createState() => _TaskViewState();
 }
 
-class _TaskPageState extends State<TaskPage> {
+class _TaskViewState extends State<TaskView> {
   final listController = TextEditingController();
   final textController = TextEditingController();
 

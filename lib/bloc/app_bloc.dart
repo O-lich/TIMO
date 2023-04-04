@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -27,19 +28,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         emit(
           const AppStateSplashScreen(),
         );
-        final QuoteModel quote = await updateQuote();
-        await getUsers();
-        final listsList = await getLists();
-        final tasksList = await getTasks(
-          listModel: listsList[selectedListIndex],
-        );
-        emit(
-          LoadedAppState(
-              tasksList: tasksList,
-              quoteModel: quote,
-              listModel: listsList[selectedListIndex],
-              listsList: listsList),
-        );
+        try {
+          final QuoteModel quote = await updateQuote();
+          await getUsers();
+          final listsList = await getLists();
+          final tasksList = await getTasks(
+            listModel: listsList[selectedListIndex],
+          );
+          emit(
+            LoadedAppState(
+                tasksList: tasksList,
+                quoteModel: quote,
+                listModel: listsList[selectedListIndex],
+                listsList: listsList),
+          );
+        } on Exception {
+          emit(const ErrorAppState());
+        }
       },
     );
     on<AppEventGoToLists>((event, emit) async {
@@ -72,40 +77,48 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           listModel: event.listModel,
         ),
       );
-      final listsList = await getLists();
-      final tasksList = await getTasks(
-        listModel: listsList[selectedListIndex],
-      );
-      final QuoteModel quote = await updateQuote();
-      emit(
-        LoadedAppState(
-            tasksList: tasksList,
-            quoteModel: quote,
-            listModel: event.listModel,
-            listsList: listsList),
-      );
+      try {
+        final listsList = await getLists();
+        final tasksList = await getTasks(
+          listModel: listsList[selectedListIndex],
+        );
+        final QuoteModel quote = await updateQuote();
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: event.listModel,
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
     on<AppEventAddNewTask>((event, emit) async {
       emit(LoadingAppState(listModel: event.listModel));
-      createNewTask(
-        taskController: event.taskController,
-        currentList: event.listModel,
-        dateTimeReminder: event.dateTimeReminder,
-        isReminderActive: event.isReminderActive,
-        taskColorIndex: event.taskColorIndex,
-      );
-      final listsList = await getLists();
-      final tasksList = await getTasks(
-        listModel: event.listModel,
-      );
-      final QuoteModel quote = await updateQuote();
-      emit(
-        LoadedAppState(
-            tasksList: tasksList,
-            quoteModel: quote,
-            listModel: event.listModel,
-            listsList: listsList),
-      );
+      try {
+        createNewTask(
+          taskController: event.taskController,
+          currentList: event.listModel,
+          dateTimeReminder: event.dateTimeReminder,
+          isReminderActive: event.isReminderActive,
+          taskColorIndex: event.taskColorIndex,
+        );
+        final listsList = await getLists();
+        final tasksList = await getTasks(
+          listModel: event.listModel,
+        );
+        final QuoteModel quote = await updateQuote();
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: event.listModel,
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
     on<AppEventGoToSettings>((event, emit) async {
       emit(
@@ -148,37 +161,45 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
     on<AppEventDeleteTask>((event, emit) async {
-      await deleteTask(oldTask: event.taskModel);
-      final listsList = await getLists();
-      final tasksList = await getTasks(
-        listModel: listsList[selectedListIndex],
-      );
-      final QuoteModel quote = await updateQuote();
-      emit(
-        LoadedAppState(
-            tasksList: tasksList,
-            quoteModel: quote,
-            listModel: listsList[selectedListIndex],
-            listsList: listsList),
-      );
+      try {
+        await deleteTask(oldTask: event.taskModel);
+        final listsList = await getLists();
+        final tasksList = await getTasks(
+          listModel: listsList[selectedListIndex],
+        );
+        final QuoteModel quote = await updateQuote();
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: listsList[selectedListIndex],
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
     on<AppEventMoveToTask>((event, emit) async {
-      await moveToFromMainScreenTask(
-        updatedTask: event.taskModel,
-        moveToListModel: event.moveToListModel,
-      );
-      final listsList = await getLists();
-      final tasksList = await getTasks(
-        listModel: listsList[selectedListIndex],
-      );
-      final QuoteModel quote = await updateQuote();
-      emit(
-        LoadedAppState(
-            tasksList: tasksList,
-            quoteModel: quote,
-            listModel: listsList[selectedListIndex],
-            listsList: listsList),
-      );
+      try {
+        await moveToFromMainScreenTask(
+          updatedTask: event.taskModel,
+          moveToListModel: event.moveToListModel,
+        );
+        final listsList = await getLists();
+        final tasksList = await getTasks(
+          listModel: listsList[selectedListIndex],
+        );
+        final QuoteModel quote = await updateQuote();
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: listsList[selectedListIndex],
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
     on<AppEventDeleteList>((event, emit) async {
       await deleteList(oldList: event.listModel);
@@ -238,20 +259,24 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(LoadingAppState(
         listModel: event.listModel,
       ));
-      selectedListIndex = event.index;
-      final listsList = await getLists();
+      try {
+        selectedListIndex = event.index;
+        final listsList = await getLists();
 
-      final tasksList = await getTasks(
-        listModel: event.listModel,
-      );
-      final QuoteModel quote = await updateQuote();
-      emit(
-        LoadedAppState(
-            tasksList: tasksList,
-            quoteModel: quote,
-            listModel: event.listModel,
-            listsList: listsList),
-      );
+        final tasksList = await getTasks(
+          listModel: event.listModel,
+        );
+        final QuoteModel quote = await updateQuote();
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: event.listModel,
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
     on<AppEventAddNewListFromListScreen>((event, emit) async {
       final listsList =
@@ -271,19 +296,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventAddNewListFromMainScreen>((event, emit) async {
-      await createNewList(listController: event.listController);
-      final listsList = await getLists();
-      final tasksList = await getTasks(
-        listModel: listsList[selectedListIndex],
-      );
-      final QuoteModel quote = await updateQuote();
-      emit(
-        LoadedAppState(
-            tasksList: tasksList,
-            quoteModel: quote,
-            listModel: listsList[selectedListIndex],
-            listsList: listsList),
-      );
+      try {
+        await createNewList(listController: event.listController);
+        final listsList = await getLists();
+        final tasksList = await getTasks(
+          listModel: listsList[selectedListIndex],
+        );
+        final QuoteModel quote = await updateQuote();
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: listsList[selectedListIndex],
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
 
     on<AppEventSetReminderFromTaskPage>((event, emit) async {
@@ -309,11 +338,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         context: event.context,
       );
       final listsList = await getLists();
-      emit(AddNewTaskAppState(
-        listsList: listsList,
-        isReminderActive: newTask.isReminderActive,
-        dateTimeReminder: newTask.dateTimeReminder,
-      ));
+      emit(
+        AddNewTaskAppState(
+          listsList: listsList,
+          isReminderActive: newTask.isReminderActive,
+          dateTimeReminder: newTask.dateTimeReminder,
+        ),
+      );
     });
 
     on<AppEventDeleteReminderFromTaskPage>((event, emit) async {
@@ -358,58 +389,68 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(LoadingAppState(
         listModel: event.listModel,
       ));
-      final listsList = await getLists();
+      try {
+        final listsList = await getLists();
 
-      await updateTask(
-        updatedTask: event.taskModel,
-        moveToListModel: event.moveToListModel,
-        textController: event.textController,
-      );
-      final tasksList = await getTasks(
-        listModel: event.listModel,
-      );
-      final QuoteModel quote = await updateQuote();
-      emit(
-        LoadedAppState(
-            tasksList: tasksList,
-            quoteModel: quote,
-            listModel: event.listModel,
-            listsList: listsList),
-      );
+        await updateTask(
+          updatedTask: event.taskModel,
+          moveToListModel: event.moveToListModel,
+          textController: event.textController,
+        );
+        final tasksList = await getTasks(
+          listModel: event.listModel,
+        );
+        final QuoteModel quote = await updateQuote();
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: event.listModel,
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
 
     on<AppEventListPanelOpenFromMainView>((event, emit) async {
-      final listsList = await getLists();
-      final tasksList = await getTasks(listModel: event.listModel);
-      final QuoteModel quote = await updateQuote();
-      showMaterialModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-          borderRadius: commonBorderRadius,
-        ),
-        enableDrag: false,
-        context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: ListsPanelWidget(
-            onButtonPressed: () {
-              event.onMoveToButtonPressed();
-              Navigator.pop(context);
-            },
-            height: event.heightScreen,
-            width: event.widthScreen,
-            lists: listsList,
-            onTapClose: Navigator.of(context).pop,
-            onAddNewListPressed: () {
-              event.onAddNewList();
-            },
+      try {
+        final listsList = await getLists();
+        final tasksList = await getTasks(listModel: event.listModel);
+        final QuoteModel quote = await updateQuote();
+        showMaterialModalBottomSheet(
+          shape: const RoundedRectangleBorder(
+            borderRadius: commonBorderRadius,
           ),
-        ),
-      );
-      emit(LoadedAppState(
-          listModel: event.listModel,
-          tasksList: tasksList,
-          quoteModel: quote,
-          listsList: listsList));
+          enableDrag: false,
+          context: event.context,
+          builder: (context) => SingleChildScrollView(
+            controller: ModalScrollController.of(context),
+            child: ListsPanelWidget(
+              onButtonPressed: () {
+                event.onMoveToButtonPressed();
+                Navigator.pop(context);
+              },
+              height: event.heightScreen,
+              width: event.widthScreen,
+              lists: listsList,
+              onTapClose: Navigator.of(context).pop,
+              onAddNewListPressed: () {
+                event.onAddNewList();
+              },
+            ),
+          ),
+        );
+        emit(
+          LoadedAppState(
+              listModel: event.listModel,
+              tasksList: tasksList,
+              quoteModel: quote,
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
 
     on<AppEventListPanelOpenFromTaskView>((event, emit) async {
@@ -434,10 +475,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           ),
         ),
       );
-      emit(SingleTaskAppState(
-          isClosePanelTapped: currentUser.isClosePanelTapped,
-          listsList: listsList,
-          taskModel: event.taskModel));
+      emit(
+        SingleTaskAppState(
+            isClosePanelTapped: currentUser.isClosePanelTapped,
+            listsList: listsList,
+            taskModel: event.taskModel),
+      );
     });
 
     on<AppEventAddNewListPanelOpenFromTaskView>((event, emit) async {
@@ -462,41 +505,49 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
       );
       final listsList = await getLists();
-      emit(SingleTaskAppState(
-          isClosePanelTapped: currentUser.isClosePanelTapped,
-          listsList: listsList,
-          taskModel: event.taskModel));
+      emit(
+        SingleTaskAppState(
+            isClosePanelTapped: currentUser.isClosePanelTapped,
+            listsList: listsList,
+            taskModel: event.taskModel),
+      );
     });
 
     on<AppEventAddNewListPanelOpenFromMainView>((event, emit) async {
-      final tasksList = await getTasks(listModel: event.listModel);
-      final QuoteModel quote = await updateQuote();
-      showMaterialModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-          borderRadius: commonBorderRadius,
-        ),
-        enableDrag: false,
-        context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: AddNewListPanelWidget(
-            height: event.heightScreen,
-            onTapClose: () {
-              Navigator.of(event.context).pop();
-            },
-            width: event.widthScreen,
-            onBlackButtonTap: (controller) {
-              event.onBlackButtonPressed(controller);
-            },
+      try {
+        final tasksList = await getTasks(listModel: event.listModel);
+        final QuoteModel quote = await updateQuote();
+        showMaterialModalBottomSheet(
+          shape: const RoundedRectangleBorder(
+            borderRadius: commonBorderRadius,
           ),
-        ),
-      );
-      final listsList = await getLists();
-      emit(LoadedAppState(
-          listModel: event.listModel,
-          tasksList: tasksList,
-          quoteModel: quote,
-          listsList: listsList));
+          enableDrag: false,
+          context: event.context,
+          builder: (context) => SingleChildScrollView(
+            controller: ModalScrollController.of(context),
+            child: AddNewListPanelWidget(
+              height: event.heightScreen,
+              onTapClose: () {
+                Navigator.of(event.context).pop();
+              },
+              width: event.widthScreen,
+              onBlackButtonTap: (controller) {
+                event.onBlackButtonPressed(controller);
+              },
+            ),
+          ),
+        );
+        final listsList = await getLists();
+        emit(
+          LoadedAppState(
+              listModel: event.listModel,
+              tasksList: tasksList,
+              quoteModel: quote,
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
     on<AppEventAddNewListPanelOpenFromListView>((event, emit) async {
       showMaterialModalBottomSheet(

@@ -13,7 +13,7 @@ import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/main_page_widgets/main_page_background_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/main_page_widgets/tasks_widget.dart';
 
-class MyHomePage extends StatefulWidget {
+class HomeView extends StatefulWidget {
   final QuoteModel quoteModel;
   final List<TaskModel> tasksList;
   final ListModel listModel;
@@ -21,7 +21,7 @@ class MyHomePage extends StatefulWidget {
 
   static const routeName = '/my_home_page';
 
-  const MyHomePage({
+  const HomeView({
     Key? key,
     required this.quoteModel,
     required this.tasksList,
@@ -30,10 +30,10 @@ class MyHomePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeViewState extends State<HomeView> {
   bool isDeleted = false; //manage undo floating action button visibility
   bool isMoveTo = false; //manage add floating action button visibility
   final scrollController = ScrollController();

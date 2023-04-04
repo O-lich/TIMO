@@ -43,5 +43,6 @@
   "letsDoSmth": "Erstellen wir eine Aufgabe",
   "wrongReminder": "Falsche Erinnerungszeit",
   "deletingReminder": "Die Erinnerungszeit wird in {seconds} gelöscht",
-  "cancel": "Kündigen"
+  "cancel": "Kündigen",
+  "error": "Keine Internetverbindung"
 }

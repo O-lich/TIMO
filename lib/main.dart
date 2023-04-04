@@ -7,14 +7,15 @@ import 'package:provider/provider.dart';
 import 'package:todo_app_main_screen/l10n/locales.dart';
 import 'package:todo_app_main_screen/models/user_model.dart';
 import 'package:todo_app_main_screen/service/locale_provider.dart';
-import 'package:todo_app_main_screen/ui/screens/language_page.dart';
-import 'package:todo_app_main_screen/ui/screens/lists_page.dart';
+import 'package:todo_app_main_screen/ui/screens/error_view.dart';
+import 'package:todo_app_main_screen/ui/screens/language_view.dart';
+import 'package:todo_app_main_screen/ui/screens/lists_view.dart';
 import 'package:todo_app_main_screen/ui/screens/loading_view.dart';
-import 'package:todo_app_main_screen/ui/screens/my_home_page.dart';
-import 'package:todo_app_main_screen/ui/screens/new_task_page.dart';
-import 'package:todo_app_main_screen/ui/screens/settings_page.dart';
+import 'package:todo_app_main_screen/ui/screens/home_view.dart';
+import 'package:todo_app_main_screen/ui/screens/new_task_view.dart';
+import 'package:todo_app_main_screen/ui/screens/settings_view.dart';
 import 'package:todo_app_main_screen/ui/screens/splash_view.dart';
-import 'package:todo_app_main_screen/ui/screens/task_page.dart';
+import 'package:todo_app_main_screen/ui/screens/task_view.dart';
 import 'bloc/app_bloc.dart';
 import 'firebase_options.dart';
 import 'generated/l10n.dart';
@@ -85,32 +86,32 @@ class MyApp extends StatelessWidget {
                       ),
                     );
                   } else if (appState is LoadedAppState) {
-                    return MyHomePage(
+                    return HomeView(
                       quoteModel: appState.quoteModel,
                       tasksList: appState.tasksList,
                       listModel: appState.listModel,
                       listsList: appState.listsList,
                     );
                   } else if (appState is LoadedListsAppState) {
-                    return ListsPage(
+                    return ListsView(
                       listsList: appState.listsList,
                       focusNodeList: appState.focusNodeList,
                       controllerList: appState.controllerList,
                     );
                   } else if (appState is AddNewTaskAppState) {
-                    return NewTaskPage(
+                    return NewTaskView(
                       listsList: appState.listsList,
                       isReminderActive: appState.isReminderActive,
                       dateTimeReminder: appState.dateTimeReminder,
                     );
                   } else if (appState is SettingsAppState) {
-                    return const SettingsPage();
+                    return const SettingsView();
                   } else if (appState is LanguageAppState) {
-                    return LanguagePage(
+                    return LanguageView(
                       selectedIndex: appState.locale,
                     );
                   } else if (appState is SingleTaskAppState) {
-                    return TaskPage(
+                    return TaskView(
                       taskModel: appState.taskModel,
                       listsList: appState.listsList,
                       isClosePanelTapped: appState.isClosePanelTapped,
@@ -119,6 +120,8 @@ class MyApp extends StatelessWidget {
                     return LoadingView(
                       listModel: appState.listModel,
                     );
+                  } else if (appState is ErrorAppState) {
+                    return const ErrorView();
                   } else {
                     return Container();
                   }

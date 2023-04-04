@@ -8,14 +8,14 @@ import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/new_task_page_widgets/new_task_page_background_widget.dart';
 
-class NewTaskPage extends StatefulWidget {
+class NewTaskView extends StatefulWidget {
   final List<ListModel> listsList;
   final bool isReminderActive;
   final String dateTimeReminder;
 
   static const routeName = '/new_task_page';
 
-  const NewTaskPage({
+  const NewTaskView({
     Key? key,
     required this.listsList,
     required this.isReminderActive,
@@ -23,10 +23,10 @@ class NewTaskPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<NewTaskPage> createState() => _NewTaskPageState();
+  State<NewTaskView> createState() => _NewTaskViewState();
 }
 
-class _NewTaskPageState extends State<NewTaskPage> {
+class _NewTaskViewState extends State<NewTaskView> {
   final taskController = TextEditingController();
   final listController = TextEditingController();
   final taskModel = TaskModel(task: '');

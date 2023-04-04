@@ -7,18 +7,18 @@ import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/ui/widgets/language_page_widgets/language_list.dart';
 
-class LanguagePage extends StatefulWidget {
+class LanguageView extends StatefulWidget {
   final int selectedIndex;
   static const routeName = '/language_page';
 
 
-  const LanguagePage({Key? key, required this.selectedIndex}) : super(key: key);
+  const LanguageView({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
-  State<LanguagePage> createState() => _LanguagePageState();
+  State<LanguageView> createState() => _LanguageViewState();
 }
 
-class _LanguagePageState extends State<LanguagePage> {
+class _LanguageViewState extends State<LanguageView> {
 
   @override
   Widget build(BuildContext context) {

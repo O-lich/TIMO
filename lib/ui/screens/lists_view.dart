@@ -7,14 +7,14 @@ import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/lists_page_background_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/options_panel_widget.dart';
 
-class ListsPage extends StatefulWidget {
+class ListsView extends StatefulWidget {
   final List<ListModel> listsList;
   final List<FocusNode> focusNodeList;
   final List<TextEditingController> controllerList;
 
   static const routeName = '/lists_page';
 
-  const ListsPage({
+  const ListsView({
     Key? key,
     required this.listsList,
     required this.focusNodeList,
@@ -22,10 +22,10 @@ class ListsPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ListsPage> createState() => _ListsPageState();
+  State<ListsView> createState() => _ListsViewState();
 }
 
-class _ListsPageState extends State<ListsPage> {
+class _ListsViewState extends State<ListsView> {
   @override
   void initState() {
     super.initState();

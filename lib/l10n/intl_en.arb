@@ -187,5 +187,9 @@
   "cancel": "Cancel",
   "@cancel": {
     "description": "cancel button"
+  },
+  "error": "No internet connection",
+  "@error": {
+    "description": "No internet connection"
   }
 }

@@ -43,5 +43,6 @@
   "letsDoSmth": "Creiamo una attività",
   "wrongReminder": "Orario di promemoria errato",
   "deletingReminder": "Il promemoria verrà eliminata tra {seconds}",
-  "cancel": "Annullare"
+  "cancel": "Annullare",
+  "error": "Nessuna connessione internet"
 }

@@ -6,22 +6,22 @@ import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/main.dart';
-import 'package:todo_app_main_screen/ui/screens/premium_page.dart';
+import 'package:todo_app_main_screen/ui/screens/premium_view.dart';
 import 'package:todo_app_main_screen/ui/widgets/language_page_widgets/language_list.dart';
 import 'package:todo_app_main_screen/ui/widgets/settings_page_widgets/settings_widget.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsView extends StatefulWidget {
   static const routeName = '/settings_page';
 
-  const SettingsPage({
+  const SettingsView({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<SettingsView> createState() => _SettingsViewState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
@@ -71,7 +71,7 @@ class _SettingsPageState extends State<SettingsPage> {
               InkWell(
                 onTap: () => Navigator.pushNamed(
                   context,
-                  PremiumPage.routeName,
+                  PremiumView.routeName,
                 ),
                 child: Center(
                     child: Stack(
