@@ -85,15 +85,12 @@ class _ListsViewState extends State<ListsView> {
               );
         },
         onOptionsTap: (int selectedIndex, BuildContext context) {
-          SlidingPanelHelper().onPressedShowBottomSheet(
-            OptionsPanelWidget(
-              selectedListColorIndex:
-                  widget.listsList[selectedIndex].listColorIndex,
-              height: heightScreen,
-              width: widthScreen,
-              onTapClose: () {
-                Navigator.pop(context);
-              },
+          context.read<AppBloc>().add(
+            AppEventOptionsPanelOpen(
+              context: context,
+              selectedIndex: selectedIndex,
+              heightScreen: heightScreen,
+              widthScreen: widthScreen,
               onRenameTap: () {
                 FocusScope.of(context)
                     .requestFocus(widget.focusNodeList[selectedIndex]);
@@ -102,21 +99,21 @@ class _ListsViewState extends State<ListsView> {
               onDeleteTap: () {
                 Navigator.pop(context);
                 context.read<AppBloc>().add(
-                      AppEventDeleteList(
-                        listModel: widget.listsList[selectedIndex],
-                      ),
-                    );
+                  AppEventDeleteList(
+                    listModel: widget.listsList[selectedIndex],
+                  ),
+                );
               },
               changeListColor: (int index) {
                 context.read<AppBloc>().add(
-                      AppEventUpdateListColor(
-                        listModel: widget.listsList[selectedIndex],
-                        listColorIndex: index,
-                      ),
-                    );
+                  AppEventUpdateListColor(
+                    listModel: widget.listsList[selectedIndex],
+                    listColorIndex: index,
+                  ),
+                );
               },
+
             ),
-            context,
           );
         },
       ),

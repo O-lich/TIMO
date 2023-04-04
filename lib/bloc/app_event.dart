@@ -446,6 +446,7 @@ class AppEventAddNewListPanelOpenFromNewTaskView implements AppEvent {
     required this.taskModel,
   }) : super();
 }
+
 @immutable
 class AppEventAddNewListFromNewTaskView implements AppEvent {
   final TextEditingController listController;
@@ -457,4 +458,25 @@ class AppEventAddNewListFromNewTaskView implements AppEvent {
     required this.context,
     required this.taskModel,
   });
+}
+
+@immutable
+class AppEventOptionsPanelOpen implements AppEvent {
+  final BuildContext context;
+  final int selectedIndex;
+  final double heightScreen;
+  final double widthScreen;
+  final void Function() onRenameTap;
+  final void Function() onDeleteTap;
+  final void Function(int index) changeListColor;
+
+  const AppEventOptionsPanelOpen({
+    required this.context,
+    required this.selectedIndex,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.onRenameTap,
+    required this.onDeleteTap,
+    required this.changeListColor,
+  }) : super();
 }

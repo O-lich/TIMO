@@ -10,6 +10,7 @@ import 'package:todo_app_main_screen/models/quote_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/style.dart';
 import 'package:todo_app_main_screen/ui/widgets/add_new_list_panel_widget.dart';
+import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/options_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/new_task_page_widgets/colors_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/reminder_panel_widget.dart';
@@ -709,6 +710,47 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             dateTimeReminder: taskModel.dateTimeReminder,
             isReminderActive: taskModel.isReminderActive),
       );
+    });
+
+    on<AppEventOptionsPanelOpen>((event, emit) async {
+      final listsList = await getLists();
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: OptionsPanelWidget(
+            selectedListColorIndex:
+            listsList[event.selectedIndex].listColorIndex,
+            height: event.heightScreen,
+            width: event.widthScreen,
+            onTapClose: () {
+              Navigator.pop(context);
+            },
+            onRenameTap: () {
+              event.onRenameTap();
+            },
+            onDeleteTap: () {
+            event.onDeleteTap();
+            },
+            changeListColor: (int index) {
+              event.changeListColor(index);
+            },
+          ),
+        ),
+      );
+      focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+      controllerList = List.generate(listsList.length, (index) => TextEditingController());
+      for (int i = 0; i < listsList.length; i++) {
+        controllerList[i].text = listsList[i].list;
+      }
+      emit(LoadedListsAppState(
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+          controllerList: controllerList));
     });
   }
 
