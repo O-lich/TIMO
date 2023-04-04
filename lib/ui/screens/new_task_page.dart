@@ -75,25 +75,26 @@ class _NewTaskPageState extends State<NewTaskPage> {
           );
         },
         onReminderTap: () {
-          SlidingPanelHelper().onReminderTap(
-            widthScreen: widthScreen,
-            heightScreen: heightScreen,
-            taskModel: taskModel,
-            context: context,
-            onSaveTap: (DateTime? dateTime) {
-              context.read<AppBloc>().add(
+          context.read<AppBloc>().add(
+            AppEventOpenReminderPanelFromNewTaskView(
+                taskModel: taskModel,
+                context: context,
+                heightScreen: heightScreen,
+                widthScreen: widthScreen,
+                onSaveTap: (DateTime? dateTime) {
+                  context.read<AppBloc>().add(
                     AppEventSetReminderFromNewTaskPage(
                         taskModel: taskModel,
                         dateTime: dateTime,
                         context: context),
                   );
-            },
-            onDeleteTap: () {
-              context.read<AppBloc>().add(
+                },
+                onDeleteTap: () {
+                  context.read<AppBloc>().add(
                     AppEventDeleteReminderFromNewTaskPage(
                         taskModel: taskModel, context: context),
                   );
-            },
+                },),
           );
         },
         onCloseTap: () {

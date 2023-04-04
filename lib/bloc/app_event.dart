@@ -384,3 +384,22 @@ class AppEventOpenReminderPanelFromTaskView implements AppEvent {
   }) : super();
 }
 
+@immutable
+class AppEventOpenReminderPanelFromNewTaskView implements AppEvent {
+  final BuildContext context;
+  final double heightScreen;
+  final double widthScreen;
+  final void Function(DateTime? dateTime) onSaveTap;
+  final void Function() onDeleteTap;
+  final TaskModel taskModel;
+
+  const AppEventOpenReminderPanelFromNewTaskView({
+    required this.context,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.taskModel,
+    required this.onSaveTap,
+    required this.onDeleteTap,
+  }) : super();
+}
+

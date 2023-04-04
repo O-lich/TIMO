@@ -42,31 +42,31 @@ class SlidingPanelHelper {
         context);
   }
 
-  void onReminderTap({
-    required double widthScreen,
-    required double heightScreen,
-    required BuildContext context,
-    required void Function(DateTime? dateTime) onSaveTap,
-    required void Function() onDeleteTap,
-    required TaskModel taskModel,
-  }) {
-    onPressedShowBottomSheet(
-        ReminderPanelWidget(
-          taskModel: taskModel,
-          height: heightScreen,
-          onCloseTap: () {
-            Navigator.of(context).pop();
-          },
-          width: widthScreen,
-          onSaveTap: (dateTime) {
-            onSaveTap(dateTime);
-          },
-          onDeleteTap: () {
-            onDeleteTap();
-          },
-        ),
-        context);
-  }
+  // void onReminderTap({
+  //   required double widthScreen,
+  //   required double heightScreen,
+  //   required BuildContext context,
+  //   required void Function(DateTime? dateTime) onSaveTap,
+  //   required void Function() onDeleteTap,
+  //   required TaskModel taskModel,
+  // }) {
+  //   onPressedShowBottomSheet(
+  //       ReminderPanelWidget(
+  //         taskModel: taskModel,
+  //         height: heightScreen,
+  //         onCloseTap: () {
+  //           Navigator.of(context).pop();
+  //         },
+  //         width: widthScreen,
+  //         onSaveTap: (dateTime) {
+  //           onSaveTap(dateTime);
+  //         },
+  //         onDeleteTap: () {
+  //           onDeleteTap();
+  //         },
+  //       ),
+  //       context);
+  // }
 
   void onListsTap(
       BuildContext context,

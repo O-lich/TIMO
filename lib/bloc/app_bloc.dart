@@ -563,6 +563,36 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           isClosePanelTapped: currentUser.isClosePanelTapped,
           taskModel: event.taskModel));
     });
+
+    on<AppEventOpenReminderPanelFromNewTaskView>((event, emit) async {
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: ReminderPanelWidget(
+            height: event.heightScreen,
+            width: event.widthScreen,
+            onCloseTap: Navigator.of(event.context).pop,
+            onSaveTap: (DateTime? chosenDateTime) {
+              event.onSaveTap(chosenDateTime);
+            },
+            taskModel: event.taskModel,
+            onDeleteTap: () {
+              event.onDeleteTap();
+            },
+          ),
+        ),
+      );
+      final listsList = await getLists();
+      emit(AddNewTaskAppState(
+          listsList: listsList,
+          dateTimeReminder: event.taskModel.dateTimeReminder,
+          isReminderActive: event.taskModel.isReminderActive));
+    });
   }
 
   @override
