@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
-import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
@@ -39,11 +38,6 @@ class _NewTaskPageState extends State<NewTaskPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
@@ -64,37 +58,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
               );
         },
         onListsTap: () {
-          context.read<AppBloc>().add(
-                AppEventOnListsTapFromNewTaskView(
-                  taskModel: taskModel,
-                  context: context,
-                  heightScreen: heightScreen,
-                  widthScreen: widthScreen,
-                  lists: widget.listsList,
-                  buttonColors: buttonColors,
-                  controller: taskController,
-                  selectedIndex: selectedListIndex,
-                  onAddNewListPressed: () => context
-                      .read<AppBloc>()
-                      .add(AppEventAddNewListPanelOpenFromNewTaskView(
-                        taskModel: taskModel,
-                        context: context,
-                        heightScreen: heightScreen,
-                        widthScreen: widthScreen,
-                        onBlackButtonPressed:
-                            (TextEditingController controller) {
-                          context.read<AppBloc>().add(
-                                AppEventAddNewListFromNewTaskView(
-                                  listController: controller,
-                                  context: context,
-                                  taskModel: taskModel,
-                                ),
-                              );
-                          Navigator.pop(context);
-                        },
-                      )),
-                ),
-              );
+          onListTap(heightScreen, widthScreen, context);
         },
         onReminderTap: () {
           context.read<AppBloc>().add(
@@ -128,5 +92,41 @@ class _NewTaskPageState extends State<NewTaskPage> {
         },
       ),
     );
+  }
+
+  void onListTap(
+      double heightScreen, double widthScreen, BuildContext context) {
+    context.read<AppBloc>().add(
+          AppEventOnListsTapFromNewTaskView(
+            taskModel: taskModel,
+            context: context,
+            heightScreen: heightScreen,
+            widthScreen: widthScreen,
+            lists: widget.listsList,
+            buttonColors: buttonColors,
+            controller: taskController,
+            selectedIndex: taskModel.colorIndex,
+            onAddNewListPressed: () => context
+                .read<AppBloc>()
+                .add(AppEventAddNewListPanelOpenFromNewTaskView(
+                  taskModel: taskModel,
+                  context: context,
+                  heightScreen: heightScreen,
+                  widthScreen: widthScreen,
+                  onBlackButtonPressed: (TextEditingController controller) {
+                    Navigator.pop(context);
+                    context.read<AppBloc>().add(
+                          AppEventAddNewListFromNewTaskView(
+                            listController: controller,
+                            context: context,
+                            taskModel: taskModel,
+                          ),
+                        );
+                    Navigator.pop(context);
+                    onListTap(heightScreen, widthScreen, context);
+                  },
+                )),
+          ),
+        );
   }
 }

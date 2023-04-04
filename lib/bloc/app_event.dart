@@ -424,7 +424,7 @@ class AppEventOnListsTapFromNewTaskView implements AppEvent {
     required this.controller,
     required this.selectedIndex,
     required this.onAddNewListPressed,
-    required this.taskModel
+    required this.taskModel,
   }) : super();
 }
 

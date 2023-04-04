@@ -1,4 +1,4 @@
-import 'dart:developer';
+//import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -100,7 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context, scrollCtrl) {
                     return TasksWidget(
                       listModel: widget.listsList[selectedListIndex],
-                      onMoveToPressed: () => onMoveToPressed(heightScreen, widthScreen, context),
+                      onMoveToPressed: () =>
+                          onMoveToPressed(heightScreen, widthScreen, context),
                       isPanelOpen: fabVisibility,
                       tasksList: widget.tasksList,
                       scrollController: scrollCtrl,
@@ -142,48 +143,49 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     });
   }
-  void onMoveToPressed(double heightScreen, double widthScreen, BuildContext context) {
-      context.read<AppBloc>().add(
-        AppEventListPanelOpenFromMainView(
-            listModel: widget.listsList[selectedListIndex],
-            context: context,
-            heightScreen: heightScreen,
-            widthScreen: widthScreen,
-            onAddNewList: () {
-              context.read<AppBloc>().add(
-                AppEventAddNewListPanelOpenFromMainView(
-                  listModel: widget
-                      .listsList[selectedListIndex],
-                  context: context,
-                  heightScreen: heightScreen,
-                  widthScreen: widthScreen,
-                  onBlackButtonPressed:
-                      (TextEditingController
-                  controller) {
-                    Navigator.pop(context);
-                    context.read<AppBloc>().add(
-                        AppEventAddNewListFromMainScreen(
-                          listController: controller,
-                          context: context,
-                          listModel: widget.listsList[
-                          selectedListIndex],
-                        ));
-                    Navigator.pop(context);
-                    onMoveToPressed(heightScreen, widthScreen, context);
-                  },
-                ),
-              );
-            },
-            onMoveToButtonPressed: () {
-              moveToListIndex == -1 ? isMoveTo = false :
-              context.read<AppBloc>().add(
-                AppEventMoveToTask(
-                    moveToListModel: widget
-                        .listsList[moveToListIndex],
-                    taskModel: widget.tasksList[selectedTaskIndex]),
-              );
-              //Navigator.pop(context);
-            }),
-      );
+
+  void onMoveToPressed(
+      double heightScreen, double widthScreen, BuildContext context) {
+    context.read<AppBloc>().add(
+          AppEventListPanelOpenFromMainView(
+              listModel: widget.listsList[selectedListIndex],
+              context: context,
+              heightScreen: heightScreen,
+              widthScreen: widthScreen,
+              onAddNewList: () {
+                context.read<AppBloc>().add(
+                      AppEventAddNewListPanelOpenFromMainView(
+                        listModel: widget.listsList[selectedListIndex],
+                        context: context,
+                        heightScreen: heightScreen,
+                        widthScreen: widthScreen,
+                        onBlackButtonPressed:
+                            (TextEditingController controller) {
+                          Navigator.pop(context);
+                          context
+                              .read<AppBloc>()
+                              .add(AppEventAddNewListFromMainScreen(
+                                listController: controller,
+                                context: context,
+                                listModel: widget.listsList[selectedListIndex],
+                              ));
+                          Navigator.pop(context);
+                          onMoveToPressed(heightScreen, widthScreen, context);
+                        },
+                      ),
+                    );
+              },
+              onMoveToButtonPressed: () {
+                moveToListIndex == -1
+                    ? isMoveTo = false
+                    : context.read<AppBloc>().add(
+                          AppEventMoveToTask(
+                              moveToListModel:
+                                  widget.listsList[moveToListIndex],
+                              taskModel: widget.tasksList[selectedTaskIndex]),
+                        );
+                //Navigator.pop(context);
+              }),
+        );
   }
 }

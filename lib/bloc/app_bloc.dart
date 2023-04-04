@@ -1,4 +1,4 @@
-import 'dart:developer';
+//import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -595,6 +595,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventOnListsTapFromNewTaskView>((event, emit) async {
+      final listsList = await getLists();
       showMaterialModalBottomSheet(
         shape: const RoundedRectangleBorder(
           borderRadius: commonBorderRadius,
@@ -608,7 +609,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             height: event.heightScreen,
             width: event.widthScreen,
             onTapClose: Navigator.of(context).pop,
-            lists: event.lists,
+            lists: listsList,
             colorsList: event.buttonColors,
             onAddNewListPressed: () {
               event.onAddNewListPressed();
@@ -616,7 +617,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           ),
         ),
       );
-      final listsList = await getLists();
       emit(AddNewTaskAppState(
           dateTimeReminder: event.taskModel.dateTimeReminder,
           listsList: listsList,
@@ -653,8 +653,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventAddNewListFromNewTaskView>((event, emit) async {
       await createNewList(listController: event.listController);
-      final listsList = await getLists();
       final taskModel = event.taskModel;
+      final listsList = await getLists();
       emit(
         AddNewTaskAppState(
             listsList: listsList,

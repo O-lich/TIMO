@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,8 +70,8 @@ Future<void> deleteTask({
       .doc(oldTask.taskID)
       .delete()
       .then(
-        (doc) => print("Document deleted"),
-        onError: (e) => print("Error updating document $e"),
+        (doc) => log("Document deleted"),
+        onError: (e) => log("Error updating document $e"),
       );
 }
 
@@ -86,8 +85,8 @@ Future<void> deleteList({
       .doc(oldList.listID)
       .delete()
       .then(
-        (doc) => print("Document deleted"),
-        onError: (e) => print("Error updating document $e"),
+        (doc) => log("Document deleted"),
+        onError: (e) => log("Error updating document $e"),
       );
 }
 
@@ -137,8 +136,8 @@ Future<void> moveToFromMainScreenTask({
       .doc(updatedTask.taskID)
       .delete()
       .then(
-        (doc) => print("Document deleted"),
-        onError: (e) => print("Error updating document $e"),
+        (doc) => log("Document deleted"),
+        onError: (e) => log("Error updating document $e"),
       );
   addNewTaskUpdate(
     newTask: TaskModel(
@@ -221,7 +220,7 @@ Future<List<TaskModel>> getTasks({
       .get()
       .then(
         (querySnapshot) => querySnapshot.docs.map((doc) => doc.data()).toList(),
-        onError: (e) => print("Error completing: $e"),
+        onError: (e) => log("Error completing: $e"),
       );
 
   return await tasksRef;
