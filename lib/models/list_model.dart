@@ -4,11 +4,13 @@ class ListModel {
   int listColorIndex;
   String list;
   String listID;
+  String listImageUrl;
 
   ListModel({
     this.listID = '',
     this.listColorIndex = 0,
     required this.list,
+    this.listImageUrl = ''
   });
 
   factory ListModel.fromFirestore(
@@ -20,6 +22,7 @@ class ListModel {
       listColorIndex: data?['listColorIndex'],
       list: data?['list'],
       listID: data?['listID'],
+      listImageUrl: data?['listImageUrl']
     );
   }
 
@@ -28,6 +31,7 @@ class ListModel {
       "listColorIndex": listColorIndex,
       "list": list,
       "listID": listID,
+      "listImageUrl": listImageUrl
     };
   }
 }

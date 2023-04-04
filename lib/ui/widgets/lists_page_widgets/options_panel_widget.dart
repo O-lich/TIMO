@@ -11,6 +11,7 @@ class OptionsPanelWidget extends StatefulWidget {
   final void Function() onTapClose;
   final void Function() onRenameTap;
   final void Function() onDeleteTap;
+  final void Function() onThumbnailTap;
   final void Function(int index) changeListColor;
   int selectedListColorIndex;
 
@@ -22,7 +23,8 @@ class OptionsPanelWidget extends StatefulWidget {
       required this.onTapClose,
       required this.onRenameTap,
       required this.onDeleteTap,
-      required this.changeListColor})
+      required this.changeListColor,
+      required this.onThumbnailTap})
       : super(key: key);
 
   @override
@@ -83,7 +85,9 @@ class _OptionsPanelWidgetState extends State<OptionsPanelWidget> {
             textColor: textColor,
           ),
           OptionsWidget(
-            onOptionTap: () {},
+            onOptionTap: () {
+              widget.onThumbnailTap();
+            },
             height: widget.height,
             optionTitle: S.of(context).thumbnail,
             textColor: textColor,

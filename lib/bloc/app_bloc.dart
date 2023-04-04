@@ -739,6 +739,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             changeListColor: (int index) {
               event.changeListColor(index);
             },
+            onThumbnailTap: () {
+              event.onThumbnailTap();
+          },
           ),
         ),
       );

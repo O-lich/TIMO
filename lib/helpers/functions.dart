@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +14,7 @@ import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/models/user_model.dart';
 import 'package:todo_app_main_screen/service/fetch_helper.dart';
 import 'package:todo_app_main_screen/service/locale_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 Future<List<ListModel>> createNewList({
   required TextEditingController listController,
@@ -540,4 +543,29 @@ Future<void> updateTask({
   }
   moveToListIndex = -1;
   taskCurrentColorIndex = -1;
+}
+
+Future<void> updateListImage({required String listID}) async {
+  final docRef = db
+      .collection("users")
+      .doc('testUser')
+      .collection('lists')
+      .doc(listID);
+
+  final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+  if (pickedFile == null) return;
+
+  final File imageFile = File(pickedFile.path);
+  final Reference storageRef = FirebaseStorage.instance
+      .ref()
+      .child('list_images')
+      .child('$listID.jpg');
+
+  final UploadTask uploadTask = storageRef.putFile(imageFile);
+  final TaskSnapshot downloadUrl = await uploadTask.whenComplete(() {});
+  final String imageUrl = await downloadUrl.ref.getDownloadURL();
+  final updates = <String, String>{
+    "listImageURL": imageUrl,
+  };
+  docRef.update(updates);
 }

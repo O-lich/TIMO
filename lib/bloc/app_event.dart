@@ -468,6 +468,7 @@ class AppEventOptionsPanelOpen implements AppEvent {
   final double widthScreen;
   final void Function() onRenameTap;
   final void Function() onDeleteTap;
+  final void Function() onThumbnailTap;
   final void Function(int index) changeListColor;
 
   const AppEventOptionsPanelOpen({
@@ -478,5 +479,6 @@ class AppEventOptionsPanelOpen implements AppEvent {
     required this.onRenameTap,
     required this.onDeleteTap,
     required this.changeListColor,
+    required this.onThumbnailTap
   }) : super();
 }
