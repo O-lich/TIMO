@@ -10,6 +10,7 @@ import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/style.dart';
 import 'package:todo_app_main_screen/ui/widgets/add_new_list_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_panel_widget.dart';
+import 'package:todo_app_main_screen/ui/widgets/new_task_page_widgets/colors_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/reminder_panel_widget.dart';
 
 part 'app_event.dart';
@@ -87,8 +88,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventAddNewTask>((event, emit) async {
       emit(LoadingAppState(
-          selectedListIndex: selectedListIndex,
-          listModel: event.listModel));
+          selectedListIndex: selectedListIndex, listModel: event.listModel));
       createNewTask(
         taskController: event.taskController,
         currentList: event.listModel,
@@ -553,7 +553,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             taskModel: event.taskModel,
             onDeleteTap: () {
               event.onDeleteTap();
-              },
+            },
           ),
         ),
       );
@@ -592,6 +592,75 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           listsList: listsList,
           dateTimeReminder: event.taskModel.dateTimeReminder,
           isReminderActive: event.taskModel.isReminderActive));
+    });
+
+    on<AppEventOnListsTapFromNewTaskView>((event, emit) async {
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: ColorsPanelWidget(
+            selectedTaskColorIndex: event.selectedIndex,
+            height: event.heightScreen,
+            width: event.widthScreen,
+            onTapClose: Navigator.of(context).pop,
+            lists: event.lists,
+            colorsList: event.buttonColors,
+            onAddNewListPressed: () {
+              event.onAddNewListPressed();
+            },
+          ),
+        ),
+      );
+      final listsList = await getLists();
+      emit(AddNewTaskAppState(
+          dateTimeReminder: event.taskModel.dateTimeReminder,
+          listsList: listsList,
+          isReminderActive: event.taskModel.isReminderActive));
+    });
+
+    on<AppEventAddNewListPanelOpenFromNewTaskView>((event, emit) async {
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: commonBorderRadius,
+        ),
+        enableDrag: false,
+        context: event.context,
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: AddNewListPanelWidget(
+            height: event.heightScreen,
+            onTapClose: () {
+              Navigator.of(event.context).pop();
+            },
+            width: event.widthScreen,
+            onBlackButtonTap: (controller) {
+              event.onBlackButtonPressed(controller);
+            },
+          ),
+        ),
+      );
+      final listsList = await getLists();
+      emit(AddNewTaskAppState(
+          listsList: listsList,
+          dateTimeReminder: event.taskModel.dateTimeReminder,
+          isReminderActive: event.taskModel.isReminderActive));
+    });
+
+    on<AppEventAddNewListFromNewTaskView>((event, emit) async {
+      await createNewList(listController: event.listController);
+      final listsList = await getLists();
+      final taskModel = event.taskModel;
+      emit(
+        AddNewTaskAppState(
+            listsList: listsList,
+            dateTimeReminder: taskModel.dateTimeReminder,
+            isReminderActive: taskModel.isReminderActive),
+      );
     });
   }
 

@@ -403,3 +403,56 @@ class AppEventOpenReminderPanelFromNewTaskView implements AppEvent {
   }) : super();
 }
 
+@immutable
+class AppEventOnListsTapFromNewTaskView implements AppEvent {
+  final BuildContext context;
+  final double widthScreen;
+  final double heightScreen;
+  final List<ListModel> lists;
+  final List<Color> buttonColors;
+  final TextEditingController controller;
+  final int selectedIndex;
+  final void Function() onAddNewListPressed;
+  final TaskModel taskModel;
+
+  const AppEventOnListsTapFromNewTaskView({
+    required this.context,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.lists,
+    required this.buttonColors,
+    required this.controller,
+    required this.selectedIndex,
+    required this.onAddNewListPressed,
+    required this.taskModel
+  }) : super();
+}
+
+@immutable
+class AppEventAddNewListPanelOpenFromNewTaskView implements AppEvent {
+  final BuildContext context;
+  final double heightScreen;
+  final double widthScreen;
+  final void Function(TextEditingController controller) onBlackButtonPressed;
+  final TaskModel taskModel;
+
+  const AppEventAddNewListPanelOpenFromNewTaskView({
+    required this.context,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.onBlackButtonPressed,
+    required this.taskModel,
+  }) : super();
+}
+@immutable
+class AppEventAddNewListFromNewTaskView implements AppEvent {
+  final TextEditingController listController;
+  final BuildContext context;
+  final TaskModel taskModel;
+
+  const AppEventAddNewListFromNewTaskView({
+    required this.listController,
+    required this.context,
+    required this.taskModel,
+  });
+}

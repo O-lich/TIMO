@@ -64,38 +64,61 @@ class _NewTaskPageState extends State<NewTaskPage> {
               );
         },
         onListsTap: () {
-          SlidingPanelHelper().onListsTap(
-            context,
-            widthScreen,
-            heightScreen,
-            widget.listsList,
-            buttonColors,
-            listController,
-            taskCurrentColorIndex,
-          );
+          context.read<AppBloc>().add(
+                AppEventOnListsTapFromNewTaskView(
+                  taskModel: taskModel,
+                  context: context,
+                  heightScreen: heightScreen,
+                  widthScreen: widthScreen,
+                  lists: widget.listsList,
+                  buttonColors: buttonColors,
+                  controller: taskController,
+                  selectedIndex: selectedListIndex,
+                  onAddNewListPressed: () => context
+                      .read<AppBloc>()
+                      .add(AppEventAddNewListPanelOpenFromNewTaskView(
+                        taskModel: taskModel,
+                        context: context,
+                        heightScreen: heightScreen,
+                        widthScreen: widthScreen,
+                        onBlackButtonPressed:
+                            (TextEditingController controller) {
+                          context.read<AppBloc>().add(
+                                AppEventAddNewListFromNewTaskView(
+                                  listController: controller,
+                                  context: context,
+                                  taskModel: taskModel,
+                                ),
+                              );
+                          Navigator.pop(context);
+                        },
+                      )),
+                ),
+              );
         },
         onReminderTap: () {
           context.read<AppBloc>().add(
-            AppEventOpenReminderPanelFromNewTaskView(
-                taskModel: taskModel,
-                context: context,
-                heightScreen: heightScreen,
-                widthScreen: widthScreen,
-                onSaveTap: (DateTime? dateTime) {
-                  context.read<AppBloc>().add(
-                    AppEventSetReminderFromNewTaskPage(
-                        taskModel: taskModel,
-                        dateTime: dateTime,
-                        context: context),
-                  );
-                },
-                onDeleteTap: () {
-                  context.read<AppBloc>().add(
-                    AppEventDeleteReminderFromNewTaskPage(
-                        taskModel: taskModel, context: context),
-                  );
-                },),
-          );
+                AppEventOpenReminderPanelFromNewTaskView(
+                  taskModel: taskModel,
+                  context: context,
+                  heightScreen: heightScreen,
+                  widthScreen: widthScreen,
+                  onSaveTap: (DateTime? dateTime) {
+                    context.read<AppBloc>().add(
+                          AppEventSetReminderFromNewTaskPage(
+                              taskModel: taskModel,
+                              dateTime: dateTime,
+                              context: context),
+                        );
+                  },
+                  onDeleteTap: () {
+                    context.read<AppBloc>().add(
+                          AppEventDeleteReminderFromNewTaskPage(
+                              taskModel: taskModel, context: context),
+                        );
+                  },
+                ),
+              );
         },
         onCloseTap: () {
           context.read<AppBloc>().add(

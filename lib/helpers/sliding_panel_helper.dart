@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
-import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/style.dart';
 import 'package:todo_app_main_screen/ui/widgets/add_new_list_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/new_task_page_widgets/colors_panel_widget.dart';
-import 'package:todo_app_main_screen/ui/widgets/reminder_panel_widget.dart';
 
 class SlidingPanelHelper {
   void onPressedShowBottomSheet(Widget child, BuildContext context) {
