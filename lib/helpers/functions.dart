@@ -555,7 +555,7 @@ Future<void> updateTask({
 Future<File?> choseFileToListImage() async {
   final pickedFile = await ImagePicker().pickImage(
     source: ImageSource.gallery,
-    imageQuality: 7,
+    imageQuality: 10,
   );
   if (pickedFile == null) {
     return null;
@@ -617,4 +617,101 @@ Future<void> updateListImage({
     "listImageUrl": imageUrl,
   };
   docRef.update(updates);
+}
+
+Future<int> updateOrDeleteImageDialog(
+    {required BuildContext context, required ListModel listModel}) async {
+  Completer<int> completer = Completer<int>();
+  showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return listModel.listImageUrl.isNotEmpty
+            ? CupertinoActionSheet(
+                actions: <Widget>[
+                  CupertinoActionSheetAction(
+                    isDestructiveAction: true,
+                    child: Text(
+                      'Delete thumbnail',
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      completer.complete(1);
+                    },
+                  ),
+                  // CupertinoActionSheetAction(
+                  //   child: Text(
+                  //     'Take photo',
+                  //   ),
+                  //   onPressed: () {
+                  //     Navigator.pop(context);
+                  //     completer.complete(3);
+                  //   },
+                  // ),
+                  CupertinoActionSheetAction(
+                    child: Text('Choose photo'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      completer.complete(2);
+                    },
+                  ),
+                ],
+                cancelButton: CupertinoActionSheetAction(
+                  isDefaultAction: true,
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    completer.complete(0);
+                  },
+                ),
+              )
+            : CupertinoActionSheet(
+                actions: <Widget>[
+                  // CupertinoActionSheetAction(
+                  //   child: Text(
+                  //     'Take photo',
+                  //   ),
+                  //   onPressed: () {
+                  //     Navigator.pop(context);
+                  //     completer.complete(3);
+                  //   },
+                  // ),
+                  CupertinoActionSheetAction(
+                    child: Text('Choose photo'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      completer.complete(2);
+                    },
+                  ),
+                ],
+                cancelButton: CupertinoActionSheetAction(
+                  isDefaultAction: true,
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    completer.complete(0);
+                  },
+                ),
+              );
+      });
+  return completer.future;
+}
+
+Future<void> deleteListImage({
+  required ListModel oldList,
+}) async {
+  final docRef = db
+      .collection("users")
+      .doc(currentUser.userID)
+      .collection('lists')
+      .doc(oldList.listID);
+  final updates = <String, String>{
+    "listImageUrl": '',
+  };
+  docRef.update(updates);
+
+  FirebaseStorage.instance
+      .ref()
+      .child(currentUser.userID)
+      .child('${oldList.listID}.jpg')
+      .delete();
 }

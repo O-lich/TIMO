@@ -758,14 +758,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventUpdateListImage>((event, emit) async {
-      final File? imageFile = await choseFileToListImage();
-      if (imageFile == null) return;
-
-      if (await showImagePickerDialog(
-        context: event.context,
-        imageFile: imageFile,
-      )) {
-        await updateListImage(listModel: event.listModel, imageFile: imageFile);
+      final int variable = await updateOrDeleteImageDialog(
+          context: event.context, listModel: event.listModel);
+      if (variable == 0) {
         final listsList = await getLists();
         focusNodeList = List.generate(listsList.length, (index) => FocusNode());
         controllerList =
@@ -779,6 +774,60 @@ class AppBloc extends Bloc<AppEvent, AppState> {
               focusNodeList: focusNodeList,
               controllerList: controllerList),
         );
+      } else if (variable == 1) {
+        deleteListImage(oldList: event.listModel);
+        final listsList = await getLists();
+        focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+        controllerList =
+            List.generate(listsList.length, (index) => TextEditingController());
+        for (int i = 0; i < listsList.length; i++) {
+          controllerList[i].text = listsList[i].list;
+        }
+        emit(
+          LoadedListsAppState(
+              listsList: listsList,
+              focusNodeList: focusNodeList,
+              controllerList: controllerList),
+        );
+      } else if (variable == 2) {
+        final File? imageFile = await choseFileToListImage();
+        if (imageFile == null) return;
+        if (await showImagePickerDialog(
+          context: event.context,
+          imageFile: imageFile,
+        )) {
+          await updateListImage(
+              listModel: event.listModel, imageFile: imageFile);
+          final listsList = await getLists();
+          focusNodeList =
+              List.generate(listsList.length, (index) => FocusNode());
+          controllerList = List.generate(
+              listsList.length, (index) => TextEditingController());
+          for (int i = 0; i < listsList.length; i++) {
+            controllerList[i].text = listsList[i].list;
+          }
+          emit(
+            LoadedListsAppState(
+                listsList: listsList,
+                focusNodeList: focusNodeList,
+                controllerList: controllerList),
+          );
+        } else if (variable == 3) {
+          final listsList = await getLists();
+          focusNodeList =
+              List.generate(listsList.length, (index) => FocusNode());
+          controllerList = List.generate(
+              listsList.length, (index) => TextEditingController());
+          for (int i = 0; i < listsList.length; i++) {
+            controllerList[i].text = listsList[i].list;
+          }
+          emit(
+            LoadedListsAppState(
+                listsList: listsList,
+                focusNodeList: focusNodeList,
+                controllerList: controllerList),
+          );
+        }
       }
     });
   }
