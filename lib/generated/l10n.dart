@@ -499,6 +499,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Update thumbnail?`
+  String get updateThumbnail {
+    return Intl.message(
+      'Update thumbnail?',
+      name: 'updateThumbnail',
+      desc: 'update thumbnail',
+      args: [],
+    );
+  }
+
+  /// `Delete thumbnail`
+  String get deleteThumbnail {
+    return Intl.message(
+      'Delete thumbnail',
+      name: 'deleteThumbnail',
+      desc: 'Delete thumbnail button',
+      args: [],
+    );
+  }
+
+  /// `Choose photo`
+  String get choosePhoto {
+    return Intl.message(
+      'Choose photo',
+      name: 'choosePhoto',
+      desc: 'Delete thumbnail button',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get okButton {
+    return Intl.message(
+      'Ok',
+      name: 'okButton',
+      desc: 'Ok button',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

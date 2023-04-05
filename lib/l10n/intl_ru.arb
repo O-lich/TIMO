@@ -44,5 +44,9 @@
   "wrongReminder": "Неверное время напоминания",
   "deletingReminder": "Напоминание будет удалено через {seconds}",
   "cancel": "Отмена",
-  "error": "Нет соединения с интернетом"
+  "error": "Нет соединения с интернетом",
+  "updateThumbnail": "Обновить обложку?",
+  "deleteThumbnail": "Удалить обложку",
+  "choosePhoto": "Выбрать фото",
+  "okButton": "Ok"
 }

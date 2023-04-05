@@ -38,11 +38,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "By subscribing you accept our"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "chooseLists": MessageLookupByLibrary.simpleMessage("Lists"),
+        "choosePhoto": MessageLookupByLibrary.simpleMessage("Choose photo"),
         "color": MessageLookupByLibrary.simpleMessage("Color"),
         "create": MessageLookupByLibrary.simpleMessage("create"),
         "createNewList":
             MessageLookupByLibrary.simpleMessage("create new list"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "deleteThumbnail":
+            MessageLookupByLibrary.simpleMessage("Delete thumbnail"),
         "deletingReminder": m0,
         "deletingTask": m1,
         "error": MessageLookupByLibrary.simpleMessage("No internet connection"),
@@ -58,6 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "lists": MessageLookupByLibrary.simpleMessage("lists"),
         "move": MessageLookupByLibrary.simpleMessage("move"),
         "newList": MessageLookupByLibrary.simpleMessage(" new list"),
+        "okButton": MessageLookupByLibrary.simpleMessage("Ok"),
         "perMonth": MessageLookupByLibrary.simpleMessage("per month"),
         "perYear": MessageLookupByLibrary.simpleMessage("per year"),
         "premColorsQuotes":
@@ -82,6 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "termsOfUsing": MessageLookupByLibrary.simpleMessage("Terms of Using"),
         "thumbnail": MessageLookupByLibrary.simpleMessage("Thumbnail"),
         "undo": MessageLookupByLibrary.simpleMessage("Undo"),
+        "updateThumbnail":
+            MessageLookupByLibrary.simpleMessage("Update thumbnail?"),
         "wrongReminder":
             MessageLookupByLibrary.simpleMessage("Wrong reminder time")
       };

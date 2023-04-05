@@ -44,5 +44,9 @@
   "wrongReminder": "Orario di promemoria errato",
   "deletingReminder": "Il promemoria verrà eliminata tra {seconds}",
   "cancel": "Annullare",
-  "error": "Nessuna connessione internet"
+  "error": "Nessuna connessione internet",
+  "updateThumbnail": "Aggiornare la copertura?",
+  "deleteThumbnail": "Eliminare la copertura",
+  "choosePhoto": "Scegliere la foto",
+  "okButton": "Ok"
 }

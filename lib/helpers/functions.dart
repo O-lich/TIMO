@@ -573,7 +573,7 @@ Future<bool> showImagePickerDialog({
     context: context,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
-        title: Text('Update list image?'),
+        title: Text(S.of(context).updateThumbnail),
         content: Image.file(imageFile),
         actions: [
           TextButton(
@@ -581,14 +581,14 @@ Future<bool> showImagePickerDialog({
               Navigator.of(context).pop();
               completer.complete(false);
             },
-            child: Text('Cancel'),
+            child: Text(S.of(context).cancel,),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               completer.complete(true);
             },
-            child: Text('OK'),
+            child: Text(S.of(context).okButton),
           ),
         ],
       );
@@ -631,7 +631,7 @@ Future<int> updateOrDeleteImageDialog(
                   CupertinoActionSheetAction(
                     isDestructiveAction: true,
                     child: Text(
-                      'Delete thumbnail',
+                      S.of(context).deleteThumbnail,
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -648,7 +648,9 @@ Future<int> updateOrDeleteImageDialog(
                   //   },
                   // ),
                   CupertinoActionSheetAction(
-                    child: Text('Choose photo'),
+                    child: Text(
+                      S.of(context).choosePhoto,
+                    ),
                     onPressed: () {
                       Navigator.pop(context);
                       completer.complete(2);
@@ -657,7 +659,9 @@ Future<int> updateOrDeleteImageDialog(
                 ],
                 cancelButton: CupertinoActionSheetAction(
                   isDefaultAction: true,
-                  child: Text('Cancel'),
+                  child: Text(
+                    S.of(context).cancel,
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                     completer.complete(0);
@@ -676,7 +680,9 @@ Future<int> updateOrDeleteImageDialog(
                   //   },
                   // ),
                   CupertinoActionSheetAction(
-                    child: Text('Choose photo'),
+                    child: Text(
+                      S.of(context).choosePhoto,
+                    ),
                     onPressed: () {
                       Navigator.pop(context);
                       completer.complete(2);
@@ -685,7 +691,7 @@ Future<int> updateOrDeleteImageDialog(
                 ],
                 cancelButton: CupertinoActionSheetAction(
                   isDefaultAction: true,
-                  child: Text('Cancel'),
+                  child: Text(S.of(context).cancel),
                   onPressed: () {
                     Navigator.pop(context);
                     completer.complete(0);

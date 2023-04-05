@@ -44,5 +44,9 @@
   "wrongReminder": "Hora de recordatorio incorrecta",
   "deletingReminder": "El recordatorio se eliminará en {seconds}",
   "cancel": "Cancelar",
-  "error": "Sin conexión a Internet"
+  "error": "Sin conexión a Internet",
+  "updateThumbnail": "¿Actualizar portada?",
+  "deleteThumbnail": "Eliminar portada",
+  "choosePhoto": "Elegir foto",
+  "okButton": "Ok"
 }

@@ -191,5 +191,21 @@
   "error": "No internet connection",
   "@error": {
     "description": "No internet connection"
+  },
+  "updateThumbnail": "Update thumbnail?",
+  "@updateThumbnail": {
+    "description": "update thumbnail"
+  },
+  "deleteThumbnail": "Delete thumbnail",
+  "@deleteThumbnail": {
+    "description": "Delete thumbnail button"
+  },
+  "choosePhoto": "Choose photo",
+  "@choosePhoto": {
+    "description": "Delete thumbnail button"
+  },
+  "okButton": "Ok",
+  "@okButton": {
+    "description": "Ok button"
   }
 }

@@ -44,5 +44,9 @@
   "wrongReminder": "Falsche Erinnerungszeit",
   "deletingReminder": "Die Erinnerungszeit wird in {seconds} gelöscht",
   "cancel": "Kündigen",
-  "error": "Keine Internetverbindung"
+  "error": "Keine Internetverbindung",
+  "updateThumbnail": "Vorschaubild aktualisieren?",
+  "deleteThumbnail": "Vorschaubild löschen",
+  "choosePhoto": "Bild auswählen",
+  "okButton": "Ok"
 }

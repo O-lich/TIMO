@@ -39,11 +39,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Подписываясь, вы принимаете наши"),
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "chooseLists": MessageLookupByLibrary.simpleMessage("Списки"),
+        "choosePhoto": MessageLookupByLibrary.simpleMessage("Выбрать фото"),
         "color": MessageLookupByLibrary.simpleMessage("Цвет"),
         "create": MessageLookupByLibrary.simpleMessage("создать"),
         "createNewList":
             MessageLookupByLibrary.simpleMessage("создать новый список"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
+        "deleteThumbnail":
+            MessageLookupByLibrary.simpleMessage("Удалить обложку"),
         "deletingReminder": m0,
         "deletingTask": m1,
         "error":
@@ -61,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "lists": MessageLookupByLibrary.simpleMessage("списки"),
         "move": MessageLookupByLibrary.simpleMessage("переместить"),
         "newList": MessageLookupByLibrary.simpleMessage(" новый список"),
+        "okButton": MessageLookupByLibrary.simpleMessage("Ok"),
         "perMonth": MessageLookupByLibrary.simpleMessage("в месяц"),
         "perYear": MessageLookupByLibrary.simpleMessage("в год"),
         "premColorsQuotes": MessageLookupByLibrary.simpleMessage(
@@ -89,6 +93,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Правила использования"),
         "thumbnail": MessageLookupByLibrary.simpleMessage("Обложка"),
         "undo": MessageLookupByLibrary.simpleMessage("Отменить"),
+        "updateThumbnail":
+            MessageLookupByLibrary.simpleMessage("Обновить обложку?"),
         "wrongReminder":
             MessageLookupByLibrary.simpleMessage("Неверное время напоминания")
       };

@@ -40,11 +40,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Indem Sie sich anmelden, akzeptieren Sie unsere"),
         "cancel": MessageLookupByLibrary.simpleMessage("Kündigen"),
         "chooseLists": MessageLookupByLibrary.simpleMessage("Listen"),
+        "choosePhoto": MessageLookupByLibrary.simpleMessage("Bild auswählen"),
         "color": MessageLookupByLibrary.simpleMessage("Farbe"),
         "create": MessageLookupByLibrary.simpleMessage("erstellen"),
         "createNewList":
             MessageLookupByLibrary.simpleMessage("neue Liste erstellen"),
         "delete": MessageLookupByLibrary.simpleMessage("Löschen"),
+        "deleteThumbnail":
+            MessageLookupByLibrary.simpleMessage("Vorschaubild löschen"),
         "deletingReminder": m0,
         "deletingTask": m1,
         "error":
@@ -62,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "lists": MessageLookupByLibrary.simpleMessage("listen"),
         "move": MessageLookupByLibrary.simpleMessage("Umzug"),
         "newList": MessageLookupByLibrary.simpleMessage(" neue Liste"),
+        "okButton": MessageLookupByLibrary.simpleMessage("Ok"),
         "perMonth": MessageLookupByLibrary.simpleMessage("pro monat"),
         "perYear": MessageLookupByLibrary.simpleMessage("per annum"),
         "premColorsQuotes": MessageLookupByLibrary.simpleMessage(
@@ -90,6 +94,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Regeln für die Verwendung"),
         "thumbnail": MessageLookupByLibrary.simpleMessage("Vorschaubild"),
         "undo": MessageLookupByLibrary.simpleMessage("Rückgängig machen"),
+        "updateThumbnail":
+            MessageLookupByLibrary.simpleMessage("Vorschaubild aktualisieren?"),
         "wrongReminder":
             MessageLookupByLibrary.simpleMessage("Falsche Erinnerungszeit")
       };

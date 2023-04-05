@@ -39,11 +39,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Al suscribirte aceptas nuestra"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
         "chooseLists": MessageLookupByLibrary.simpleMessage("Listas"),
+        "choosePhoto": MessageLookupByLibrary.simpleMessage("Elegir foto"),
         "color": MessageLookupByLibrary.simpleMessage("Color"),
         "create": MessageLookupByLibrary.simpleMessage("crear"),
         "createNewList":
             MessageLookupByLibrary.simpleMessage("crear nueva lista"),
         "delete": MessageLookupByLibrary.simpleMessage("Borrar"),
+        "deleteThumbnail":
+            MessageLookupByLibrary.simpleMessage("Eliminar portada"),
         "deletingReminder": m0,
         "deletingTask": m1,
         "error":
@@ -60,6 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "lists": MessageLookupByLibrary.simpleMessage("listas"),
         "move": MessageLookupByLibrary.simpleMessage("mover"),
         "newList": MessageLookupByLibrary.simpleMessage(" lista nueva"),
+        "okButton": MessageLookupByLibrary.simpleMessage("Ok"),
         "perMonth": MessageLookupByLibrary.simpleMessage("al mes"),
         "perYear": MessageLookupByLibrary.simpleMessage("al año"),
         "premColorsQuotes": MessageLookupByLibrary.simpleMessage(
@@ -86,6 +90,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "termsOfUsing": MessageLookupByLibrary.simpleMessage("Normas de uso"),
         "thumbnail": MessageLookupByLibrary.simpleMessage("Portada"),
         "undo": MessageLookupByLibrary.simpleMessage("Deshacer"),
+        "updateThumbnail":
+            MessageLookupByLibrary.simpleMessage("¿Actualizar portada?"),
         "wrongReminder": MessageLookupByLibrary.simpleMessage(
             "Hora de recordatorio incorrecta")
       };
