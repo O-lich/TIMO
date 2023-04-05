@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
@@ -17,6 +19,7 @@ class SingleListWidget extends StatefulWidget {
   final FocusNode focusNode;
   ListModel listModel;
   final TextEditingController controller;
+  final File? imageFile;
 
   SingleListWidget({
     Key? key,
@@ -30,6 +33,7 @@ class SingleListWidget extends StatefulWidget {
     required this.focusNode,
     required this.controller,
     required this.onListRenameSubmitted,
+    required this.imageFile,
   }) : super(key: key);
 
   @override
@@ -61,6 +65,8 @@ class _SingleListWidgetState extends State<SingleListWidget> {
               decoration: BoxDecoration(
                 color: buttonColors[widget.listModel.listColorIndex],
                 borderRadius: BorderRadius.circular(26),
+                image: widget.imageFile != null ? DecorationImage(
+                    image: FileImage(widget.imageFile!), fit: BoxFit.cover) : null
               ),
               child: Stack(
                 children: [

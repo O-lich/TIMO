@@ -31,6 +31,8 @@ class ListsView extends StatefulWidget {
 }
 
 class _ListsViewState extends State<ListsView> {
+  File? _imageFile;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +44,7 @@ class _ListsViewState extends State<ListsView> {
     double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       body: ListsPageBackgroundWidget(
+        imageFile: _imageFile,
         height: heightScreen,
         width: widthScreen,
         lists: widget.listsList,
@@ -142,7 +145,10 @@ class _ListsViewState extends State<ListsView> {
             ),
             TextButton(
               onPressed: () async {
-                await updateListImage(listID: widget.listsList[selectedIndex].listID, imageFile: File(pickedFile.path));
+                setState(() {
+                  _imageFile = File(pickedFile.path);
+                });
+                await updateListImage(listID: widget.listsList[selectedIndex].listID, imageFile: _imageFile!);
                 Navigator.of(context).pop();
               },
               child: Text('OK'),

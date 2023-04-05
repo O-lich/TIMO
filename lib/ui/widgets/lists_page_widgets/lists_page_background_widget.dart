@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
@@ -19,6 +21,7 @@ class ListsPageBackgroundWidget extends StatefulWidget {
   final void Function(String text, int selectedIndex) onListRenameSubmitted;
   final void Function(int selectedIndex) onListTap;
   final void Function(int selectedIndex, BuildContext context) onOptionsTap;
+  final File? imageFile;
 
   const ListsPageBackgroundWidget({
     Key? key,
@@ -33,6 +36,7 @@ class ListsPageBackgroundWidget extends StatefulWidget {
     required this.onListRenameSubmitted,
     required this.onListTap,
     required this.onOptionsTap,
+    required this.imageFile,
   }) : super(key: key);
 
   @override
@@ -126,6 +130,7 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                                 onListRenameSubmitted: (String text) {
                                   widget.onListRenameSubmitted(text, list.key);
                                 },
+                                imageFile: widget.imageFile,
                               ),
                             ),
                         AddButtonWidget(
