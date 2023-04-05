@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -131,7 +132,7 @@ class _ListsViewState extends State<ListsView> {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return CupertinoAlertDialog(
           title: Text('Update list image?'),
           content: Image.file(File(pickedFile.path)),
           actions: [
@@ -141,7 +142,7 @@ class _ListsViewState extends State<ListsView> {
             ),
             TextButton(
               onPressed: () async {
-                await updateListImage(listID: widget.listsList[selectedIndex].listID);
+                await updateListImage(listID: widget.listsList[selectedIndex].listID, imageFile: File(pickedFile.path));
                 Navigator.of(context).pop();
               },
               child: Text('OK'),

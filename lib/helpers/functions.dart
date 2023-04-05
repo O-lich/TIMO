@@ -545,6 +545,7 @@ Future<void> updateTask({
 
 Future<void> updateListImage({
   required String listID,
+  required File imageFile
 }) async {
   final docRef = db
       .collection("users")
@@ -552,13 +553,6 @@ Future<void> updateListImage({
       .collection('lists')
       .doc(listID);
 
-  final pickedFile = await ImagePicker().pickImage(
-    source: ImageSource.gallery,
-    imageQuality: 5,
-  );
-  if (pickedFile == null) return;
-
-  final File imageFile = File(pickedFile.path);
   final Reference storageRef = FirebaseStorage.instance
       .ref()
       .child(currentUser.userID)
