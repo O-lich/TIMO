@@ -96,7 +96,8 @@ Future<void> deleteList({
   FirebaseStorage.instance
       .ref()
       .child(currentUser.userID)
-      .child('${oldList.listID}.jpg').delete();
+      .child('${oldList.listID}.jpg')
+      .delete();
 }
 
 Future<void> updateListColor({
@@ -605,19 +606,15 @@ Future<void> updateListImage({
       .doc(currentUser.userID)
       .collection('lists')
       .doc(listModel.listID);
-
   final Reference storageRef = FirebaseStorage.instance
       .ref()
       .child(currentUser.userID)
       .child('${listModel.listID}.jpg');
-
   final UploadTask uploadTask = storageRef.putFile(imageFile);
-  log("done1");
   final TaskSnapshot downloadUrl = await uploadTask.whenComplete(() {});
   final String imageUrl = await downloadUrl.ref.getDownloadURL();
   final updates = <String, String>{
     "listImageUrl": imageUrl,
   };
   docRef.update(updates);
-  log("done2");
 }

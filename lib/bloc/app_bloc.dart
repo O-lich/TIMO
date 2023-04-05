@@ -767,7 +767,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       )) {
         await updateListImage(listModel: event.listModel, imageFile: imageFile);
         final listsList = await getLists();
-        log("done3");
         focusNodeList = List.generate(listsList.length, (index) => FocusNode());
         controllerList =
             List.generate(listsList.length, (index) => TextEditingController());
