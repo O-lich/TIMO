@@ -724,7 +724,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           controller: ModalScrollController.of(context),
           child: OptionsPanelWidget(
             selectedListColorIndex:
-            listsList[event.selectedIndex].listColorIndex,
+                listsList[event.selectedIndex].listColorIndex,
             height: event.heightScreen,
             width: event.widthScreen,
             onTapClose: () {
@@ -734,19 +734,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
               event.onRenameTap();
             },
             onDeleteTap: () {
-            event.onDeleteTap();
+              event.onDeleteTap();
             },
             changeListColor: (int index) {
               event.changeListColor(index);
             },
             onThumbnailTap: () {
               event.onThumbnailTap();
-          },
+            },
           ),
         ),
       );
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());
-      controllerList = List.generate(listsList.length, (index) => TextEditingController());
+      controllerList =
+          List.generate(listsList.length, (index) => TextEditingController());
       for (int i = 0; i < listsList.length; i++) {
         controllerList[i].text = listsList[i].list;
       }
@@ -754,6 +755,32 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           listsList: listsList,
           focusNodeList: focusNodeList,
           controllerList: controllerList));
+    });
+
+    on<AppEventUpdateListImage>((event, emit) async {
+      final File? imageFile = await choseFileToListImage();
+      if (imageFile == null) return;
+
+      if (await showImagePickerDialog(
+        context: event.context,
+        imageFile: imageFile,
+      )) {
+        await updateListImage(listModel: event.listModel, imageFile: imageFile);
+        final listsList = await getLists();
+        log("done3");
+        focusNodeList = List.generate(listsList.length, (index) => FocusNode());
+        controllerList =
+            List.generate(listsList.length, (index) => TextEditingController());
+        for (int i = 0; i < listsList.length; i++) {
+          controllerList[i].text = listsList[i].list;
+        }
+        emit(
+          LoadedListsAppState(
+              listsList: listsList,
+              focusNodeList: focusNodeList,
+              controllerList: controllerList),
+        );
+      }
     });
   }
 

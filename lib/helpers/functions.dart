@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -51,7 +52,7 @@ Future<void> addNewList({
 }) async {
   final docRef = db
       .collection("users")
-      .doc('testUser')
+      .doc(currentUser.userID)
       .collection('lists')
       .withConverter(
         toFirestore: (ListModel task, options) => task.toFirestore(),
@@ -83,7 +84,7 @@ Future<void> deleteList({
 }) async {
   db
       .collection("users")
-      .doc('testUser')
+      .doc(currentUser.userID)
       .collection('lists')
       .doc(oldList.listID)
       .delete()
@@ -91,13 +92,20 @@ Future<void> deleteList({
         (doc) => log("Document deleted"),
         onError: (e) => log("Error updating document $e"),
       );
+
+  FirebaseStorage.instance
+      .ref()
+      .child(currentUser.userID)
+      .child('${oldList.listID}.jpg').delete();
 }
 
-Future<void> updateListColor(
-    {required ListModel oldList, required int listColorIndex}) async {
+Future<void> updateListColor({
+  required ListModel oldList,
+  required int listColorIndex,
+}) async {
   final docRef = db
       .collection("users")
-      .doc('testUser')
+      .doc(currentUser.userID)
       .collection('lists')
       .doc(oldList.listID);
 
@@ -255,7 +263,7 @@ Future<ListModel> addToDoList() async {
   final list = ListModel(
       listID: DateTime.now().millisecondsSinceEpoch.toString(),
       list: 'ToDo',
-      listImageUrl: "url");
+      listImageUrl: "");
   final docRef = db
       .collection("users")
       .doc(currentUser.userID)
@@ -478,7 +486,7 @@ Future<void> updateTaskReminder({
 }) async {
   final docRef = db
       .collection("users")
-      .doc('testUser')
+      .doc(currentUser.userID)
       .collection('lists')
       .doc(updatedTask.listID)
       .collection('tasks')
@@ -543,26 +551,73 @@ Future<void> updateTask({
   taskCurrentColorIndex = -1;
 }
 
+Future<File?> choseFileToListImage() async {
+  final pickedFile = await ImagePicker().pickImage(
+    source: ImageSource.gallery,
+    imageQuality: 7,
+  );
+  if (pickedFile == null) {
+    return null;
+  } else {
+    return File(pickedFile.path);
+  }
+}
+
+Future<bool> showImagePickerDialog({
+  required BuildContext context,
+  required File imageFile,
+}) async {
+  Completer<bool> completer = Completer<bool>();
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text('Update list image?'),
+        content: Image.file(imageFile),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              completer.complete(false);
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              completer.complete(true);
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+  return completer.future;
+}
+
 Future<void> updateListImage({
-  required String listID,
-  required File imageFile
+  required ListModel listModel,
+  required File imageFile,
 }) async {
   final docRef = db
       .collection("users")
       .doc(currentUser.userID)
       .collection('lists')
-      .doc(listID);
+      .doc(listModel.listID);
 
   final Reference storageRef = FirebaseStorage.instance
       .ref()
       .child(currentUser.userID)
-      .child('$listID.jpg');
+      .child('${listModel.listID}.jpg');
 
   final UploadTask uploadTask = storageRef.putFile(imageFile);
+  log("done1");
   final TaskSnapshot downloadUrl = await uploadTask.whenComplete(() {});
   final String imageUrl = await downloadUrl.ref.getDownloadURL();
   final updates = <String, String>{
     "listImageUrl": imageUrl,
   };
   docRef.update(updates);
+  log("done2");
 }

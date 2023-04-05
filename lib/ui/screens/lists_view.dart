@@ -1,16 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
-import 'package:todo_app_main_screen/helpers/functions.dart';
-import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/lists_page_background_widget.dart';
-import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/options_panel_widget.dart';
 
 class ListsView extends StatefulWidget {
   final List<ListModel> listsList;
@@ -120,8 +115,13 @@ class _ListsViewState extends State<ListsView> {
                   ),
                 );
               },
-              onThumbnailTap: () async {
-                _showImagePickerDialog(context, selectedIndex);
+              onThumbnailTap: () {
+                context.read<AppBloc>().add(
+                  AppEventUpdateListImage(
+                    listModel: widget.listsList[selectedIndex],
+                    context: context,
+                  ),
+                );
             },
             ),
           );
@@ -129,33 +129,5 @@ class _ListsViewState extends State<ListsView> {
       ),
     );
   }
-  Future<void> _showImagePickerDialog (BuildContext context, int selectedIndex) async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile == null) return;
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text('Update list image?'),
-          content: Image.file(File(pickedFile.path)),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                setState(() {
-                  _imageFile = File(pickedFile.path);
-                });
-                await updateListImage(listID: widget.listsList[selectedIndex].listID, imageFile: _imageFile!);
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+
 }

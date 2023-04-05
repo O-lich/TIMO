@@ -471,14 +471,25 @@ class AppEventOptionsPanelOpen implements AppEvent {
   final void Function() onThumbnailTap;
   final void Function(int index) changeListColor;
 
-  const AppEventOptionsPanelOpen({
+  const AppEventOptionsPanelOpen(
+      {required this.context,
+      required this.selectedIndex,
+      required this.heightScreen,
+      required this.widthScreen,
+      required this.onRenameTap,
+      required this.onDeleteTap,
+      required this.changeListColor,
+      required this.onThumbnailTap})
+      : super();
+}
+
+@immutable
+class AppEventUpdateListImage implements AppEvent {
+  final ListModel listModel;
+  final BuildContext context;
+
+  const AppEventUpdateListImage({
     required this.context,
-    required this.selectedIndex,
-    required this.heightScreen,
-    required this.widthScreen,
-    required this.onRenameTap,
-    required this.onDeleteTap,
-    required this.changeListColor,
-    required this.onThumbnailTap
+    required this.listModel,
   }) : super();
 }

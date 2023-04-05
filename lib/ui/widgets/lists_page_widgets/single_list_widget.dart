@@ -19,7 +19,6 @@ class SingleListWidget extends StatefulWidget {
   final FocusNode focusNode;
   ListModel listModel;
   final TextEditingController controller;
-  final File? imageFile;
 
   SingleListWidget({
     Key? key,
@@ -33,7 +32,6 @@ class SingleListWidget extends StatefulWidget {
     required this.focusNode,
     required this.controller,
     required this.onListRenameSubmitted,
-    required this.imageFile,
   }) : super(key: key);
 
   @override
@@ -65,8 +63,11 @@ class _SingleListWidgetState extends State<SingleListWidget> {
               decoration: BoxDecoration(
                 color: buttonColors[widget.listModel.listColorIndex],
                 borderRadius: BorderRadius.circular(26),
-                image: widget.imageFile != null ? DecorationImage(
-                    image: FileImage(widget.imageFile!), fit: BoxFit.cover) : null
+                image: widget.listModel.listImageUrl != ''
+                    ? DecorationImage(
+                        image: NetworkImage(widget.listModel.listImageUrl),
+                        fit: BoxFit.cover)
+                    : null,
               ),
               child: Stack(
                 children: [
@@ -117,7 +118,8 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                         border: InputBorder.none,
                       ),
                       onTapOutside: (_) {
-                        if (widget.controller.text.isEmpty || widget.controller.text.trim().isEmpty) {
+                        if (widget.controller.text.isEmpty ||
+                            widget.controller.text.trim().isEmpty) {
                           widget.focusNode.hasFocus;
                           shakeKey.currentState?.shake();
                           widget.controller.text = widget.listModel.list;
@@ -128,7 +130,8 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                       },
                       onSubmitted: (text) {
                         //ToDo
-                        if (widget.controller.text.isEmpty || widget.controller.text.trim().isEmpty) {
+                        if (widget.controller.text.isEmpty ||
+                            widget.controller.text.trim().isEmpty) {
                           widget.focusNode.hasFocus;
                           shakeKey.currentState?.shake();
                           widget.controller.text = widget.listModel.list;

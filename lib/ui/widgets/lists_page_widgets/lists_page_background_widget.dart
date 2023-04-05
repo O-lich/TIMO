@@ -45,8 +45,6 @@ class ListsPageBackgroundWidget extends StatefulWidget {
 }
 
 class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
-
-
   @override
   void initState() {
     super.initState();
@@ -130,7 +128,6 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                                 onListRenameSubmitted: (String text) {
                                   widget.onListRenameSubmitted(text, list.key);
                                 },
-                                imageFile: widget.imageFile,
                               ),
                             ),
                         AddButtonWidget(
