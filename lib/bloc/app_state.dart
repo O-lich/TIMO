@@ -78,6 +78,11 @@ class LanguageAppState extends AppState {
 }
 
 @immutable
+class PremiumAppState extends AppState {
+  const PremiumAppState();
+}
+
+@immutable
 class ErrorAppState extends AppState {
   const ErrorAppState();
 }

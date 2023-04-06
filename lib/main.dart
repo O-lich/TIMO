@@ -13,6 +13,7 @@ import 'package:todo_app_main_screen/ui/screens/lists_view.dart';
 import 'package:todo_app_main_screen/ui/screens/loading_view.dart';
 import 'package:todo_app_main_screen/ui/screens/home_view.dart';
 import 'package:todo_app_main_screen/ui/screens/new_task_view.dart';
+import 'package:todo_app_main_screen/ui/screens/premium_view.dart';
 import 'package:todo_app_main_screen/ui/screens/settings_view.dart';
 import 'package:todo_app_main_screen/ui/screens/splash_view.dart';
 import 'package:todo_app_main_screen/ui/screens/task_view.dart';
@@ -122,6 +123,8 @@ class MyApp extends StatelessWidget {
                     );
                   } else if (appState is ErrorAppState) {
                     return const ErrorView();
+                  } else if (appState is PremiumAppState) {
+                    return const PremiumView();
                   } else {
                     return Container();
                   }

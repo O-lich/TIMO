@@ -6,7 +6,6 @@ import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/main.dart';
-import 'package:todo_app_main_screen/ui/screens/premium_view.dart';
 import 'package:todo_app_main_screen/ui/widgets/language_page_widgets/language_list.dart';
 import 'package:todo_app_main_screen/ui/widgets/settings_page_widgets/settings_widget.dart';
 
@@ -69,9 +68,8 @@ class _SettingsViewState extends State<SettingsView> {
                 height: heightScreen * 0.06,
               ),
               InkWell(
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  PremiumView.routeName,
+                onTap: () => context.read<AppBloc>().add(
+                  const AppEventGoToPremium(),
                 ),
                 child: Center(
                     child: Stack(

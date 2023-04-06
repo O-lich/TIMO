@@ -126,6 +126,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         const SettingsAppState(),
       );
     });
+    on<AppEventGoToPremium>((event, emit) async {
+      emit(
+        const PremiumAppState(),
+      );
+    });
     on<AppEventGoToSingleTask>((event, emit) async {
       final taskModel = event.taskModel;
       final listsList = await getLists();
