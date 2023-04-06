@@ -30,7 +30,7 @@ class PremiumView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: InkWell(
                   onTap: () => context.read<AppBloc>().add(
-                     AppEventGoToSettingsFromPremiumView(context: context),
+                     const AppEventGoToSettings(),
                   ),
                   child: Image.asset(
                     AppIcons.close,

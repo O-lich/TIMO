@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsWidget extends StatelessWidget {
   final String title;
@@ -46,14 +47,14 @@ class SettingsWidget extends StatelessWidget {
 }
 
 _launchURL(String url) async {
-  // if (await canLaunchUrl(Uri.parse(url))) {
-  //   await launchUrl(
-  //     Uri.parse(url),
-  //     mode: LaunchMode.externalApplication,
-  //   );
-  // } else {
-  //   throw 'Could not launch $url';
-  // }
+  if (await canLaunchUrl(Uri.parse(url))) {
+    await launchUrl(
+      Uri.parse(url),
+      mode: LaunchMode.externalApplication,
+    );
+  } else {
+    throw 'Could not launch $url';
+  }
 }
 
 Widget settingsImage = Image.asset(

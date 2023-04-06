@@ -104,3 +104,7 @@ class SingleTaskAppState extends AppState {
 class OpenListPanelAppState extends AppState {
   const OpenListPanelAppState();
 }
+@immutable
+class AppTestAppState extends AppState {
+  const AppTestAppState();
+}

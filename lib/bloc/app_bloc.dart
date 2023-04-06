@@ -123,32 +123,36 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
     });
 
-    on<AppEventGoToSettingsFromPremiumView>((event, emit) async {
-      await Navigator.push(
-        event.context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-          const SettingsView(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(0.0, 1.0);
-            const end = Offset.zero;
-            const curve = Curves.ease;
-            final tween = Tween(begin: begin, end: end);
-            final curvedAnimation = CurvedAnimation(
-              parent: animation,
-              curve: curve,
-            );
-            return SlideTransition(
-              position: tween.animate(curvedAnimation),
-              child: child,
-            );
-          },
-        ),
-      );
-      emit(
-        const SettingsAppState(),
-      );
-    });
+    // on<AppEventGoToSettingsFromPremiumView>((event, emit) async {
+    //   emit(
+    //    const AppTestAppState()
+    //   );
+    //   await Future.delayed(Duration(seconds: 1));
+    //   // await Navigator.push(
+    //   //   event.context,
+    //   //   PageRouteBuilder(
+    //   //     pageBuilder: (context, animation, secondaryAnimation) =>
+    //   //     const SettingsView(),
+    //   //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //   //       const begin = Offset(0.0, 1.0);
+    //   //       const end = Offset.zero;
+    //   //       const curve = Curves.ease;
+    //   //       final tween = Tween(begin: begin, end: end);
+    //   //       final curvedAnimation = CurvedAnimation(
+    //   //         parent: animation,
+    //   //         curve: curve,
+    //   //       );
+    //   //       return SlideTransition(
+    //   //         position: tween.animate(curvedAnimation),
+    //   //         child: child,
+    //   //       );
+    //   //     },
+    //   //   ),
+    //   // );
+    //   emit(
+    //     const SettingsAppState(),
+    //   );
+    // });
 
     on<AppEventGoToSettings>((event, emit) async {
       emit(
