@@ -161,5 +161,51 @@
   "allFeatures": "All features without limits",
   "@allFeatures": {
     "description": "All features"
+  },
+  "hintTaskText": " Type the task...",
+  "@hintTaskText": {
+    "description": "hint text Type the task..."
+  },
+  "letsDoSmth": "Let's do something",
+  "@letsDoSmth": {
+    "description": "initial text"
+  },
+  "wrongReminder": "Wrong reminder time",
+  "@wrongReminder": {
+    "description": "wrong reminder message"
+  },
+  "deletingReminder": "The reminder will be deleted in {seconds}",
+  "@deletingReminder": {
+    "description": "Delete task in some seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "4"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "cancel button"
+  },
+  "error": "No internet connection",
+  "@error": {
+    "description": "No internet connection"
+  },
+  "updateThumbnail": "Update thumbnail?",
+  "@updateThumbnail": {
+    "description": "update thumbnail"
+  },
+  "deleteThumbnail": "Delete thumbnail",
+  "@deleteThumbnail": {
+    "description": "Delete thumbnail button"
+  },
+  "choosePhoto": "Choose photo",
+  "@choosePhoto": {
+    "description": "Delete thumbnail button"
+  },
+  "okButton": "Ok",
+  "@okButton": {
+    "description": "Ok button"
   }
 }

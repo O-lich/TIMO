@@ -1,33 +1,45 @@
+import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
-import 'package:todo_app_main_screen/consts/strings.dart';
+import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/main.dart';
+import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/main_page_widgets/single_task_widget.dart';
 
 class TasksWidget extends StatefulWidget {
-  final bool isPanelOpen;
+  final ListModel listModel;
+  bool isPanelOpen;
   final double height;
   final List<TaskModel> tasksList;
   final ScrollController scrollController;
-  final PanelController panelController;
-  final void Function()? onPressed;
+  final DraggableScrollableController dragController;
+  final void Function()? onMoveToPressed;
+  final void Function() onTaskTap;
+  final void Function() onNewTaskAddPressed;
   final bool isMoveToPressed;
+  bool isPanelDraggable;
 
-  const TasksWidget(
-      {Key? key,
-      required this.isPanelOpen,
-      required this.tasksList,
-      required this.scrollController,
-      required this.panelController,
-      this.onPressed,
-      required this.height,
-      required this.isMoveToPressed})
-      : super(key: key);
+  TasksWidget({
+    Key? key,
+    required this.listModel,
+    required this.isPanelOpen,
+    required this.tasksList,
+    required this.scrollController,
+    this.onMoveToPressed,
+    required this.height,
+    required this.isMoveToPressed,
+    this.isPanelDraggable = true,
+    required this.dragController,
+    required this.onTaskTap,
+    required this.onNewTaskAddPressed,
+  }) : super(key: key);
 
   @override
   State<TasksWidget> createState() => _TasksWidgetState();
@@ -42,7 +54,14 @@ class _TasksWidgetState extends State<TasksWidget> {
   @override
   Widget build(BuildContext context) {
     List<TaskModel> tasks = widget.tasksList;
-    return Padding(
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(21),
+          topRight: Radius.circular(21),
+        ),
+      ),
       padding: const EdgeInsets.only(
         right: 25,
       ),
@@ -51,94 +70,138 @@ class _TasksWidgetState extends State<TasksWidget> {
           Stack(
             children: [
               Center(
-                child: widget.isPanelOpen ? Container() : dragHandle(),
+                child: widget.isPanelOpen == false ? Container() : dragHandle(),
               ),
               todoButton(),
             ],
           ),
-          SizedBox(
-            height: 0.9 * widget.height,
-            child: ListView.builder(
-                padding: EdgeInsets.zero,
-                controller: widget.scrollController,
-                physics: widget.panelController.isPanelOpen
-                    ? const AlwaysScrollableScrollPhysics()
-                    : const NeverScrollableScrollPhysics(),
-                //scrollController: widget.controller,
-                itemCount: tasks.length,
-                //shrinkWrap: true,
-                //onReorder: widget.panelController.isPanelOpen ? reorderData : (){},
-                itemBuilder: (BuildContext context, int index) {
-                  return widget.isMoveToPressed == false
-                      ? Slidable(
-                          key: ValueKey(tasks[index]),
-                          endActionPane: ActionPane(
-                            extentRatio: 0.35,
-                            dismissible: DismissiblePane(
-                              onDismissed: () {
-                                setState(() {
-                                  _undo(tasks, index);
-                                });
-                              },
-                            ),
-                            motion: const ScrollMotion(),
-                            children: [
-                              CustomSlidableAction(
-                                padding: const EdgeInsets.only(
-                                  left: 20,
-                                ),
-                                onPressed: (BuildContext context) {
-                                  setState(() {});
-                                },
-                                child: InkWell(
-                                  onTap: widget.onPressed,
-                                  child: Image.asset(
-                                    AppIcons.moveTo,
-                                    scale: 2.9,
-                                  ),
-                                ),
-                              ),
-                              CustomSlidableAction(
-                                padding: const EdgeInsets.only(
-                                  left: 20,
-                                ),
-                                onPressed: (BuildContext context) {
-                                  setState(() {
-                                    //ToDo
-                                    _undo(tasks, index);
-                                  });
-                                },
-                                child: Image.asset(
-                                  AppIcons.delete,
-                                  scale: 2.9,
-                                ),
-                              ),
-                            ],
-                          ),
+          Expanded(
+            child: SizedBox(
+              height: 0.9 * widget.height,
+              child: widget.tasksList.isEmpty
+                  ? ListView(
+                      controller: widget.scrollController,
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 25,
-                            ),
-                            child: Card(
-                              elevation: 0,
-                              child: SingleTaskWidget(
-                                taskModel: widget.tasksList[index],
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextButton(
+                              onPressed: widget.onNewTaskAddPressed,
+                              child: Text(
+                                S.of(context).letsDoSmth,
+                                style: const TextStyle(
+                                    fontSize: 46,
+                                    color: textColor,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
                         )
-                      : Padding(
-                          padding: const EdgeInsets.only(
-                            left: 25,
-                          ),
-                          child: Card(
-                            elevation: 0,
-                            child: SingleTaskWidget(
-                              taskModel: widget.tasksList[index],
-                            ),
-                          ),
-                        );
-                }),
+                      ],
+                    )
+                  : ReorderableListView.builder(
+                      physics: widget.isPanelOpen
+                          ? const AlwaysScrollableScrollPhysics()
+                          : const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      scrollController: widget.scrollController,
+                      itemCount: tasks.length,
+                      shrinkWrap: true,
+                      onReorder: reorderData,
+                      itemBuilder: (BuildContext context, int index) {
+                        return widget.isMoveToPressed == false
+                            ? Slidable(
+                                key: ValueKey(tasks[index]),
+                                closeOnScroll: false,
+                                endActionPane: ActionPane(
+                                  extentRatio: 0.35,
+                                  dismissible: DismissiblePane(
+                                    onDismissed: () {
+                                      setState(() {
+                                        _undo(tasks, index);
+                                      });
+                                    },
+                                  ),
+                                  motion: const ScrollMotion(),
+                                  children: [
+                                    CustomSlidableAction(
+                                      padding: const EdgeInsets.only(
+                                        left: 20,
+                                      ),
+                                      onPressed: (BuildContext context) {
+                                        setState(() {});
+                                      },
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            selectedTaskIndex = index;
+                                          });
+                                          widget.onMoveToPressed!();
+                                        },
+                                        child: Image.asset(
+                                          AppIcons.moveTo,
+                                          scale: 2.9,
+                                        ),
+                                      ),
+                                    ),
+                                    CustomSlidableAction(
+                                      padding: const EdgeInsets.only(
+                                        left: 20,
+                                      ),
+                                      onPressed: (BuildContext context) {
+                                        setState(() {
+                                          //ToDo
+                                          _undo(tasks, index);
+                                        });
+                                      },
+                                      child: Image.asset(
+                                        AppIcons.delete,
+                                        scale: 2.9,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 25,
+                                  ),
+                                  child: Card(
+                                    elevation: 0,
+                                    child: SingleTaskWidget(
+                                      taskModel: widget.tasksList[index],
+                                      onSingleTaskTap: () {
+                                        context.read<AppBloc>().add(
+                                            AppEventGoToSingleTask(
+                                                taskModel:
+                                                    widget.tasksList[index]));
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Padding(
+                                key: ValueKey(tasks[index]),
+                                padding: const EdgeInsets.only(
+                                  left: 25,
+                                ),
+                                child: Card(
+                                  elevation: 0,
+                                  child: SingleTaskWidget(
+                                    taskModel: widget.tasksList[index],
+                                    onSingleTaskTap: () {
+                                      context.read<AppBloc>().add(
+                                            AppEventGoToSingleTask(
+                                              taskModel:
+                                                  widget.tasksList[index],
+                                            ),
+                                          );
+                                    },
+                                  ),
+                                ),
+                              );
+                      }),
+            ),
           ),
         ],
       ),
@@ -175,11 +238,17 @@ class _TasksWidgetState extends State<TasksWidget> {
       );
 
   Widget todoButton() {
-    return widget.isPanelOpen
-        ? Padding(
+    return widget.isPanelOpen == true
+        ? const SizedBox(
+            height: 22,
+          )
+        : Padding(
             padding: const EdgeInsets.only(left: 25, top: 15),
             child: InkWell(
-              onTap: widget.panelController.close,
+              onTap: () {
+                widget.dragController.jumpTo(0.58);
+                widget.isPanelOpen = false;
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
@@ -191,27 +260,27 @@ class _TasksWidgetState extends State<TasksWidget> {
                   const SizedBox(
                     width: 13,
                   ),
-                  const Text(
-                    TestStrings.toDo,
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  Expanded(
+                    child: Text(
+                      widget.listModel.list,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          )
-        : const SizedBox(
-            height: 22,
           );
   }
 
   void _movePanel() {
-    widget.panelController.isPanelOpen
-        ? setState(() {
-            widget.panelController.close();
-          })
-        : setState(() {
-            widget.panelController.open();
-          });
+    setState(() {
+      widget.isPanelOpen = true;
+      widget.dragController.jumpTo(0.95);
+    });
   }
 
   void _undo(List<TaskModel> tasks, int index) {
@@ -268,8 +337,8 @@ class _TasksWidgetState extends State<TasksWidget> {
         .doc(deletedTask.taskID)
         .delete()
         .then(
-          (doc) => print("Document deleted"),
-      onError: (e) => print("Error updating document $e"),
-    );
+          (doc) => log("Document deleted"),
+          onError: (e) => log("Error updating document $e"),
+        );
   }
 }

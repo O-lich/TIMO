@@ -26,43 +26,46 @@ class _ColorsWidgetState extends State<ColorsWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 60,
-      child: Padding(
-        padding: EdgeInsets.only(right: widget.width * 0.15),
-        child: ListView.separated(
-          shrinkWrap: true,
-          itemCount: buttonColors.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (BuildContext context, int index) {
-            return ExpandTapWidget(
-              tapPadding: const EdgeInsets.all(20.0),
-              onTap: () {
-                setState(() {
-                  if (widget.selectedTaskColorIndex != index) {
-                    widget.selectedTaskColorIndex = index;
-                  } else {
-                    widget.selectedTaskColorIndex = -1;
-                  }
-                  taskCurrentColorIndex = widget.selectedTaskColorIndex;
-                });
-              },
-              child: SingleColorWidget(
-                color: buttonColors[index],
-                bottomPadding: (widget.selectedTaskColorIndex == index)
-                    ? bottomPadding = 20
-                    : bottomPadding = 0,
-                topPadding: (widget.selectedTaskColorIndex == index)
-                    ? topPadding = 0
-                    : topPadding = 20,
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) => SizedBox(
-            width: widget.width * 0.07,
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Padding(
+          padding: EdgeInsets.only(right: widget.width * 0.115),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: buttonColors.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (BuildContext context, int index) {
+              return ExpandTapWidget(
+                tapPadding: const EdgeInsets.symmetric(
+                  vertical: 100,
+                ),
+                onTap: () {
+                  setState(() {
+                    if (widget.selectedTaskColorIndex != index) {
+                      widget.selectedTaskColorIndex = index;
+                    } else {
+                      widget.selectedTaskColorIndex = -1;
+                    }
+                    taskCurrentColorIndex = widget.selectedTaskColorIndex;
+                  });
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: widget.width * 0.035),
+                  child: SingleColorWidget(
+                    color: buttonColors[index],
+                    bottomPadding: (widget.selectedTaskColorIndex == index)
+                        ? bottomPadding = 20
+                        : bottomPadding = 0,
+                    topPadding: (widget.selectedTaskColorIndex == index)
+                        ? topPadding = 0
+                        : topPadding = 20,
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
     );
   }
-
-
 }

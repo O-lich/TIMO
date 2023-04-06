@@ -20,7 +20,10 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'de';
 
-  static String m0(seconds) => "Die Aufgabe wird in ${seconds} gelöscht";
+  static String m0(seconds) =>
+      "Die Erinnerungszeit wird in ${seconds} gelöscht";
+
+  static String m1(seconds) => "Die Aufgabe wird in ${seconds} gelöscht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -35,22 +38,34 @@ class MessageLookup extends MessageLookupByLibrary {
         "and": MessageLookupByLibrary.simpleMessage(" und "),
         "bySubscribing": MessageLookupByLibrary.simpleMessage(
             "Indem Sie sich anmelden, akzeptieren Sie unsere"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Kündigen"),
         "chooseLists": MessageLookupByLibrary.simpleMessage("Listen"),
+        "choosePhoto": MessageLookupByLibrary.simpleMessage("Bild auswählen"),
         "color": MessageLookupByLibrary.simpleMessage("Farbe"),
         "create": MessageLookupByLibrary.simpleMessage("erstellen"),
         "createNewList":
             MessageLookupByLibrary.simpleMessage("neue Liste erstellen"),
         "delete": MessageLookupByLibrary.simpleMessage("Löschen"),
-        "deletingTask": m0,
+        "deleteThumbnail":
+            MessageLookupByLibrary.simpleMessage("Vorschaubild löschen"),
+        "deletingReminder": m0,
+        "deletingTask": m1,
+        "error":
+            MessageLookupByLibrary.simpleMessage("Keine Internetverbindung"),
         "getPremium": MessageLookupByLibrary.simpleMessage("Hol dir Premium"),
         "goPremium": MessageLookupByLibrary.simpleMessage("Werde Premium"),
+        "hintTaskText": MessageLookupByLibrary.simpleMessage(
+            " Geben Sie die Aufgabe ein..."),
         "hintText": MessageLookupByLibrary.simpleMessage(
             " Geben Sie neue Aufgabe ein..."),
         "language": MessageLookupByLibrary.simpleMessage("Deutsch"),
         "languageTitle": MessageLookupByLibrary.simpleMessage("Sprache"),
+        "letsDoSmth":
+            MessageLookupByLibrary.simpleMessage("Erstellen wir eine Aufgabe"),
         "lists": MessageLookupByLibrary.simpleMessage("listen"),
         "move": MessageLookupByLibrary.simpleMessage("Umzug"),
         "newList": MessageLookupByLibrary.simpleMessage(" neue Liste"),
+        "okButton": MessageLookupByLibrary.simpleMessage("Ok"),
         "perMonth": MessageLookupByLibrary.simpleMessage("pro monat"),
         "perYear": MessageLookupByLibrary.simpleMessage("per annum"),
         "premColorsQuotes": MessageLookupByLibrary.simpleMessage(
@@ -78,6 +93,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "termsOfUsing":
             MessageLookupByLibrary.simpleMessage("Regeln für die Verwendung"),
         "thumbnail": MessageLookupByLibrary.simpleMessage("Vorschaubild"),
-        "undo": MessageLookupByLibrary.simpleMessage("Rückgängig machen")
+        "undo": MessageLookupByLibrary.simpleMessage("Rückgängig machen"),
+        "updateThumbnail":
+            MessageLookupByLibrary.simpleMessage("Vorschaubild aktualisieren?"),
+        "wrongReminder":
+            MessageLookupByLibrary.simpleMessage("Falsche Erinnerungszeit")
       };
 }

@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
-import 'package:todo_app_main_screen/ui/screens/task_page.dart';
 
 class SingleTaskWidget extends StatelessWidget {
   final TaskModel taskModel;
+  final void Function() onSingleTaskTap;
 
   const SingleTaskWidget({
     Key? key,
     required this.taskModel,
+    required this.onSingleTaskTap,
   }) : super(key: key);
 
   @override
@@ -18,11 +19,7 @@ class SingleTaskWidget extends StatelessWidget {
       color: backgroundColor,
       width: 378,
       child: InkWell(
-        onTap: () => Navigator.pushNamed(
-          context,
-          TaskPage.routeName,
-          arguments: taskModel,
-        ),
+        onTap: onSingleTaskTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

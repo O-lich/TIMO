@@ -3,6 +3,7 @@ import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/ui/widgets/panel_close_widget.dart';
+import 'package:todo_app_main_screen/ui/widgets/shake_error_widget.dart';
 import '../black_button_widget.dart';
 
 class NewTaskPageBackgroundWidget extends StatefulWidget {
@@ -12,16 +13,20 @@ class NewTaskPageBackgroundWidget extends StatefulWidget {
   final void Function() onBlackButtonPressed;
   final void Function() onReminderTap;
   final void Function() onListsTap;
+  final void Function() onCloseTap;
+  final bool isReminderActive;
 
-  const NewTaskPageBackgroundWidget(
-      {Key? key,
-      required this.taskController,
-      required this.height,
-      required this.width,
-      required this.onBlackButtonPressed,
-      required this.onReminderTap,
-      required this.onListsTap})
-      : super(key: key);
+  const NewTaskPageBackgroundWidget({
+    Key? key,
+    required this.taskController,
+    required this.height,
+    required this.width,
+    required this.onBlackButtonPressed,
+    required this.onReminderTap,
+    required this.onListsTap,
+    required this.onCloseTap,
+    required this.isReminderActive,
+  }) : super(key: key);
 
   @override
   State<NewTaskPageBackgroundWidget> createState() =>
@@ -30,6 +35,8 @@ class NewTaskPageBackgroundWidget extends StatefulWidget {
 
 class _NewTaskPageBackgroundWidgetState
     extends State<NewTaskPageBackgroundWidget> {
+  final shakeKey = GlobalKey<ShakeWidgetState>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,33 +49,39 @@ class _NewTaskPageBackgroundWidgetState
         children: [
           PanelCloseWidget(
             alignment: Alignment.topRight,
-            onTapClose: Navigator.of(context).pop,
+            onTapClose: widget.onCloseTap,
             image: AppIcons.close,
           ),
           Expanded(
-            child: TextField(
-              textCapitalization: TextCapitalization.sentences,
-              controller: widget.taskController,
-              style: const TextStyle(
-                fontSize: 26,
-              ),
-              decoration: InputDecoration(
-                hintText: S.of(context).hintText,
-                hintStyle: const TextStyle(
-                  color: hintTextColor,
+            child: ShakeWidget(
+              key: shakeKey,
+              shakeOffset: 10,
+              shakeCount: 3,
+              shakeDuration: const Duration(milliseconds: 500),
+              child: TextField(
+                textCapitalization: TextCapitalization.sentences,
+                controller: widget.taskController,
+                style: const TextStyle(
                   fontSize: 26,
-                  height: 2,
                 ),
-                border: InputBorder.none,
+                decoration: InputDecoration(
+                  hintText: S.of(context).hintText,
+                  hintStyle: const TextStyle(
+                    color: hintTextColor,
+                    fontSize: 26,
+                    height: 2,
+                  ),
+                  border: InputBorder.none,
+                ),
+                scrollPadding: const EdgeInsets.all(20.0),
+                autofocus: true,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                cursorColor: Colors.black,
+                onTapOutside: (_) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
               ),
-              scrollPadding: const EdgeInsets.all(20.0),
-              autofocus: true,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              cursorColor: Colors.black,
-              onTapOutside: (_) {
-                FocusManager.instance.primaryFocus?.unfocus();
-              },
             ),
           ),
           Padding(
@@ -91,7 +104,9 @@ class _NewTaskPageBackgroundWidgetState
                     InkWell(
                       onTap: widget.onReminderTap,
                       child: Image.asset(
-                        AppIcons.reminderBell,
+                        widget.isReminderActive
+                            ? AppIcons.reminderBellActive
+                            : AppIcons.reminderBell,
                         scale: 3,
                       ),
                     ),
@@ -99,12 +114,19 @@ class _NewTaskPageBackgroundWidgetState
                 ),
                 BlackButtonWidget(
                   height: widget.height * 0.05,
-                  onPressed: widget.onBlackButtonPressed,
+                  onPressed: () {
+                    if (widget.taskController.text.isEmpty || widget.taskController.text.trim().isEmpty) {
+                      widget.taskController.text = '';
+                      shakeKey.currentState?.shake();
+                    } else {
+                      widget.onBlackButtonPressed();
+                    }
+                  },
                   width: widget.width * 0.3,
                   borderRadius: BorderRadius.circular(22),
                   child: Text(
                     S.of(context).create,
-                    style: TextStyle(color: backgroundColor),
+                    style: const TextStyle(color: backgroundColor),
                   ),
                 ),
               ],

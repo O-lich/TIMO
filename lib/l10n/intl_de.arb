@@ -38,5 +38,15 @@
   "premColorsQuotes": "Neue Farben und vollständige Anführungszeichen",
   "premLists": "Verschiedene Listen und Anpassung",
   "premFuture": "Neue Features in Zukunft",
-  "allFeatures": "Alle Funktionen\nohne Einschränkungen"
+  "allFeatures": "Alle Funktionen\nohne Einschränkungen",
+  "hintTaskText": " Geben Sie die Aufgabe ein...",
+  "letsDoSmth": "Erstellen wir eine Aufgabe",
+  "wrongReminder": "Falsche Erinnerungszeit",
+  "deletingReminder": "Die Erinnerungszeit wird in {seconds} gelöscht",
+  "cancel": "Kündigen",
+  "error": "Keine Internetverbindung",
+  "updateThumbnail": "Vorschaubild aktualisieren?",
+  "deleteThumbnail": "Vorschaubild löschen",
+  "choosePhoto": "Bild auswählen",
+  "okButton": "Ok"
 }

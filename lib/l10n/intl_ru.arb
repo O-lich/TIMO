@@ -38,5 +38,15 @@
   "premColorsQuotes": "Новые цвета и цитаты целиком",
   "premLists": "Разные списки и кастомизации",
   "premFuture": "Новые функции в будущем",
-  "allFeatures": "Все функции\nбез ограничений"
+  "allFeatures": "Все функции\nбез ограничений",
+  "hintTaskText": " Введите задачу...",
+  "letsDoSmth": "Давай создадим задачу",
+  "wrongReminder": "Неверное время напоминания",
+  "deletingReminder": "Напоминание будет удалено через {seconds}",
+  "cancel": "Отмена",
+  "error": "Нет соединения с интернетом",
+  "updateThumbnail": "Обновить обложку?",
+  "deleteThumbnail": "Удалить обложку",
+  "choosePhoto": "Выбрать фото",
+  "okButton": "Ok"
 }

@@ -1,26 +1,26 @@
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/main.dart';
-import 'package:todo_app_main_screen/ui/screens/language_page.dart';
-import 'package:todo_app_main_screen/ui/screens/premium_page.dart';
 import 'package:todo_app_main_screen/ui/widgets/language_page_widgets/language_list.dart';
 import 'package:todo_app_main_screen/ui/widgets/settings_page_widgets/settings_widget.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsView extends StatefulWidget {
   static const routeName = '/settings_page';
 
-  const SettingsPage({
+  const SettingsView({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<SettingsView> createState() => _SettingsViewState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
@@ -41,7 +41,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   ExpandTapWidget(
                     tapPadding: const EdgeInsets.all(50.0),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () {
+                      context.read<AppBloc>().add(
+                        const AppEventGoToLists(),
+                      );
+                    },
                     child: Image.asset(
                       AppIcons.close,
                       scale: 3,
@@ -64,13 +68,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 height: heightScreen * 0.06,
               ),
               InkWell(
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  PremiumPage.routeName,
+                onTap: () => context.read<AppBloc>().add(
+                  const AppEventGoToPremium(),
                 ),
                 child: Center(
                     child: Stack(
-                  children: [
+                      children: [
                     Positioned(
                         child: Image.asset(
                       AppIcons.vector,
@@ -116,31 +119,17 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 )),
               ),
-              // SizedBox(
-              //   height: 0.9 * heightScreen,
-              //   child: ListView.separated(
-              //       shrinkWrap: true,
-              //       itemBuilder: (context, index) {
-              //
-              //         return settingsList[index];
-              //       },
-              //       separatorBuilder: (context, index) {
-              //         return const Divider();
-              //       },
-              //       itemCount: settingsList.length),
-              // ),
               SizedBox(
                 height: 0.9 * heightScreen,
                 child: ListView(
                   children: [
                     SettingsWidget(
-                      route: '',
                       url: 'https://flutter.dev/',
                       title: S.of(context).aboutUs,
                       trailing: settingsImage,
+                      navigateTo: () {},
                     ),
                     SettingsWidget(
-                      route: LanguagePage.routeName,
                       url: '',
                       title: S.of(context).languageTitle,
                       trailing: Text(
@@ -153,24 +142,29 @@ class _SettingsPageState extends State<SettingsPage> {
                           color: paleTextColor,
                         ),
                       ),
+                      navigateTo: () {
+                        context.read<AppBloc>().add(
+                              const AppEventGoToLanguage(),
+                            );
+                      },
                     ),
                     SettingsWidget(
-                      route: '',
                       url: '',
                       title: S.of(context).reportProblem,
                       trailing: Container(),
+                      navigateTo: () {},
                     ),
                     SettingsWidget(
-                      route: '',
                       url: 'https://flutter.dev/',
                       title: S.of(context).termsOfUsing,
                       trailing: settingsImage,
+                      navigateTo: () {},
                     ),
                     SettingsWidget(
-                      route: '',
                       url: 'https://flutter.dev/',
                       title: S.of(context).privacyPolicy,
                       trailing: settingsImage,
+                      navigateTo: () {},
                     ),
                   ],
                 ),

@@ -38,5 +38,15 @@
   "premColorsQuotes": "Nuovi colori e virgolette complete",
   "premLists": "Diverse liste personalizzabile",
   "premFuture": "Nuove funzionalità in futuro",
-  "allFeatures": "Tutte le funzioni senza limiti"
+  "allFeatures": "Tutte le funzioni senza limiti",
+  "hintTaskText": "Digita l'attività...",
+  "letsDoSmth": "Creiamo una attività",
+  "wrongReminder": "Orario di promemoria errato",
+  "deletingReminder": "Il promemoria verrà eliminata tra {seconds}",
+  "cancel": "Annullare",
+  "error": "Nessuna connessione internet",
+  "updateThumbnail": "Aggiornare la copertura?",
+  "deleteThumbnail": "Eliminare la copertura",
+  "choosePhoto": "Scegliere la foto",
+  "okButton": "Ok"
 }

@@ -439,6 +439,106 @@ class S {
       args: [],
     );
   }
+
+  /// ` Type the task...`
+  String get hintTaskText {
+    return Intl.message(
+      ' Type the task...',
+      name: 'hintTaskText',
+      desc: 'hint text Type the task...',
+      args: [],
+    );
+  }
+
+  /// `Let's do something`
+  String get letsDoSmth {
+    return Intl.message(
+      'Let\'s do something',
+      name: 'letsDoSmth',
+      desc: 'initial text',
+      args: [],
+    );
+  }
+
+  /// `Wrong reminder time`
+  String get wrongReminder {
+    return Intl.message(
+      'Wrong reminder time',
+      name: 'wrongReminder',
+      desc: 'wrong reminder message',
+      args: [],
+    );
+  }
+
+  /// `The reminder will be deleted in {seconds}`
+  String deletingReminder(int seconds) {
+    return Intl.message(
+      'The reminder will be deleted in $seconds',
+      name: 'deletingReminder',
+      desc: 'Delete task in some seconds',
+      args: [seconds],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: 'cancel button',
+      args: [],
+    );
+  }
+
+  /// `No internet connection`
+  String get error {
+    return Intl.message(
+      'No internet connection',
+      name: 'error',
+      desc: 'No internet connection',
+      args: [],
+    );
+  }
+
+  /// `Update thumbnail?`
+  String get updateThumbnail {
+    return Intl.message(
+      'Update thumbnail?',
+      name: 'updateThumbnail',
+      desc: 'update thumbnail',
+      args: [],
+    );
+  }
+
+  /// `Delete thumbnail`
+  String get deleteThumbnail {
+    return Intl.message(
+      'Delete thumbnail',
+      name: 'deleteThumbnail',
+      desc: 'Delete thumbnail button',
+      args: [],
+    );
+  }
+
+  /// `Choose photo`
+  String get choosePhoto {
+    return Intl.message(
+      'Choose photo',
+      name: 'choosePhoto',
+      desc: 'Delete thumbnail button',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get okButton {
+    return Intl.message(
+      'Ok',
+      name: 'okButton',
+      desc: 'Ok button',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

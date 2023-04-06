@@ -20,7 +20,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
-  static String m0(seconds) => "Задача будет удалена через ${seconds}";
+  static String m0(seconds) => "Напоминание будет удалено через ${seconds}";
+
+  static String m1(seconds) => "Задача будет удалена через ${seconds}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -35,22 +37,34 @@ class MessageLookup extends MessageLookupByLibrary {
         "and": MessageLookupByLibrary.simpleMessage(" и "),
         "bySubscribing": MessageLookupByLibrary.simpleMessage(
             "Подписываясь, вы принимаете наши"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "chooseLists": MessageLookupByLibrary.simpleMessage("Списки"),
+        "choosePhoto": MessageLookupByLibrary.simpleMessage("Выбрать фото"),
         "color": MessageLookupByLibrary.simpleMessage("Цвет"),
         "create": MessageLookupByLibrary.simpleMessage("создать"),
         "createNewList":
             MessageLookupByLibrary.simpleMessage("создать новый список"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
-        "deletingTask": m0,
+        "deleteThumbnail":
+            MessageLookupByLibrary.simpleMessage("Удалить обложку"),
+        "deletingReminder": m0,
+        "deletingTask": m1,
+        "error":
+            MessageLookupByLibrary.simpleMessage("Нет соединения с интернетом"),
         "getPremium": MessageLookupByLibrary.simpleMessage("Попробуй премиум"),
         "goPremium": MessageLookupByLibrary.simpleMessage("Перейти на Премиум"),
+        "hintTaskText":
+            MessageLookupByLibrary.simpleMessage(" Введите задачу..."),
         "hintText":
             MessageLookupByLibrary.simpleMessage(" Введите новую задачу..."),
         "language": MessageLookupByLibrary.simpleMessage("Русский"),
         "languageTitle": MessageLookupByLibrary.simpleMessage("Язык"),
+        "letsDoSmth":
+            MessageLookupByLibrary.simpleMessage("Давай создадим задачу"),
         "lists": MessageLookupByLibrary.simpleMessage("списки"),
         "move": MessageLookupByLibrary.simpleMessage("переместить"),
         "newList": MessageLookupByLibrary.simpleMessage(" новый список"),
+        "okButton": MessageLookupByLibrary.simpleMessage("Ok"),
         "perMonth": MessageLookupByLibrary.simpleMessage("в месяц"),
         "perYear": MessageLookupByLibrary.simpleMessage("в год"),
         "premColorsQuotes": MessageLookupByLibrary.simpleMessage(
@@ -78,6 +92,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "termsOfUsing":
             MessageLookupByLibrary.simpleMessage("Правила использования"),
         "thumbnail": MessageLookupByLibrary.simpleMessage("Обложка"),
-        "undo": MessageLookupByLibrary.simpleMessage("Отменить")
+        "undo": MessageLookupByLibrary.simpleMessage("Отменить"),
+        "updateThumbnail":
+            MessageLookupByLibrary.simpleMessage("Обновить обложку?"),
+        "wrongReminder":
+            MessageLookupByLibrary.simpleMessage("Неверное время напоминания")
       };
 }

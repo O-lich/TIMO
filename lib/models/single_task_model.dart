@@ -5,7 +5,6 @@ class TaskModel {
   bool isReminderActive;
   String task;
   String listID;
-  int listColorIndex;
   String userID;
   String taskID;
   String dateTimeReminder;
@@ -15,7 +14,6 @@ class TaskModel {
     this.userID = 'testUser',
     this.taskID = '',
     this.colorIndex = -1,
-    this.listColorIndex = 0,
     this.isReminderActive = false,
     required this.task,
     this.listID = "ToDo",
@@ -32,7 +30,6 @@ class TaskModel {
       isReminderActive: data?['isReminderActive'],
       task: data?['task'],
       listID: data?['listID'],
-      listColorIndex: data?['listColorIndex'],
       userID: data?['userID'],
       taskID: data?['taskID'],
     );
@@ -45,7 +42,6 @@ class TaskModel {
       "isReminderActive": isReminderActive,
       "task": task,
       "listID": listID,
-      "listColorIndex": listColorIndex,
       "userID": userID,
       "taskID": taskID,
     };

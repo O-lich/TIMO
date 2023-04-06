@@ -5,19 +5,19 @@ import 'package:todo_app_main_screen/ui/widgets/main_page_widgets/date_widget.da
 import 'package:todo_app_main_screen/ui/widgets/main_page_widgets/quote_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/nav_bar_widget.dart';
 
-
 class MainScreenBackgroundWidget extends StatelessWidget {
   final double width;
   final double? height;
   final void Function() onPressed;
   final QuoteModel quoteModel;
+  final Color buttonColor;
 
   const MainScreenBackgroundWidget({
     super.key,
     this.height,
     required this.onPressed,
     required this.width,
-    required this.quoteModel,
+    required this.quoteModel, required this.buttonColor,
   });
 
   @override
@@ -37,7 +37,7 @@ class MainScreenBackgroundWidget extends StatelessWidget {
                 height: height!,
                 onPressed: onPressed,
                 titleColor: textColor,
-                buttonColor: lightBlueColor,
+                buttonColor: buttonColor,
               ),
               DateWidget(
                 dateTime: DateTime.now(),

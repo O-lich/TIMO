@@ -22,7 +22,7 @@ class ListsWidget extends StatefulWidget {
 }
 
 class _ListsWidgetState extends State<ListsWidget> {
-  int selectedIndex = 0;
+  int selectedIndex = selectedListIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _ListsWidgetState extends State<ListsWidget> {
                       onTap: () {
                         setState(() {
                           selectedIndex = index;
-                          currentList = currentLists[index];
+                          moveToListIndex = index;
                         });
                       },
                       child: Padding(
@@ -63,10 +63,13 @@ class _ListsWidgetState extends State<ListsWidget> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              widget.lists[index].list,
-                              style: const TextStyle(
-                                fontSize: 20,
+                            Expanded(
+                              child: Text(
+                                widget.lists[index].list,
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    overflow: TextOverflow.ellipsis
+                                ),
                               ),
                             ),
                             Image.asset(

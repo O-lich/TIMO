@@ -38,5 +38,15 @@
   "premColorsQuotes": "Nuevos colores y comillas completas",
   "premLists": "Diferentes listas personalizables",
   "premFuture": "Nuevas características en el futuro",
-  "allFeatures": "Todas las funciones sin límites"
+  "allFeatures": "Todas las funciones sin límites",
+  "hintTaskText": " Escriba la tarea...",
+  "letsDoSmth": "Creemos una tarea",
+  "wrongReminder": "Hora de recordatorio incorrecta",
+  "deletingReminder": "El recordatorio se eliminará en {seconds}",
+  "cancel": "Cancelar",
+  "error": "Sin conexión a Internet",
+  "updateThumbnail": "¿Actualizar portada?",
+  "deleteThumbnail": "Eliminar portada",
+  "choosePhoto": "Elegir foto",
+  "okButton": "Ok"
 }

@@ -1,15 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/consts/strings.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/ui/widgets/black_button_widget.dart';
 
-class PremiumPage extends StatelessWidget {
-  static const routeName = '/premium_page';
+class PremiumView extends StatelessWidget {
 
-  const PremiumPage({Key? key}) : super(key: key);
+  const PremiumView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,9 @@ class PremiumPage extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: InkWell(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => context.read<AppBloc>().add(
+                     const AppEventGoToSettings(),
+                  ),
                   child: Image.asset(
                     AppIcons.close,
                     scale: 3,

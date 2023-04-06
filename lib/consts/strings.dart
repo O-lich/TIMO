@@ -17,4 +17,5 @@ abstract class PremiumPageStrings {
 
 abstract class AssetsImagesStrings {
   static const quoteBackgroundBlur = 'assets/images/blur.png';
+  static const splashViewImage = 'assets/images/splash_view_image.png';
 }

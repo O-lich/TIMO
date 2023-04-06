@@ -34,7 +34,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  sliding_up_panel: ^2.0.0+1
   flutter_slidable: ^2.0.0
   modal_bottom_sheet:
     git:
@@ -43,6 +42,7 @@ dependencies:
       path: modal_bottom_sheet
   #url_launcher: ^6.1.9
   drop_shadow_image: ^0.9.1
+  shared_preferences: ^2.0.20
   expand_tap_area: ^1.1.1
   firebase_core: ^2.7.0
   firebase_database: ^10.0.5
@@ -53,6 +53,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   provider: ^6.0.5
+  flutter_bloc: ^8.1.2
+  bloc: ^8.1.1
+  image_picker: ^0.8.7+1
 
 
 dev_dependencies:

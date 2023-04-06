@@ -1,33 +1,42 @@
+import 'dart:io';
+
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
-import 'package:todo_app_main_screen/helpers/sliding_panel_helper.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
-import 'package:todo_app_main_screen/ui/screens/settings_page.dart';
-import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/options_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/single_list_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/nav_bar_widget.dart';
-
 import 'add_button_widget.dart';
 
 class ListsPageBackgroundWidget extends StatefulWidget {
   final double height;
   final double width;
-  final void Function() onPressed;
+  final void Function() onPressedClose;
   final List<ListModel> lists;
   final void Function() onAddButtonTap;
-  final TextEditingController controller;
+  final void Function() onSettingsButtonTap;
+  final List<FocusNode> focusNodeList;
+  final List<TextEditingController> controllerList;
+  final void Function(String text, int selectedIndex) onListRenameSubmitted;
+  final void Function(int selectedIndex) onListTap;
+  final void Function(int selectedIndex, BuildContext context) onOptionsTap;
+  final File? imageFile;
 
   const ListsPageBackgroundWidget({
     Key? key,
     required this.height,
     required this.width,
-    required this.onPressed,
+    required this.onPressedClose,
     required this.lists,
     required this.onAddButtonTap,
-    required this.controller,
+    required this.onSettingsButtonTap,
+    required this.focusNodeList,
+    required this.controllerList,
+    required this.onListRenameSubmitted,
+    required this.onListTap,
+    required this.onOptionsTap,
+    required this.imageFile,
   }) : super(key: key);
 
   @override
@@ -36,21 +45,9 @@ class ListsPageBackgroundWidget extends StatefulWidget {
 }
 
 class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
-  int _selectedIndex = 0;
-  late List<FocusNode> focusNodeList;
-
   @override
   void initState() {
-    focusNodeList = List.generate(widget.lists.length, (index) => FocusNode());
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    for (int i = 0; i <= widget.lists.length; i++) {
-      focusNodeList[i].dispose();
-    }
-    super.dispose();
   }
 
   @override
@@ -70,10 +67,7 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
               children: [
                 ExpandTapWidget(
                   tapPadding: const EdgeInsets.all(50.0),
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    SettingsPage.routeName,
-                  ),
+                  onTap: widget.onSettingsButtonTap,
                   child: const Icon(
                     Icons.settings,
                     size: 30,
@@ -81,7 +75,7 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                 ),
                 NavBarWidget(
                   height: widget.height,
-                  onPressed: widget.onPressed,
+                  onPressed: widget.onPressedClose,
                   width: widget.width,
                   titleColor: backgroundColor,
                   buttonColor: darkColor,
@@ -117,46 +111,23 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                         ...widget.lists.asMap().entries.map(
                               (list) => SingleListWidget(
                                 onListTap: () {
-                                  setState(() {
-                                    _selectedIndex = list.key;
-                                  });
+                                  widget.onListTap(list.key);
                                 },
                                 height: widget.height,
                                 onOptionsTap: () {
-                                  _selectedIndex = list.key;
-                                  SlidingPanelHelper().onPressedShowBottomSheet(
-                                    OptionsPanelWidget(
-                                      selectedListColorIndex: widget.lists[_selectedIndex].listColorIndex,
-                                      height: widget.height,
-                                      width: widget.width,
-                                      onTapClose: () {
-                                        _updateListColor(
-                                          oldList: widget.lists[_selectedIndex],
-                                        );
-                                        Navigator.pop(context);
-                                      },
-                                      colors: buttonColors,
-                                      onRenameTap: () {
-                                        FocusScope.of(context).requestFocus(focusNodeList[list.key]);
-                                        Navigator.pop(context);
-                                      },
-                                      onDeleteTap: () {
-                                        setState(() {
-                                          _deleteList(oldList: widget.lists[_selectedIndex],);
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    context,
-                                  );
+                                  widget.onOptionsTap(list.key, context);
                                 },
                                 listModel: list.value,
-                                isTapped: _selectedIndex == list.key,
+                                isTapped: selectedListIndex == list.key,
                                 onAddButtonTap: () {
                                   widget.onAddButtonTap();
                                 },
                                 width: widget.width,
-                                focusNode: focusNodeList[list.key],
+                                focusNode: widget.focusNodeList[list.key],
+                                controller: widget.controllerList[list.key],
+                                onListRenameSubmitted: (String text) {
+                                  widget.onListRenameSubmitted(text, list.key);
+                                },
                               ),
                             ),
                         AddButtonWidget(
@@ -173,35 +144,5 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
         ),
       ),
     );
-  }
-
-  Future<void> _deleteList({
-    required ListModel oldList,
-  }) async {
-    db
-        .collection("users")
-        .doc('testUser')
-        .collection('lists')
-        .doc(oldList.listID)
-        .delete()
-        .then(
-          (doc) => print("Document deleted"),
-          onError: (e) => print("Error updating document $e"),
-        );
-  }
-
-  Future<void> _updateListColor({
-    required ListModel oldList,
-  }) async {
-    final docRef = db
-        .collection("users")
-        .doc('testUser')
-        .collection('lists')
-        .doc(oldList.listID);
-
-    final updates = <String, int>{
-      "listColorIndex": listCurrentColorIndex,
-    };
-    docRef.update(updates);
   }
 }

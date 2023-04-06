@@ -18,6 +18,7 @@ abstract class AppIcons {
   static const reminder = 'assets/icons/reminder_icon.png';
   static const undo = 'assets/icons/undo_icon.png';
   static const reminderBell = 'assets/icons/reminder_bell_icon.png';
+  static const reminderBellActive = 'assets/icons/reminder_bell_active_icon.png';
   static const lists = 'assets/icons/lists_icon.png';
   static const back = 'assets/icons/back_icon.png';
   static const blackItem = 'assets/icons/black_item_icon.png';
