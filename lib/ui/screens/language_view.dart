@@ -36,7 +36,7 @@ class _LanguageViewState extends State<LanguageView> {
               alignment: Alignment.centerLeft,
               child: ExpandTapWidget(
                 onTap: () => context.read<AppBloc>().add(
-                  const AppEventGoToSettings(),
+                   const AppEventGoToSettings(),
                 ),
                 tapPadding: const EdgeInsets.all(50.0),
                 child: Image.asset(

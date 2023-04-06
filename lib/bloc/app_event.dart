@@ -17,8 +17,13 @@ class AppEventGoToLists implements AppEvent {
 
 @immutable
 class AppEventGoToSettings implements AppEvent {
-
   const AppEventGoToSettings() : super();
+}
+
+@immutable
+class AppEventGoToSettingsFromPremiumView implements AppEvent {
+  final BuildContext context;
+  const AppEventGoToSettingsFromPremiumView({required this.context}) : super();
 }
 
 @immutable

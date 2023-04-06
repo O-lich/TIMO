@@ -53,7 +53,7 @@ class _ListsViewState extends State<ListsView> {
         },
         onSettingsButtonTap: () {
           context.read<AppBloc>().add(
-                const AppEventGoToSettings(),
+                 const AppEventGoToSettings(),
               );
         },
         onListTap: (int selectedIndex) {
