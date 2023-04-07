@@ -77,6 +77,7 @@ Future<void> deleteTask({
         (doc) => log("Document deleted"),
         onError: (e) => log("Error updating document $e"),
       );
+
 }
 
 Future<void> deleteList({

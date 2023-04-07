@@ -120,9 +120,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                                   extentRatio: 0.35,
                                   dismissible: DismissiblePane(
                                     onDismissed: () {
-                                      setState(() {
-                                        _undo(tasks, index);
-                                      });
+                                      _undo(tasks, index);
                                     },
                                   ),
                                   motion: const ScrollMotion(),
@@ -153,7 +151,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                                       ),
                                       onPressed: (BuildContext context) {
                                         setState(() {
-                                          //ToDo
+
                                           _undo(tasks, index);
                                         });
                                       },
@@ -174,9 +172,10 @@ class _TasksWidgetState extends State<TasksWidget> {
                                       taskModel: widget.tasksList[index],
                                       onSingleTaskTap: () {
                                         context.read<AppBloc>().add(
-                                            AppEventGoToSingleTask(
-                                                taskModel:
-                                                    widget.tasksList[index]));
+                                              AppEventGoToSingleTask(
+                                                  taskModel:
+                                                      widget.tasksList[index]),
+                                            );
                                       },
                                     ),
                                   ),
@@ -220,7 +219,6 @@ class _TasksWidgetState extends State<TasksWidget> {
     });
   }
 
-
   Widget todoButton() {
     return widget.isPanelOpen
         ? const SizedBox(
@@ -260,10 +258,9 @@ class _TasksWidgetState extends State<TasksWidget> {
           );
   }
 
-
   void _undo(List<TaskModel> tasks, int index) {
     Duration duration = const Duration(seconds: 5);
-    TaskModel deletedItem = tasks.removeAt(index);
+    TaskModel deletedItem = tasks[index];
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) {
@@ -271,8 +268,10 @@ class _TasksWidgetState extends State<TasksWidget> {
             duration: duration,
             tween: Tween(begin: duration, end: Duration.zero),
             onEnd: () {
-              _deleteTask(deletedTask: deletedItem);
               Navigator.of(context).pop(true);
+              context.read<AppBloc>().add(
+                    AppEventDeleteTask(taskModel: deletedItem),
+                  );
             },
             builder: (BuildContext context, Duration value, Widget? child) {
               final seconds = value.inSeconds % 60;
@@ -282,41 +281,21 @@ class _TasksWidgetState extends State<TasksWidget> {
                   CupertinoDialogAction(
                       child: Text(S.of(context).undo),
                       onPressed: () {
-                        setState(
-                          () {
-                            tasks = tasks..insert(index, deletedItem);
-                          },
-                        );
                         Navigator.of(context).pop();
                       }),
                   CupertinoDialogAction(
                       isDestructiveAction: true,
                       child: Text(S.of(context).delete),
                       onPressed: () {
-                        _deleteTask(deletedTask: deletedItem);
                         Navigator.of(context).pop();
+                        context.read<AppBloc>().add(
+                              AppEventDeleteTask(taskModel: deletedItem),
+                            );
                       }),
                 ],
               );
             });
       },
     );
-  }
-
-  Future<void> _deleteTask({
-    required TaskModel deletedTask,
-  }) async {
-    db
-        .collection("users")
-        .doc(deletedTask.userID)
-        .collection('lists')
-        .doc(deletedTask.listID)
-        .collection('tasks')
-        .doc(deletedTask.taskID)
-        .delete()
-        .then(
-          (doc) => log("Document deleted"),
-          onError: (e) => log("Error updating document $e"),
-        );
   }
 }
