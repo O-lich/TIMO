@@ -102,6 +102,7 @@ class _SingleListWidgetState extends State<SingleListWidget> {
                   Flexible(
                     fit: FlexFit.tight,
                     child: TextField(
+                      keyboardType: TextInputType.text,
                       focusNode: widget.focusNode,
                       autofocus: false,
                       textAlign: TextAlign.center,

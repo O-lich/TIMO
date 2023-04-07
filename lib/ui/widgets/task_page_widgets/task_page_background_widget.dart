@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
@@ -85,15 +86,16 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
               shakeCount: 3,
               shakeDuration: const Duration(milliseconds: 500),
               child: TextField(
+                enableInteractiveSelection: true,
                 onTap: () => setState(
                   () => isTapped = true,
                 ),
                 controller: widget.taskController,
                 cursorColor: darkColor,
                 cursorHeight: 26,
-                keyboardType: TextInputType.multiline,
+                keyboardType: TextInputType.text,
                 minLines: 1,
-                maxLines: null,
+                maxLines: 10,
                 decoration: InputDecoration(
                   hintText: widget.taskController.text.isEmpty
                       ? S.of(context).hintTaskText
@@ -113,6 +115,13 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                 onChanged: (String newText) => setState(() {
                   widget.taskModel.task == newText;
                 }),
+                onSubmitted: (_) {
+                  isTapped = false;
+                  if (widget.taskController.text.isEmpty || widget.taskController.text.trim().isEmpty) {
+                    widget.taskController.text = '';
+                    shakeKey.currentState?.shake();
+                  }
+                },
                 onTapOutside: (_) {
                   FocusManager.instance.primaryFocus?.unfocus();
                   isTapped = false;

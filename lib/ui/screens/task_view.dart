@@ -69,6 +69,7 @@ class _TaskViewState extends State<TaskView> {
                             AppEventDeleteReminderFromTaskPage(
                                 taskModel: widget.taskModel, context: context),
                           );
+                      Navigator.pop(context);
                     }),
               );
         },

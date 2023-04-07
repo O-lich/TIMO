@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
@@ -59,6 +60,7 @@ class _NewTaskPageBackgroundWidgetState
               shakeCount: 3,
               shakeDuration: const Duration(milliseconds: 500),
               child: TextField(
+                enableInteractiveSelection: true,
                 textCapitalization: TextCapitalization.sentences,
                 controller: widget.taskController,
                 style: const TextStyle(
@@ -75,11 +77,17 @@ class _NewTaskPageBackgroundWidgetState
                 ),
                 scrollPadding: const EdgeInsets.all(20.0),
                 autofocus: true,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
+                keyboardType: TextInputType.text,
+                maxLines: 10,
                 cursorColor: Colors.black,
                 onTapOutside: (_) {
                   FocusManager.instance.primaryFocus?.unfocus();
+                },
+                onSubmitted: (_) {
+                  if (widget.taskController.text.isEmpty || widget.taskController.text.trim().isEmpty) {
+                    widget.taskController.text = '';
+                    shakeKey.currentState?.shake();
+                  }
                 },
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 class SettingsWidget extends StatelessWidget {
   final String title;
   final Widget trailing;
