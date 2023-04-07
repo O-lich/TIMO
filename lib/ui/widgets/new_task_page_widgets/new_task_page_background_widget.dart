@@ -77,7 +77,7 @@ class _NewTaskPageBackgroundWidgetState
                 ),
                 scrollPadding: const EdgeInsets.all(20.0),
                 autofocus: true,
-                keyboardType: TextInputType.text,
+                //keyboardType: TextInputType.text,
                 maxLines: 10,
                 cursorColor: Colors.black,
                 onTapOutside: (_) {

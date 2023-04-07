@@ -357,16 +357,18 @@ Future<void> updateListText({
   required ListModel oldList,
   required String text,
 }) async {
-  final docRef = db
-      .collection("users")
-      .doc(currentUser.userID)
-      .collection('lists')
-      .doc(oldList.listID);
+  if(text.isNotEmpty) {
+    final docRef = db
+        .collection("users")
+        .doc(currentUser.userID)
+        .collection('lists')
+        .doc(oldList.listID);
 
-  final updates = <String, String>{
-    "list": text,
-  };
-  docRef.update(updates);
+    final updates = <String, String>{
+      "list": text,
+    };
+    docRef.update(updates);
+  }
 }
 
 TaskModel newTaskReminderSet({

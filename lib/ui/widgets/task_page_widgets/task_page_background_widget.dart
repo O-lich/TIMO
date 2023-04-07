@@ -93,7 +93,7 @@ class _TaskPageBackgroundWidgetState extends State<TaskPageBackgroundWidget> {
                 controller: widget.taskController,
                 cursorColor: darkColor,
                 cursorHeight: 26,
-                keyboardType: TextInputType.text,
+                //keyboardType: TextInputType.text,
                 minLines: 1,
                 maxLines: 10,
                 decoration: InputDecoration(

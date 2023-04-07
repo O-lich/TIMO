@@ -29,7 +29,7 @@ class SingleTaskWidget extends StatelessWidget {
                 bottom: 11,
               ),
               child: Text(
-                taskModel.task,
+                taskModel.task.trim(),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: const TextStyle(

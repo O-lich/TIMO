@@ -70,7 +70,9 @@ class _TasksWidgetState extends State<TasksWidget> {
           Stack(
             children: [
               Center(
-                child: widget.isPanelOpen == false ? Container() : dragHandle(),
+                child: Container(
+                  height: 22,
+                ),
               ),
               todoButton(),
             ],
@@ -218,27 +220,9 @@ class _TasksWidgetState extends State<TasksWidget> {
     });
   }
 
-  Widget dragHandle() => GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onVerticalDragEnd: (DragEndDetails details) => _movePanel(),
-        onVerticalDragStart: (DragStartDetails details) => _movePanel(),
-        onVerticalDragDown: (DragDownDetails details) => _movePanel(),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 150.0, right: 150, top: 10, bottom: 20),
-          child: Container(
-            width: 30,
-            height: 5,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        ),
-      );
 
   Widget todoButton() {
-    return widget.isPanelOpen == true
+    return widget.isPanelOpen
         ? const SizedBox(
             height: 22,
           )
@@ -276,12 +260,6 @@ class _TasksWidgetState extends State<TasksWidget> {
           );
   }
 
-  void _movePanel() {
-    setState(() {
-      widget.isPanelOpen = true;
-      widget.dragController.jumpTo(0.95);
-    });
-  }
 
   void _undo(List<TaskModel> tasks, int index) {
     Duration duration = const Duration(seconds: 5);

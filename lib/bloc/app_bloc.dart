@@ -279,7 +279,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventUpdateListText>((event, emit) async {
       await updateListText(
         oldList: event.listModel,
-        text: event.listText,
+        text: event.listText.trim(),
       );
       final listsList = await getLists();
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());

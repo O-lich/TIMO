@@ -59,15 +59,18 @@ class _TaskViewState extends State<TaskView> {
                     onSaveTap: (DateTime? dateTime) {
                       context.read<AppBloc>().add(
                             AppEventSetReminderFromTaskPage(
-                                taskModel: widget.taskModel,
-                                dateTime: dateTime,
-                                context: context),
+                              taskModel: widget.taskModel,
+                              dateTime: dateTime,
+                              context: context,
+                            ),
                           );
                     },
                     onDeleteTap: () {
                       context.read<AppBloc>().add(
                             AppEventDeleteReminderFromTaskPage(
-                                taskModel: widget.taskModel, context: context),
+                              taskModel: widget.taskModel,
+                              context: context,
+                            ),
                           );
                       Navigator.pop(context);
                     }),
