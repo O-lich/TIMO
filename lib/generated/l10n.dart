@@ -539,6 +539,36 @@ class S {
       args: [],
     );
   }
+
+  /// `https://timodo.app`
+  String get linkAboutUs {
+    return Intl.message(
+      'https://timodo.app',
+      name: 'linkAboutUs',
+      desc: 'link about us settings',
+      args: [],
+    );
+  }
+
+  /// `https://timodo.app/terms-eng`
+  String get linkTermsOfUsing {
+    return Intl.message(
+      'https://timodo.app/terms-eng',
+      name: 'linkTermsOfUsing',
+      desc: 'link about us settings',
+      args: [],
+    );
+  }
+
+  /// `https://timodo.app/policy-eng`
+  String get linkPrivacyPolicy {
+    return Intl.message(
+      'https://timodo.app/policy-eng',
+      name: 'linkPrivacyPolicy',
+      desc: 'link about us settings',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -852,31 +852,31 @@ class AppBloc extends Bloc<AppEvent, AppState> {
                 focusNodeList: focusNodeList,
                 controllerList: controllerList),
           );
-        } else if (variable == 3) {
-          final XFile? takenPhoto = await takePhotoToListImage();
-          if (takenPhoto == null) return;
-          if (await showCameraImagePickerDialog(
-            context: event.context,
-            imageFile: takenPhoto,
-          )) {
-            await uploadListImageFromCamera(
-                listModel: event.listModel, takenPhoto: takenPhoto);
-            final listsList = await getLists();
-            focusNodeList =
-                List.generate(listsList.length, (index) => FocusNode());
-            controllerList = List.generate(
-                listsList.length, (index) => TextEditingController());
-            for (int i = 0; i < listsList.length; i++) {
-              controllerList[i].text = listsList[i].list;
-            }
-            emit(
-              LoadedListsAppState(
-                  listsList: listsList,
-                  focusNodeList: focusNodeList,
-                  controllerList: controllerList),
-            );
-          }
-        }
+         } //else if (variable == 3) {
+        //   final XFile? takenPhoto = await takePhotoToListImage();
+        //   if (takenPhoto == null) return;
+        //   if (await showCameraImagePickerDialog(
+        //     context: event.context,
+        //     imageFile: takenPhoto,
+        //   )) {
+        //     await uploadListImageFromCamera(
+        //         listModel: event.listModel, takenPhoto: takenPhoto);
+        //     final listsList = await getLists();
+        //     focusNodeList =
+        //         List.generate(listsList.length, (index) => FocusNode());
+        //     controllerList = List.generate(
+        //         listsList.length, (index) => TextEditingController());
+        //     for (int i = 0; i < listsList.length; i++) {
+        //       controllerList[i].text = listsList[i].list;
+        //     }
+        //     emit(
+        //       LoadedListsAppState(
+        //           listsList: listsList,
+        //           focusNodeList: focusNodeList,
+        //           controllerList: controllerList),
+        //     );
+        //   }
+        // }
       }
     });
   }

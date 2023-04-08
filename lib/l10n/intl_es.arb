@@ -48,5 +48,8 @@
   "updateThumbnail": "¿Actualizar portada?",
   "deleteThumbnail": "Eliminar portada",
   "choosePhoto": "Elegir foto",
-  "okButton": "Ok"
+  "okButton": "Ok",
+  "linkAboutUs": "https://timodo.app",
+  "linkTermsOfUsing": "https://timodo.app/terms-esp",
+  "linkPrivacyPolicy": "https://timodo.app/policy-esp"
 }

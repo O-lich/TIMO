@@ -48,5 +48,8 @@
   "updateThumbnail": "Aggiornare la copertura?",
   "deleteThumbnail": "Eliminare la copertura",
   "choosePhoto": "Scegliere la foto",
-  "okButton": "Ok"
+  "okButton": "Ok",
+  "linkAboutUs": "https://timodo.app",
+  "linkTermsOfUsing": "https://timodo.app/terms-it",
+  "linkPrivacyPolicy": "https://timodo.app/policy-it"
 }

@@ -207,5 +207,17 @@
   "okButton": "Ok",
   "@okButton": {
     "description": "Ok button"
+  },
+  "linkAboutUs": "https://timodo.app",
+  "@linkAboutUs": {
+    "description": "link about us settings"
+  },
+  "linkTermsOfUsing": "https://timodo.app/terms-eng",
+  "@linkTermsOfUsing": {
+    "description": "link about us settings"
+  },
+  "linkPrivacyPolicy": "https://timodo.app/policy-eng",
+  "@linkPrivacyPolicy": {
+    "description": "link about us settings"
   }
 }

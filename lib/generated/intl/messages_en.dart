@@ -58,6 +58,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "languageTitle": MessageLookupByLibrary.simpleMessage("Language"),
         "letsDoSmth":
             MessageLookupByLibrary.simpleMessage("Let\'s do something"),
+        "linkAboutUs":
+            MessageLookupByLibrary.simpleMessage("https://timodo.app"),
+        "linkPrivacyPolicy": MessageLookupByLibrary.simpleMessage(
+            "https://timodo.app/policy-eng"),
+        "linkTermsOfUsing": MessageLookupByLibrary.simpleMessage(
+            "https://timodo.app/terms-eng"),
         "lists": MessageLookupByLibrary.simpleMessage("lists"),
         "move": MessageLookupByLibrary.simpleMessage("move"),
         "newList": MessageLookupByLibrary.simpleMessage(" new list"),

@@ -132,7 +132,7 @@ class _SettingsViewState extends State<SettingsView> {
                     child: ListView(
                       children: [
                         SettingsWidget(
-                          url: 'https://flutter.dev/',
+                          url: S.of(context).linkAboutUs,
                           title: S.of(context).aboutUs,
                           trailing: settingsImage,
                           navigateTo: () {},
@@ -163,13 +163,13 @@ class _SettingsViewState extends State<SettingsView> {
                           navigateTo: () {},
                         ),
                         SettingsWidget(
-                          url: 'https://flutter.dev/',
+                          url: S.of(context).linkTermsOfUsing,
                           title: S.of(context).termsOfUsing,
                           trailing: settingsImage,
                           navigateTo: () {},
                         ),
                         SettingsWidget(
-                          url: 'https://flutter.dev/',
+                          url: S.of(context).linkPrivacyPolicy,
                           title: S.of(context).privacyPolicy,
                           trailing: settingsImage,
                           navigateTo: () {},
