@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todo_app_main_screen/helpers/functions.dart';
 import 'package:todo_app_main_screen/main.dart';
@@ -829,7 +830,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
               controllerList: controllerList),
         );
       } else if (variable == 2) {
-        final File? imageFile = await choseFileToListImage();
+        final File? imageFile = await chooseFileToListImage();
         if (imageFile == null) return;
         if (await showImagePickerDialog(
           context: event.context,
@@ -852,20 +853,29 @@ class AppBloc extends Bloc<AppEvent, AppState> {
                 controllerList: controllerList),
           );
         } else if (variable == 3) {
-          final listsList = await getLists();
-          focusNodeList =
-              List.generate(listsList.length, (index) => FocusNode());
-          controllerList = List.generate(
-              listsList.length, (index) => TextEditingController());
-          for (int i = 0; i < listsList.length; i++) {
-            controllerList[i].text = listsList[i].list;
+          final XFile? takenPhoto = await takePhotoToListImage();
+          if (takenPhoto == null) return;
+          if (await showCameraImagePickerDialog(
+            context: event.context,
+            imageFile: takenPhoto,
+          )) {
+            await uploadListImageFromCamera(
+                listModel: event.listModel, takenPhoto: takenPhoto);
+            final listsList = await getLists();
+            focusNodeList =
+                List.generate(listsList.length, (index) => FocusNode());
+            controllerList = List.generate(
+                listsList.length, (index) => TextEditingController());
+            for (int i = 0; i < listsList.length; i++) {
+              controllerList[i].text = listsList[i].list;
+            }
+            emit(
+              LoadedListsAppState(
+                  listsList: listsList,
+                  focusNodeList: focusNodeList,
+                  controllerList: controllerList),
+            );
           }
-          emit(
-            LoadedListsAppState(
-                listsList: listsList,
-                focusNodeList: focusNodeList,
-                controllerList: controllerList),
-          );
         }
       }
     });

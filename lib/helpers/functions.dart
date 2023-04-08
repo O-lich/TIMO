@@ -554,7 +554,7 @@ Future<void> updateTask({
   taskCurrentColorIndex = -1;
 }
 
-Future<File?> choseFileToListImage() async {
+Future<File?> chooseFileToListImage() async {
   final pickedFile = await ImagePicker().pickImage(
     source: ImageSource.gallery,
     imageQuality: 10,
@@ -563,6 +563,17 @@ Future<File?> choseFileToListImage() async {
     return null;
   } else {
     return File(pickedFile.path);
+  }
+}
+Future<XFile?> takePhotoToListImage() async {
+  final pickedFile = await ImagePicker().pickImage(
+    source: ImageSource.camera,
+    imageQuality: 10,
+  );
+  if (pickedFile == null) {
+    return null;
+  } else {
+    return pickedFile;
   }
 }
 
@@ -577,6 +588,40 @@ Future<bool> showImagePickerDialog({
       return CupertinoAlertDialog(
         title: Text(S.of(context).updateThumbnail),
         content: Image.file(imageFile),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              completer.complete(false);
+            },
+            child: Text(S.of(context).cancel,),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              completer.complete(true);
+            },
+            child: Text(S.of(context).okButton),
+          ),
+        ],
+      );
+    },
+  );
+  return completer.future;
+}
+
+Future<bool> showCameraImagePickerDialog({
+  required BuildContext context,
+  required XFile imageFile,
+}) async {
+  Completer<bool> completer = Completer<bool>();
+  print("SHOWCAMERADIALOG");
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text(S.of(context).updateThumbnail),
+        content: Image.file(File(imageFile.path)),
         actions: [
           TextButton(
             onPressed: () {
@@ -621,6 +666,28 @@ Future<void> updateListImage({
   docRef.update(updates);
 }
 
+Future<void> uploadListImageFromCamera({
+  required ListModel listModel,
+  required XFile takenPhoto
+}) async {
+  final docRef = db
+      .collection("users")
+      .doc(currentUser.userID)
+      .collection('lists')
+      .doc(listModel.listID);
+  final Reference storageRef = FirebaseStorage.instance
+      .ref()
+      .child(currentUser.userID)
+      .child('${listModel.listID}.jpg');
+  final UploadTask uploadTask = storageRef.putFile(File(takenPhoto.path));
+  final TaskSnapshot downloadUrl = await uploadTask.whenComplete(() {});
+  final String imageUrl = await downloadUrl.ref.getDownloadURL();
+  final updates = <String, String>{
+    "listImageUrl": imageUrl,
+  };
+  docRef.update(updates);
+}
+
 Future<int> updateOrDeleteImageDialog(
     {required BuildContext context, required ListModel listModel}) async {
   Completer<int> completer = Completer<int>();
@@ -640,15 +707,15 @@ Future<int> updateOrDeleteImageDialog(
                       completer.complete(1);
                     },
                   ),
-                  // CupertinoActionSheetAction(
-                  //   child: Text(
-                  //     'Take photo',
-                  //   ),
-                  //   onPressed: () {
-                  //     Navigator.pop(context);
-                  //     completer.complete(3);
-                  //   },
-                  // ),
+                  CupertinoActionSheetAction(
+                    child: const Text(
+                      'Take photo',
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      completer.complete(3);
+                    },
+                  ),
                   CupertinoActionSheetAction(
                     child: Text(
                       S.of(context).choosePhoto,
@@ -672,15 +739,15 @@ Future<int> updateOrDeleteImageDialog(
               )
             : CupertinoActionSheet(
                 actions: <Widget>[
-                  // CupertinoActionSheetAction(
-                  //   child: Text(
-                  //     'Take photo',
-                  //   ),
-                  //   onPressed: () {
-                  //     Navigator.pop(context);
-                  //     completer.complete(3);
-                  //   },
-                  // ),
+                  CupertinoActionSheetAction(
+                    child: Text(
+                      'Take photo',
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      completer.complete(3);
+                    },
+                  ),
                   CupertinoActionSheetAction(
                     child: Text(
                       S.of(context).choosePhoto,
