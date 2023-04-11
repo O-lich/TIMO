@@ -68,16 +68,16 @@ class MessageLookup extends MessageLookupByLibrary {
             "https://timodo.app/terms-esp"),
         "lists": MessageLookupByLibrary.simpleMessage("listas"),
         "move": MessageLookupByLibrary.simpleMessage("mover"),
-        "newList": MessageLookupByLibrary.simpleMessage(" lista nueva"),
+        "newList": MessageLookupByLibrary.simpleMessage(" nueva lista"),
         "okButton": MessageLookupByLibrary.simpleMessage("Ok"),
         "perMonth": MessageLookupByLibrary.simpleMessage("al mes"),
         "perYear": MessageLookupByLibrary.simpleMessage("al año"),
         "premColorsQuotes": MessageLookupByLibrary.simpleMessage(
-            "Nuevos colores y comillas completas"),
+            "Nuevos colores y citas completas"),
         "premFuture": MessageLookupByLibrary.simpleMessage(
             "Nuevas características en el futuro"),
-        "premLists": MessageLookupByLibrary.simpleMessage(
-            "Diferentes listas personalizables"),
+        "premLists":
+            MessageLookupByLibrary.simpleMessage("Listas personalizables"),
         "premTasks": MessageLookupByLibrary.simpleMessage("Tareas ilimitadas"),
         "privacyPolicy":
             MessageLookupByLibrary.simpleMessage("Política de privacidad"),
@@ -89,6 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rename": MessageLookupByLibrary.simpleMessage("Renombrar"),
         "reportProblem":
             MessageLookupByLibrary.simpleMessage("Notificar un problema"),
+        "save": MessageLookupByLibrary.simpleMessage("Guardar"),
         "saveReminder":
             MessageLookupByLibrary.simpleMessage("Guardar recordatorio"),
         "settings": MessageLookupByLibrary.simpleMessage("Ajustes"),

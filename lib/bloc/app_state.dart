@@ -92,11 +92,13 @@ class SingleTaskAppState extends AppState {
   final TaskModel taskModel;
   final List<ListModel> listsList;
   final bool isClosePanelTapped;
+  final ListModel listModel;
 
   const SingleTaskAppState({
     required this.isClosePanelTapped,
     required this.listsList,
     required this.taskModel,
+    required this.listModel
   });
 }
 

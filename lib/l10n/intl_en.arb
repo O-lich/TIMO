@@ -219,5 +219,9 @@
   "linkPrivacyPolicy": "https://timodo.app/policy-eng",
   "@linkPrivacyPolicy": {
     "description": "link about us settings"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button"
   }
 }

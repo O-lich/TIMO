@@ -116,6 +116,7 @@ class MyApp extends StatelessWidget {
                       taskModel: appState.taskModel,
                       listsList: appState.listsList,
                       isClosePanelTapped: appState.isClosePanelTapped,
+                      listModel: appState.listModel,
                     );
                   } else if (appState is LoadingAppState) {
                     return LoadingView(

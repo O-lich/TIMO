@@ -91,6 +91,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rename": MessageLookupByLibrary.simpleMessage("Переименовать"),
         "reportProblem":
             MessageLookupByLibrary.simpleMessage("Сообщить о проблеме"),
+        "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "saveReminder":
             MessageLookupByLibrary.simpleMessage("Установить напоминание"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),

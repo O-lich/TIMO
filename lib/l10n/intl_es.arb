@@ -23,7 +23,7 @@
   "move": "mover",
   "addNewList": "añadir nueva lista",
   "createNewList": "crear nueva lista",
-  "newList": " lista nueva",
+  "newList": " nueva lista",
   "create": "crear",
   "hintText": " Escribe nueva tarea...",
   "undo": "Deshacer",
@@ -35,8 +35,8 @@
   "privacyPolicyPremium": "\nPolítica de Privacidad",
   "and": " y ",
   "premTasks": "Tareas ilimitadas",
-  "premColorsQuotes": "Nuevos colores y comillas completas",
-  "premLists": "Diferentes listas personalizables",
+  "premColorsQuotes": "Nuevos colores y citas completas",
+  "premLists": "Listas personalizables",
   "premFuture": "Nuevas características en el futuro",
   "allFeatures": "Todas las funciones sin límites",
   "hintTaskText": " Escriba la tarea...",
@@ -51,5 +51,6 @@
   "okButton": "Ok",
   "linkAboutUs": "https://timodo.app",
   "linkTermsOfUsing": "https://timodo.app/terms-esp",
-  "linkPrivacyPolicy": "https://timodo.app/policy-esp"
+  "linkPrivacyPolicy": "https://timodo.app/policy-esp",
+  "save": "Guardar"
 }

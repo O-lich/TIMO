@@ -92,6 +92,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rename": MessageLookupByLibrary.simpleMessage("Umbenennen"),
         "reportProblem":
             MessageLookupByLibrary.simpleMessage("Ein Problem melden"),
+        "save": MessageLookupByLibrary.simpleMessage("Speichern"),
         "saveReminder":
             MessageLookupByLibrary.simpleMessage("Erinnerung speichern"),
         "settings": MessageLookupByLibrary.simpleMessage("Einstellungen"),

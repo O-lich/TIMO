@@ -51,5 +51,6 @@
   "okButton": "Ok",
   "linkAboutUs": "https://timodo.app",
   "linkTermsOfUsing": "https://timodo.app/terms-de",
-  "linkPrivacyPolicy": "https://timodo.app/policy-de"
+  "linkPrivacyPolicy": "https://timodo.app/policy-de",
+  "save": "Speichern"
 }

@@ -2,14 +2,12 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todo_app_main_screen/helpers/functions.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/quote_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
-import 'package:todo_app_main_screen/ui/screens/settings_view.dart';
 import 'package:todo_app_main_screen/ui/style.dart';
 import 'package:todo_app_main_screen/ui/widgets/add_new_list_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/options_panel_widget.dart';
@@ -173,7 +171,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         SingleTaskAppState(
           taskModel: taskModel,
           listsList: listsList,
-          isClosePanelTapped: currentUser.isClosePanelTapped,
+          isClosePanelTapped: currentUser.isClosePanelTapped, 
+          listModel: listsList[selectedListIndex],
         ),
       );
     });
@@ -185,7 +184,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         SingleTaskAppState(
           taskModel: taskModel,
           listsList: listsList,
-          isClosePanelTapped: currentUser.isClosePanelTapped,
+          isClosePanelTapped: currentUser.isClosePanelTapped, listModel: listsList[selectedListIndex],
         ),
       );
     });
@@ -368,6 +367,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           listsList: listsList,
           taskModel: updatedTaskModel,
           isClosePanelTapped: currentUser.isClosePanelTapped,
+          listModel: listsList[selectedListIndex]
         ),
       );
     });
@@ -397,6 +397,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           listsList: listsList,
           taskModel: updatedTaskModel,
           isClosePanelTapped: currentUser.isClosePanelTapped,
+          listModel: listsList[selectedListIndex]
         ),
       );
     });
@@ -423,6 +424,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           listsList: listsList,
           taskModel: event.taskModel,
           isClosePanelTapped: true,
+          listModel: listsList[selectedListIndex]
         ),
       );
     });
@@ -520,7 +522,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         SingleTaskAppState(
             isClosePanelTapped: currentUser.isClosePanelTapped,
             listsList: listsList,
-            taskModel: event.taskModel),
+            taskModel: event.taskModel, listModel: listsList[selectedListIndex]),
       );
     });
 
@@ -550,7 +552,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         SingleTaskAppState(
             isClosePanelTapped: currentUser.isClosePanelTapped,
             listsList: listsList,
-            taskModel: event.taskModel),
+            taskModel: event.taskModel, listModel: listsList[selectedListIndex]),
       );
     });
 
@@ -650,7 +652,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(SingleTaskAppState(
           listsList: listsList,
           isClosePanelTapped: currentUser.isClosePanelTapped,
-          taskModel: event.taskModel));
+          taskModel: event.taskModel, listModel: listsList[selectedListIndex]));
     });
 
     on<AppEventOpenReminderPanelFromNewTaskView>((event, emit) async {

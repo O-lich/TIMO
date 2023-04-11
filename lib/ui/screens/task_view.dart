@@ -1,4 +1,4 @@
-import 'dart:developer';
+//import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,14 +6,17 @@ import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
+import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
+import 'package:todo_app_main_screen/ui/widgets/black_button_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/task_page_widgets/task_page_background_widget.dart';
 
 class TaskView extends StatefulWidget {
   static const routeName = '/task_page';
   final TaskModel taskModel;
+  final ListModel listModel;
   final List<ListModel> listsList;
   final bool isClosePanelTapped;
 
@@ -21,7 +24,7 @@ class TaskView extends StatefulWidget {
     Key? key,
     required this.taskModel,
     required this.listsList,
-    required this.isClosePanelTapped,
+    required this.isClosePanelTapped, required this.listModel,
   }) : super(key: key);
 
   @override
@@ -81,14 +84,9 @@ class _TaskViewState extends State<TaskView> {
         taskModel: widget.taskModel,
         onCloseTap: () {
           context.read<AppBloc>().add(
-                AppEventUpdateTask(
-                    listModel: widget.listsList[selectedListIndex],
-                    taskModel: widget.taskModel,
-                    moveToListModel: moveToListIndex >= 0
-                        ? widget.listsList[moveToListIndex]
-                        : null,
-                    textController: textController),
-              );
+            AppEventGoToMainView(
+                listModel: widget.listModel),
+          );
         },
         onClosePanelTap: () {
           context.read<AppBloc>().add(
@@ -126,6 +124,26 @@ class _TaskViewState extends State<TaskView> {
                     child: Image.asset(
                       AppIcons.delete,
                       scale: 2.5,
+                    ),
+                  ),
+                  BlackButtonWidget(
+                    onPressed: () {
+                      context.read<AppBloc>().add(
+                            AppEventUpdateTask(
+                                listModel: widget.listsList[selectedListIndex],
+                                taskModel: widget.taskModel,
+                                moveToListModel: moveToListIndex >= 0
+                                    ? widget.listsList[moveToListIndex]
+                                    : null,
+                                textController: textController),
+                          );
+                    },
+                    width: widthScreen * 0.5,
+                    borderRadius: BorderRadius.circular(20),
+                    height: heightScreen * 0.07,
+                    child: Text(
+                      S.of(context).save,
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
                   FloatingActionButton(

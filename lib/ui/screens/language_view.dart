@@ -1,16 +1,16 @@
-import 'dart:developer';
-
+//import 'dart:developer';
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
+import 'package:todo_app_main_screen/generated/l10n.dart';
+import 'package:todo_app_main_screen/ui/widgets/black_button_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/language_page_widgets/language_list.dart';
 
 class LanguageView extends StatefulWidget {
   final int selectedIndex;
   static const routeName = '/language_page';
-
 
   const LanguageView({Key? key, required this.selectedIndex}) : super(key: key);
 
@@ -19,10 +19,10 @@ class LanguageView extends StatefulWidget {
 }
 
 class _LanguageViewState extends State<LanguageView> {
-
   @override
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
@@ -36,8 +36,8 @@ class _LanguageViewState extends State<LanguageView> {
               alignment: Alignment.centerLeft,
               child: ExpandTapWidget(
                 onTap: () => context.read<AppBloc>().add(
-                   const AppEventGoToSettings(),
-                ),
+                      const AppEventGoToSettings(),
+                    ),
                 tapPadding: const EdgeInsets.all(50.0),
                 child: Image.asset(
                   AppIcons.back,
@@ -46,7 +46,7 @@ class _LanguageViewState extends State<LanguageView> {
               ),
             ),
             SizedBox(
-              height: 0.9 * heightScreen,
+              height: 0.5 * heightScreen,
               child: ListView.separated(
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
@@ -80,6 +80,19 @@ class _LanguageViewState extends State<LanguageView> {
                   },
                   itemCount: languageList.length),
             ),
+            BlackButtonWidget(
+                onPressed: () {
+                  context.read<AppBloc>().add(
+                        const AppEventGoToSettings(),
+                      );
+                },
+                width: widthScreen * 0.5,
+                borderRadius: BorderRadius.circular(20),
+                height: heightScreen * 0.07,
+                child: Text(
+                  S.of(context).save,
+                  style: const TextStyle(fontSize: 16),
+                ))
           ],
         ),
       ),
