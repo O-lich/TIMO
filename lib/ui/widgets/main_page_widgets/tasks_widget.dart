@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
@@ -20,7 +18,8 @@ class TasksWidget extends StatefulWidget {
   final ScrollController scrollController;
   final DraggableScrollableController dragController;
   final void Function()? onMoveToPressed;
-  final void Function() onTaskTap;
+  final void Function(int index) onTaskTap;
+  final void Function(TaskModel taskModel) onDelete;
   final void Function() onNewTaskAddPressed;
   final bool isMoveToPressed;
   bool isPanelDraggable;
@@ -38,6 +37,7 @@ class TasksWidget extends StatefulWidget {
     required this.dragController,
     required this.onTaskTap,
     required this.onNewTaskAddPressed,
+    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -116,7 +116,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                                   extentRatio: 0.35,
                                   dismissible: DismissiblePane(
                                     onDismissed: () {
-                                      _undo(tasks, index);
+                                      widget.onDelete(tasks[index]);
                                     },
                                   ),
                                   motion: const ScrollMotion(),
@@ -146,10 +146,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                                         left: 20,
                                       ),
                                       onPressed: (BuildContext context) {
-                                        setState(() {
-
-                                          _undo(tasks, index);
-                                        });
+                                        widget.onDelete(tasks[index]);
                                       },
                                       child: Image.asset(
                                         AppIcons.delete,
@@ -167,11 +164,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                                     child: SingleTaskWidget(
                                       taskModel: widget.tasksList[index],
                                       onSingleTaskTap: () {
-                                        context.read<AppBloc>().add(
-                                              AppEventGoToSingleTask(
-                                                  taskModel:
-                                                      widget.tasksList[index]),
-                                            );
+                                        widget.onTaskTap(index);
                                       },
                                     ),
                                   ),
@@ -187,12 +180,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                                   child: SingleTaskWidget(
                                     taskModel: widget.tasksList[index],
                                     onSingleTaskTap: () {
-                                      context.read<AppBloc>().add(
-                                            AppEventGoToSingleTask(
-                                              taskModel:
-                                                  widget.tasksList[index],
-                                            ),
-                                          );
+                                      widget.onTaskTap(index);
                                     },
                                   ),
                                 ),
@@ -252,46 +240,5 @@ class _TasksWidgetState extends State<TasksWidget> {
               ),
             ),
           );
-  }
-
-  void _undo(List<TaskModel> tasks, int index) {
-    Duration duration = const Duration(seconds: 5);
-    TaskModel deletedItem = tasks[index];
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return TweenAnimationBuilder<Duration>(
-            duration: duration,
-            tween: Tween(begin: duration, end: Duration.zero),
-            onEnd: () {
-              Navigator.of(context).pop(true);
-              context.read<AppBloc>().add(
-                    AppEventDeleteTask(taskModel: deletedItem),
-                  );
-            },
-            builder: (BuildContext context, Duration value, Widget? child) {
-              final seconds = value.inSeconds % 60;
-              return CupertinoAlertDialog(
-                title: Text(S.of(context).deletingTask(seconds)),
-                actions: <CupertinoDialogAction>[
-                  CupertinoDialogAction(
-                      child: Text(S.of(context).undo),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                  CupertinoDialogAction(
-                      isDestructiveAction: true,
-                      child: Text(S.of(context).delete),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        context.read<AppBloc>().add(
-                              AppEventDeleteTask(taskModel: deletedItem),
-                            );
-                      }),
-                ],
-              );
-            });
-      },
-    );
   }
 }

@@ -25,7 +25,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   AppBloc() : super(const AppStateSplashScreen()) {
     on<AppEventGetUser>(
-      (event, emit) async {
+          (event, emit) async {
         emit(
           const AppStateSplashScreen(),
         );
@@ -171,7 +171,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         SingleTaskAppState(
           taskModel: taskModel,
           listsList: listsList,
-          isClosePanelTapped: currentUser.isClosePanelTapped, 
+          isClosePanelTapped: currentUser.isClosePanelTapped,
           listModel: listsList[selectedListIndex],
         ),
       );
@@ -184,7 +184,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         SingleTaskAppState(
           taskModel: taskModel,
           listsList: listsList,
-          isClosePanelTapped: currentUser.isClosePanelTapped, listModel: listsList[selectedListIndex],
+          isClosePanelTapped: currentUser.isClosePanelTapped,
+          listModel: listsList[selectedListIndex],
         ),
       );
     });
@@ -195,24 +196,60 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventChangeLocale>((event, emit) async {
       final int locale =
-          changeLocale(context: event.context, index: event.index);
+      changeLocale(context: event.context, index: event.index);
       emit(
         LanguageAppState(locale: locale),
       );
     });
-    on<AppEventDeleteTask>((event, emit) async {
+    on<AppEventShowUndoButtonAndDelete>((event, emit) async {
+
+
+
+
       try {
+        final QuoteModel quote = await updateQuote();
         await deleteTask(oldTask: event.taskModel);
         final listsList = await getLists();
-        final tasksList = await getTasks(
-          listModel: listsList[selectedListIndex],
+        final tasksListBefore = await getTasks(
+          listModel: event.listModel,
         );
-        final QuoteModel quote = await updateQuote();
+        emit(
+            LoadedAppState(
+              isJustDeleted: true,
+              tasksList: tasksListBefore,
+              quoteModel: quote,
+              listModel: event.listModel,
+              listsList: listsList,
+              deletedTask: event.taskModel,)
+        );
+        await Future.delayed(const Duration(seconds: 5));
+        final tasksList = await getTasks(
+          listModel: event.listModel,
+        );
         emit(
           LoadedAppState(
               tasksList: tasksList,
               quoteModel: quote,
-              listModel: listsList[selectedListIndex],
+              listModel: event.listModel,
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
+    });
+    on<AppEventDeleteTask>((event, emit) async {
+      try {
+        final QuoteModel quote = await updateQuote();
+        await deleteTask(oldTask: event.taskModel);
+        final listsList = await getLists();
+        final tasksList = await getTasks(
+          listModel: event.listModel,
+        );
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: event.listModel,
               listsList: listsList),
         );
       } on Exception {
@@ -320,7 +357,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventAddNewListFromListScreen>((event, emit) async {
       final listsList =
-          await createNewList(listController: event.listController);
+      await createNewList(listController: event.listController);
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());
       controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
@@ -364,11 +401,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final listsList = await getLists();
       emit(
         SingleTaskAppState(
-          listsList: listsList,
-          taskModel: updatedTaskModel,
-          isClosePanelTapped: currentUser.isClosePanelTapped,
-          listModel: listsList[selectedListIndex]
-        ),
+            listsList: listsList,
+            taskModel: updatedTaskModel,
+            isClosePanelTapped: currentUser.isClosePanelTapped,
+            listModel: listsList[selectedListIndex]),
       );
     });
 
@@ -394,11 +430,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final listsList = await getLists();
       emit(
         SingleTaskAppState(
-          listsList: listsList,
-          taskModel: updatedTaskModel,
-          isClosePanelTapped: currentUser.isClosePanelTapped,
-          listModel: listsList[selectedListIndex]
-        ),
+            listsList: listsList,
+            taskModel: updatedTaskModel,
+            isClosePanelTapped: currentUser.isClosePanelTapped,
+            listModel: listsList[selectedListIndex]),
       );
     });
 
@@ -421,11 +456,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final listsList = await getLists();
       emit(
         SingleTaskAppState(
-          listsList: listsList,
-          taskModel: event.taskModel,
-          isClosePanelTapped: true,
-          listModel: listsList[selectedListIndex]
-        ),
+            listsList: listsList,
+            taskModel: event.taskModel,
+            isClosePanelTapped: true,
+            listModel: listsList[selectedListIndex]),
       );
     });
     on<AppEventUpdateTask>((event, emit) async {
@@ -467,22 +501,25 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           ),
           enableDrag: false,
           context: event.context,
-          builder: (context) => SingleChildScrollView(
-            controller: ModalScrollController.of(context),
-            child: ListsPanelWidget(
-              onButtonPressed: () {
-                event.onMoveToButtonPressed();
-                Navigator.pop(context);
-              },
-              height: event.heightScreen,
-              width: event.widthScreen,
-              lists: listsList,
-              onTapClose: Navigator.of(context).pop,
-              onAddNewListPressed: () {
-                event.onAddNewList();
-              },
-            ),
-          ),
+          builder: (context) =>
+              SingleChildScrollView(
+                controller: ModalScrollController.of(context),
+                child: ListsPanelWidget(
+                  onButtonPressed: () {
+                    event.onMoveToButtonPressed();
+                    Navigator.pop(context);
+                  },
+                  height: event.heightScreen,
+                  width: event.widthScreen,
+                  lists: listsList,
+                  onTapClose: Navigator
+                      .of(context)
+                      .pop,
+                  onAddNewListPressed: () {
+                    event.onAddNewList();
+                  },
+                ),
+              ),
         );
         emit(
           LoadedAppState(
@@ -504,25 +541,31 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: ListsPanelWidget(
-            onButtonPressed: Navigator.of(context).pop,
-            height: event.heightScreen,
-            width: event.widthScreen,
-            lists: listsList,
-            onTapClose: Navigator.of(context).pop,
-            onAddNewListPressed: () {
-              event.onAddNewList();
-            },
-          ),
-        ),
+        builder: (context) =>
+            SingleChildScrollView(
+              controller: ModalScrollController.of(context),
+              child: ListsPanelWidget(
+                onButtonPressed: Navigator
+                    .of(context)
+                    .pop,
+                height: event.heightScreen,
+                width: event.widthScreen,
+                lists: listsList,
+                onTapClose: Navigator
+                    .of(context)
+                    .pop,
+                onAddNewListPressed: () {
+                  event.onAddNewList();
+                },
+              ),
+            ),
       );
       emit(
         SingleTaskAppState(
             isClosePanelTapped: currentUser.isClosePanelTapped,
             listsList: listsList,
-            taskModel: event.taskModel, listModel: listsList[selectedListIndex]),
+            taskModel: event.taskModel,
+            listModel: listsList[selectedListIndex]),
       );
     });
 
@@ -533,26 +576,28 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: AddNewListPanelWidget(
-            height: event.heightScreen,
-            onTapClose: () {
-              Navigator.of(event.context).pop();
-            },
-            width: event.widthScreen,
-            onBlackButtonTap: (controller) {
-              event.onBlackButtonPressed(controller);
-            },
-          ),
-        ),
+        builder: (context) =>
+            SingleChildScrollView(
+              controller: ModalScrollController.of(context),
+              child: AddNewListPanelWidget(
+                height: event.heightScreen,
+                onTapClose: () {
+                  Navigator.of(event.context).pop();
+                },
+                width: event.widthScreen,
+                onBlackButtonTap: (controller) {
+                  event.onBlackButtonPressed(controller);
+                },
+              ),
+            ),
       );
       final listsList = await getLists();
       emit(
         SingleTaskAppState(
             isClosePanelTapped: currentUser.isClosePanelTapped,
             listsList: listsList,
-            taskModel: event.taskModel, listModel: listsList[selectedListIndex]),
+            taskModel: event.taskModel,
+            listModel: listsList[selectedListIndex]),
       );
     });
 
@@ -566,19 +611,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           ),
           enableDrag: false,
           context: event.context,
-          builder: (context) => SingleChildScrollView(
-            controller: ModalScrollController.of(context),
-            child: AddNewListPanelWidget(
-              height: event.heightScreen,
-              onTapClose: () {
-                Navigator.of(event.context).pop();
-              },
-              width: event.widthScreen,
-              onBlackButtonTap: (controller) {
-                event.onBlackButtonPressed(controller);
-              },
-            ),
-          ),
+          builder: (context) =>
+              SingleChildScrollView(
+                controller: ModalScrollController.of(context),
+                child: AddNewListPanelWidget(
+                  height: event.heightScreen,
+                  onTapClose: () {
+                    Navigator.of(event.context).pop();
+                  },
+                  width: event.widthScreen,
+                  onBlackButtonTap: (controller) {
+                    event.onBlackButtonPressed(controller);
+                  },
+                ),
+              ),
         );
         final listsList = await getLists();
         emit(
@@ -599,19 +645,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: AddNewListPanelWidget(
-            height: event.heightScreen,
-            onTapClose: () {
-              Navigator.of(event.context).pop();
-            },
-            width: event.widthScreen,
-            onBlackButtonTap: (controller) {
-              event.onBlackButtonPressed(controller);
-            },
-          ),
-        ),
+        builder: (context) =>
+            SingleChildScrollView(
+              controller: ModalScrollController.of(context),
+              child: AddNewListPanelWidget(
+                height: event.heightScreen,
+                onTapClose: () {
+                  Navigator.of(event.context).pop();
+                },
+                width: event.widthScreen,
+                onBlackButtonTap: (controller) {
+                  event.onBlackButtonPressed(controller);
+                },
+              ),
+            ),
       );
       final listsList = await getLists();
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());
@@ -632,27 +679,31 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: ReminderPanelWidget(
-            height: event.heightScreen,
-            width: event.widthScreen,
-            onCloseTap: Navigator.of(event.context).pop,
-            onSaveTap: (DateTime? chosenDateTime) {
-              event.onSaveTap(chosenDateTime);
-            },
-            taskModel: event.taskModel,
-            onDeleteTap: () {
-              event.onDeleteTap();
-            },
-          ),
-        ),
+        builder: (context) =>
+            SingleChildScrollView(
+              controller: ModalScrollController.of(context),
+              child: ReminderPanelWidget(
+                height: event.heightScreen,
+                width: event.widthScreen,
+                onCloseTap: Navigator
+                    .of(event.context)
+                    .pop,
+                onSaveTap: (DateTime? chosenDateTime) {
+                  event.onSaveTap(chosenDateTime);
+                },
+                taskModel: event.taskModel,
+                onDeleteTap: () {
+                  event.onDeleteTap();
+                },
+              ),
+            ),
       );
       final listsList = await getLists();
       emit(SingleTaskAppState(
           listsList: listsList,
           isClosePanelTapped: currentUser.isClosePanelTapped,
-          taskModel: event.taskModel, listModel: listsList[selectedListIndex]));
+          taskModel: event.taskModel,
+          listModel: listsList[selectedListIndex]));
     });
 
     on<AppEventOpenReminderPanelFromNewTaskView>((event, emit) async {
@@ -662,21 +713,24 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: ReminderPanelWidget(
-            height: event.heightScreen,
-            width: event.widthScreen,
-            onCloseTap: Navigator.of(event.context).pop,
-            onSaveTap: (DateTime? chosenDateTime) {
-              event.onSaveTap(chosenDateTime);
-            },
-            taskModel: event.taskModel,
-            onDeleteTap: () {
-              event.onDeleteTap();
-            },
-          ),
-        ),
+        builder: (context) =>
+            SingleChildScrollView(
+              controller: ModalScrollController.of(context),
+              child: ReminderPanelWidget(
+                height: event.heightScreen,
+                width: event.widthScreen,
+                onCloseTap: Navigator
+                    .of(event.context)
+                    .pop,
+                onSaveTap: (DateTime? chosenDateTime) {
+                  event.onSaveTap(chosenDateTime);
+                },
+                taskModel: event.taskModel,
+                onDeleteTap: () {
+                  event.onDeleteTap();
+                },
+              ),
+            ),
       );
       final listsList = await getLists();
       emit(AddNewTaskAppState(
@@ -693,20 +747,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: ColorsPanelWidget(
-            selectedTaskColorIndex: event.selectedIndex,
-            height: event.heightScreen,
-            width: event.widthScreen,
-            onTapClose: Navigator.of(context).pop,
-            lists: listsList,
-            colorsList: event.buttonColors,
-            onAddNewListPressed: () {
-              event.onAddNewListPressed();
-            },
-          ),
-        ),
+        builder: (context) =>
+            SingleChildScrollView(
+              controller: ModalScrollController.of(context),
+              child: ColorsPanelWidget(
+                selectedTaskColorIndex: event.selectedIndex,
+                height: event.heightScreen,
+                width: event.widthScreen,
+                onTapClose: Navigator
+                    .of(context)
+                    .pop,
+                lists: listsList,
+                colorsList: event.buttonColors,
+                onAddNewListPressed: () {
+                  event.onAddNewListPressed();
+                },
+              ),
+            ),
       );
       emit(AddNewTaskAppState(
           dateTimeReminder: event.taskModel.dateTimeReminder,
@@ -721,19 +778,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: AddNewListPanelWidget(
-            height: event.heightScreen,
-            onTapClose: () {
-              Navigator.of(event.context).pop();
-            },
-            width: event.widthScreen,
-            onBlackButtonTap: (controller) {
-              event.onBlackButtonPressed(controller);
-            },
-          ),
-        ),
+        builder: (context) =>
+            SingleChildScrollView(
+              controller: ModalScrollController.of(context),
+              child: AddNewListPanelWidget(
+                height: event.heightScreen,
+                onTapClose: () {
+                  Navigator.of(event.context).pop();
+                },
+                width: event.widthScreen,
+                onBlackButtonTap: (controller) {
+                  event.onBlackButtonPressed(controller);
+                },
+              ),
+            ),
       );
       final listsList = await getLists();
       emit(AddNewTaskAppState(
@@ -762,30 +820,31 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: OptionsPanelWidget(
-            selectedListColorIndex:
+        builder: (context) =>
+            SingleChildScrollView(
+              controller: ModalScrollController.of(context),
+              child: OptionsPanelWidget(
+                selectedListColorIndex:
                 listsList[event.selectedIndex].listColorIndex,
-            height: event.heightScreen,
-            width: event.widthScreen,
-            onTapClose: () {
-              Navigator.pop(context);
-            },
-            onRenameTap: () {
-              event.onRenameTap();
-            },
-            onDeleteTap: () {
-              event.onDeleteTap();
-            },
-            changeListColor: (int index) {
-              event.changeListColor(index);
-            },
-            onThumbnailTap: () {
-              event.onThumbnailTap();
-            },
-          ),
-        ),
+                height: event.heightScreen,
+                width: event.widthScreen,
+                onTapClose: () {
+                  Navigator.pop(context);
+                },
+                onRenameTap: () {
+                  event.onRenameTap();
+                },
+                onDeleteTap: () {
+                  event.onDeleteTap();
+                },
+                changeListColor: (int index) {
+                  event.changeListColor(index);
+                },
+                onThumbnailTap: () {
+                  event.onThumbnailTap();
+                },
+              ),
+            ),
       );
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());
       controllerList =
@@ -797,6 +856,33 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           listsList: listsList,
           focusNodeList: focusNodeList,
           controllerList: controllerList));
+    });
+
+    on<AppEventUndoDeleteTask>((event, emit) async {
+      try {
+        addNewTask(
+          text: event.taskModel.task,
+          taskID: event.taskModel.taskID,
+          colorIndex: event.taskModel.colorIndex,
+          listID: event.taskModel.listID,
+          dateTimeReminder: event.taskModel.dateTimeReminder,
+          isReminderActive: event.taskModel.isReminderActive,
+        );
+        final listsList = await getLists();
+        final tasksList = await getTasks(
+          listModel: event.listModel,
+        );
+        final QuoteModel quote = await updateQuote();
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: event.listModel,
+              listsList: listsList),
+        );
+      } on Exception {
+        emit(const ErrorAppState());
+      }
     });
 
     on<AppEventUpdateListImage>((event, emit) async {
@@ -854,7 +940,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
                 focusNodeList: focusNodeList,
                 controllerList: controllerList),
           );
-         } //else if (variable == 3) {
+        } //else if (variable == 3) {
         //   final XFile? takenPhoto = await takePhotoToListImage();
         //   if (takenPhoto == null) return;
         //   if (await showCameraImagePickerDialog(

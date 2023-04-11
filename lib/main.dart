@@ -88,6 +88,8 @@ class MyApp extends StatelessWidget {
                     );
                   } else if (appState is LoadedAppState) {
                     return HomeView(
+                      deletedTask: appState.deletedTask,
+                      isJustDeleted: appState.isJustDeleted,
                       quoteModel: appState.quoteModel,
                       tasksList: appState.tasksList,
                       listModel: appState.listModel,

@@ -24,7 +24,8 @@ class TaskView extends StatefulWidget {
     Key? key,
     required this.taskModel,
     required this.listsList,
-    required this.isClosePanelTapped, required this.listModel,
+    required this.isClosePanelTapped,
+    required this.listModel,
   }) : super(key: key);
 
   @override
@@ -84,9 +85,8 @@ class _TaskViewState extends State<TaskView> {
         taskModel: widget.taskModel,
         onCloseTap: () {
           context.read<AppBloc>().add(
-            AppEventGoToMainView(
-                listModel: widget.listModel),
-          );
+                AppEventGoToMainView(listModel: widget.listModel),
+              );
         },
         onClosePanelTap: () {
           context.read<AppBloc>().add(
@@ -118,7 +118,11 @@ class _TaskViewState extends State<TaskView> {
                     backgroundColor: removeColor,
                     onPressed: () {
                       context.read<AppBloc>().add(
-                            AppEventDeleteTask(taskModel: widget.taskModel),
+                            AppEventDeleteTask(
+                              taskModel: widget.taskModel,
+                              listModel: widget.listModel,
+                              listsList: widget.listsList,
+                            ),
                           );
                     },
                     child: Image.asset(

@@ -23,6 +23,7 @@ class AppEventGoToSettings implements AppEvent {
 @immutable
 class AppEventGoToSettingsFromPremiumView implements AppEvent {
   final BuildContext context;
+
   const AppEventGoToSettingsFromPremiumView({required this.context}) : super();
 }
 
@@ -138,11 +139,51 @@ class AppEventMoveToTask implements AppEvent {
 @immutable
 class AppEventDeleteTask implements AppEvent {
   final TaskModel taskModel;
+  final ListModel listModel;
+  final List<ListModel> listsList;
+  final List<TaskModel>? taskModels;
 
   const AppEventDeleteTask({
+    this.taskModels ,
+    required this.listModel,
+    required this.listsList,
     required this.taskModel,
   });
 }
+
+
+@immutable
+class AppEventShowUndoButtonAndDelete implements AppEvent {
+  final TaskModel taskModel;
+  final ListModel listModel;
+  final List<ListModel> listsList;
+  final List<TaskModel>? taskModels;
+
+  const AppEventShowUndoButtonAndDelete({
+    this.taskModels ,
+    required this.listModel,
+    required this.listsList,
+    required this.taskModel,
+  });
+}
+
+
+@immutable
+class AppEventUndoDeleteTask implements AppEvent {
+  final TaskModel taskModel;
+  final ListModel listModel;
+  final List<ListModel> listsList;
+  final List<TaskModel>? taskModels;
+
+  const AppEventUndoDeleteTask({
+    this.taskModels ,
+    required this.listModel,
+    required this.listsList,
+    required this.taskModel,
+  });
+}
+
+
 
 @immutable
 class AppEventAddNewTask implements AppEvent {

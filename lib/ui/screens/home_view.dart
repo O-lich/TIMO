@@ -14,10 +14,12 @@ import 'package:todo_app_main_screen/ui/widgets/main_page_widgets/main_page_back
 import 'package:todo_app_main_screen/ui/widgets/main_page_widgets/tasks_widget.dart';
 
 class HomeView extends StatefulWidget {
+  final bool isJustDeleted;
   final QuoteModel quoteModel;
   final List<TaskModel> tasksList;
   final ListModel listModel;
   final List<ListModel> listsList;
+  final TaskModel? deletedTask;
 
   static const routeName = '/my_home_page';
 
@@ -27,6 +29,8 @@ class HomeView extends StatefulWidget {
     required this.tasksList,
     required this.listsList,
     required this.listModel,
+    this.isJustDeleted = false,
+    this.deletedTask,
   }) : super(key: key);
 
   @override
@@ -34,7 +38,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  bool isDeleted = false; //manage undo floating action button visibility
   bool isMoveTo = false; //manage add floating action button visibility
   final scrollController = ScrollController();
   final listController = TextEditingController();
@@ -59,8 +62,7 @@ class _HomeViewState extends State<HomeView> {
                     MediaQuery.of(context).size.height * 0.95
             ? Colors.white
             : (widget.listsList.isNotEmpty)
-                ? buttonColors[
-                    widget.listModel.listColorIndex]
+                ? buttonColors[widget.listModel.listColorIndex]
                 : buttonColors[0],
         body: Stack(
           fit: StackFit.expand,
@@ -75,8 +77,7 @@ class _HomeViewState extends State<HomeView> {
               },
               quoteModel: widget.quoteModel,
               buttonColor: (widget.listsList.isNotEmpty)
-                  ? buttonColors[
-                      widget.listModel.listColorIndex]
+                  ? buttonColors[widget.listModel.listColorIndex]
                   : buttonColors[0],
             ),
             NotificationListener<DraggableScrollableNotification>(
@@ -110,10 +111,25 @@ class _HomeViewState extends State<HomeView> {
                           : 0.55 * heightScreen,
                       isMoveToPressed: isMoveTo,
                       dragController: dragController,
-                      onTaskTap: () {},
+                      onTaskTap: (index) {
+                        context.read<AppBloc>().add(
+                              AppEventGoToSingleTask(
+                                  taskModel: widget.tasksList[index]),
+                            );
+                      },
                       onNewTaskAddPressed: () {
                         context.read<AppBloc>().add(
                               AppEventGoToNewTask(
+                                listsList: widget.listsList,
+                              ),
+                            );
+                      },
+                      onDelete: (TaskModel taskModel) {
+                        context.read<AppBloc>().add(
+                              AppEventShowUndoButtonAndDelete(
+                                taskModels: widget.tasksList,
+                                taskModel: taskModel,
+                                listModel: widget.listModel,
                                 listsList: widget.listsList,
                               ),
                             );
@@ -124,22 +140,61 @@ class _HomeViewState extends State<HomeView> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: isMoveTo
-            ? Container()
-            : FloatingActionButton(
-                heroTag: "fab2",
-                backgroundColor: textColor,
-                onPressed: () {
-                  context.read<AppBloc>().add(
-                        AppEventGoToNewTask(
-                          listsList: widget.listsList,
-                        ),
-                      );
-                },
-                child: Image.asset(
-                  AppIcons.addButton,
-                ),
-              ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            widget.isJustDeleted
+                ? FloatingActionButton(
+                    backgroundColor: textColor,
+                    onPressed: () {
+                      context.read<AppBloc>().add(
+                            AppEventUndoDeleteTask(
+                                listModel: widget.listModel,
+                                listsList: widget.listsList,
+                                taskModel: widget.deletedTask!,
+                                taskModels: widget.tasksList),
+                          );
+                    },
+                    heroTag: "fab1",
+                    child: Image.asset(
+                      AppIcons.undo,
+                    ),
+                  )
+                : Container(),
+            isMoveTo
+                ? Container()
+                : FloatingActionButton(
+                    backgroundColor: textColor,
+                    onPressed: () {
+                      context.read<AppBloc>().add(
+                            AppEventGoToNewTask(
+                              listsList: widget.listsList,
+                            ),
+                          );
+                    },
+                    heroTag: "fab2",
+                    child: Image.asset(
+                      AppIcons.addButton,
+                    ),
+                  ),
+          ],
+        ),
+        // floatingActionButton: isMoveTo
+        //     ? Container()
+        //     : FloatingActionButton(
+        //         heroTag: "fab2",
+        //         backgroundColor: textColor,
+        //         onPressed: () {
+        //           context.read<AppBloc>().add(
+        //                 AppEventGoToNewTask(
+        //                   listsList: widget.listsList,
+        //                 ),
+        //               );
+        //         },
+        //         child: Image.asset(
+        //           AppIcons.addButton,
+        //         ),
+        //       ),
       );
     });
   }

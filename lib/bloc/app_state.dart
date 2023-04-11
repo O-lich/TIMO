@@ -28,16 +28,21 @@ class AppStateSplashScreen extends AppState {
 
 @immutable
 class LoadedAppState extends AppState {
+  final bool isJustDeleted;
   final QuoteModel quoteModel;
   final List<TaskModel> tasksList;
   final ListModel listModel;
   final List<ListModel> listsList;
+  final TaskModel? deletedTask;
 
-  const LoadedAppState(
-      {required this.listModel,
-      required this.tasksList,
-      required this.quoteModel,
-      required this.listsList});
+  const LoadedAppState({
+    required this.listModel,
+    required this.tasksList,
+    required this.quoteModel,
+    required this.listsList,
+    this.isJustDeleted = false,
+    this.deletedTask,
+  });
 }
 
 @immutable
@@ -94,18 +99,18 @@ class SingleTaskAppState extends AppState {
   final bool isClosePanelTapped;
   final ListModel listModel;
 
-  const SingleTaskAppState({
-    required this.isClosePanelTapped,
-    required this.listsList,
-    required this.taskModel,
-    required this.listModel
-  });
+  const SingleTaskAppState(
+      {required this.isClosePanelTapped,
+      required this.listsList,
+      required this.taskModel,
+      required this.listModel});
 }
 
 @immutable
 class OpenListPanelAppState extends AppState {
   const OpenListPanelAppState();
 }
+
 @immutable
 class AppTestAppState extends AppState {
   const AppTestAppState();
