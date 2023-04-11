@@ -90,6 +90,7 @@ class _ListsViewState extends State<ListsView> {
         onOptionsTap: (int selectedIndex, BuildContext context) {
           context.read<AppBloc>().add(
             AppEventOptionsPanelOpen(
+              listsList: widget.listsList,
               context: context,
               selectedIndex: selectedIndex,
               heightScreen: heightScreen,

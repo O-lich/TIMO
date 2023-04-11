@@ -203,44 +203,44 @@ class _HomeViewState extends State<HomeView> {
       double heightScreen, double widthScreen, BuildContext context) {
     context.read<AppBloc>().add(
           AppEventListPanelOpenFromMainView(
-              listModel: widget.listsList[selectedListIndex],
-              context: context,
-              heightScreen: heightScreen,
-              widthScreen: widthScreen,
-              onAddNewList: () {
-                context.read<AppBloc>().add(
-                      AppEventAddNewListPanelOpenFromMainView(
-                        listModel: widget.listsList[selectedListIndex],
-                        context: context,
-                        heightScreen: heightScreen,
-                        widthScreen: widthScreen,
-                        onBlackButtonPressed:
-                            (TextEditingController controller) {
-                          Navigator.pop(context);
-                          context
-                              .read<AppBloc>()
-                              .add(AppEventAddNewListFromMainScreen(
-                                listController: controller,
-                                context: context,
-                                listModel: widget.listsList[selectedListIndex],
-                              ));
-                          Navigator.pop(context);
-                          onMoveToPressed(heightScreen, widthScreen, context);
-                        },
-                      ),
-                    );
-              },
-              onMoveToButtonPressed: () {
-                moveToListIndex == -1
-                    ? isMoveTo = false
-                    : context.read<AppBloc>().add(
-                          AppEventMoveToTask(
-                              moveToListModel:
-                                  widget.listsList[moveToListIndex],
-                              taskModel: widget.tasksList[selectedTaskIndex]),
-                        );
-                //Navigator.pop(context);
-              }),
+            listsList: widget.listsList,
+            listModel: widget.listsList[selectedListIndex],
+            context: context,
+            heightScreen: heightScreen,
+            widthScreen: widthScreen,
+            onAddNewList: () {
+              context.read<AppBloc>().add(
+                    AppEventAddNewListPanelOpenFromMainView(
+                      listModel: widget.listsList[selectedListIndex],
+                      context: context,
+                      heightScreen: heightScreen,
+                      widthScreen: widthScreen,
+                      onBlackButtonPressed: (TextEditingController controller) {
+                        Navigator.pop(context);
+                        context
+                            .read<AppBloc>()
+                            .add(AppEventAddNewListFromMainScreen(
+                              listController: controller,
+                              context: context,
+                              listModel: widget.listsList[selectedListIndex],
+                            ));
+                        Navigator.pop(context);
+                        onMoveToPressed(heightScreen, widthScreen, context);
+                      },
+                    ),
+                  );
+            },
+            onMoveToButtonPressed: () {
+              moveToListIndex == -1
+                  ? isMoveTo = false
+                  : context.read<AppBloc>().add(
+                        AppEventMoveToTask(
+                            moveToListModel: widget.listsList[moveToListIndex],
+                            taskModel: widget.tasksList[selectedTaskIndex]),
+                      );
+              //Navigator.pop(context);
+            },
+          ),
         );
   }
 }

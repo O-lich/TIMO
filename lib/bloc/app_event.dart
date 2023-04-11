@@ -144,13 +144,12 @@ class AppEventDeleteTask implements AppEvent {
   final List<TaskModel>? taskModels;
 
   const AppEventDeleteTask({
-    this.taskModels ,
+    this.taskModels,
     required this.listModel,
     required this.listsList,
     required this.taskModel,
   });
 }
-
 
 @immutable
 class AppEventShowUndoButtonAndDelete implements AppEvent {
@@ -160,13 +159,12 @@ class AppEventShowUndoButtonAndDelete implements AppEvent {
   final List<TaskModel>? taskModels;
 
   const AppEventShowUndoButtonAndDelete({
-    this.taskModels ,
+    this.taskModels,
     required this.listModel,
     required this.listsList,
     required this.taskModel,
   });
 }
-
 
 @immutable
 class AppEventUndoDeleteTask implements AppEvent {
@@ -176,14 +174,12 @@ class AppEventUndoDeleteTask implements AppEvent {
   final List<TaskModel>? taskModels;
 
   const AppEventUndoDeleteTask({
-    this.taskModels ,
+    this.taskModels,
     required this.listModel,
     required this.listsList,
     required this.taskModel,
   });
 }
-
-
 
 @immutable
 class AppEventAddNewTask implements AppEvent {
@@ -370,6 +366,7 @@ class AppEventAddNewListPanelOpenFromTaskView implements AppEvent {
 
 @immutable
 class AppEventListPanelOpenFromMainView implements AppEvent {
+  final List<ListModel> listsList;
   final BuildContext context;
   final ListModel listModel;
   final double heightScreen;
@@ -377,7 +374,7 @@ class AppEventListPanelOpenFromMainView implements AppEvent {
   final void Function() onAddNewList;
   final void Function() onMoveToButtonPressed;
 
-  const AppEventListPanelOpenFromMainView({
+  const AppEventListPanelOpenFromMainView( {required this.listsList,
     required this.onMoveToButtonPressed,
     required this.context,
     required this.listModel,
@@ -514,6 +511,7 @@ class AppEventAddNewListFromNewTaskView implements AppEvent {
 
 @immutable
 class AppEventOptionsPanelOpen implements AppEvent {
+  final List<ListModel> listsList;
   final BuildContext context;
   final int selectedIndex;
   final double heightScreen;
@@ -523,16 +521,17 @@ class AppEventOptionsPanelOpen implements AppEvent {
   final void Function() onThumbnailTap;
   final void Function(int index) changeListColor;
 
-  const AppEventOptionsPanelOpen(
-      {required this.context,
-      required this.selectedIndex,
-      required this.heightScreen,
-      required this.widthScreen,
-      required this.onRenameTap,
-      required this.onDeleteTap,
-      required this.changeListColor,
-      required this.onThumbnailTap})
-      : super();
+  const AppEventOptionsPanelOpen({
+    required this.context,
+    required this.selectedIndex,
+    required this.heightScreen,
+    required this.widthScreen,
+    required this.onRenameTap,
+    required this.onDeleteTap,
+    required this.changeListColor,
+    required this.onThumbnailTap,
+    required this.listsList,
+  }) : super();
 }
 
 @immutable

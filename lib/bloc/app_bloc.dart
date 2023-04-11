@@ -10,9 +10,7 @@ import 'package:todo_app_main_screen/models/quote_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
 import 'package:todo_app_main_screen/ui/style.dart';
 import 'package:todo_app_main_screen/ui/widgets/add_new_list_panel_widget.dart';
-import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/options_panel_widget.dart';
-import 'package:todo_app_main_screen/ui/widgets/lists_panel_widget.dart';
-import 'package:todo_app_main_screen/ui/widgets/new_task_page_widgets/colors_panel_widget.dart';
+import 'package:todo_app_main_screen/ui/widgets/modal_bottom_sheet.dart';
 import 'package:todo_app_main_screen/ui/widgets/reminder_panel_widget.dart';
 
 part 'app_event.dart';
@@ -25,7 +23,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   AppBloc() : super(const AppStateSplashScreen()) {
     on<AppEventGetUser>(
-          (event, emit) async {
+      (event, emit) async {
         emit(
           const AppStateSplashScreen(),
         );
@@ -196,16 +194,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventChangeLocale>((event, emit) async {
       final int locale =
-      changeLocale(context: event.context, index: event.index);
+          changeLocale(context: event.context, index: event.index);
       emit(
         LanguageAppState(locale: locale),
       );
     });
     on<AppEventShowUndoButtonAndDelete>((event, emit) async {
-
-
-
-
       try {
         final QuoteModel quote = await updateQuote();
         await deleteTask(oldTask: event.taskModel);
@@ -213,15 +207,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final tasksListBefore = await getTasks(
           listModel: event.listModel,
         );
-        emit(
-            LoadedAppState(
-              isJustDeleted: true,
-              tasksList: tasksListBefore,
-              quoteModel: quote,
-              listModel: event.listModel,
-              listsList: listsList,
-              deletedTask: event.taskModel,)
-        );
+        emit(LoadedAppState(
+          isJustDeleted: true,
+          tasksList: tasksListBefore,
+          quoteModel: quote,
+          listModel: event.listModel,
+          listsList: listsList,
+          deletedTask: event.taskModel,
+        ));
         await Future.delayed(const Duration(seconds: 5));
         final tasksList = await getTasks(
           listModel: event.listModel,
@@ -357,7 +350,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventAddNewListFromListScreen>((event, emit) async {
       final listsList =
-      await createNewList(listController: event.listController);
+          await createNewList(listController: event.listController);
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());
       controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
@@ -493,34 +486,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventListPanelOpenFromMainView>((event, emit) async {
       try {
         final listsList = await getLists();
+
+        CustomModalBottomSheet.showModalListsPanelWidgetFromMainView(
+          context: event.context,
+          heightScreen: event.heightScreen,
+          widthScreen: event.widthScreen,
+          listsList: listsList,
+          onMoveToButtonPressed: event.onMoveToButtonPressed,
+          onAddNewList: event.onAddNewList,
+        );
+
         final tasksList = await getTasks(listModel: event.listModel);
         final QuoteModel quote = await updateQuote();
-        showMaterialModalBottomSheet(
-          shape: const RoundedRectangleBorder(
-            borderRadius: commonBorderRadius,
-          ),
-          enableDrag: false,
-          context: event.context,
-          builder: (context) =>
-              SingleChildScrollView(
-                controller: ModalScrollController.of(context),
-                child: ListsPanelWidget(
-                  onButtonPressed: () {
-                    event.onMoveToButtonPressed();
-                    Navigator.pop(context);
-                  },
-                  height: event.heightScreen,
-                  width: event.widthScreen,
-                  lists: listsList,
-                  onTapClose: Navigator
-                      .of(context)
-                      .pop,
-                  onAddNewListPressed: () {
-                    event.onAddNewList();
-                  },
-                ),
-              ),
-        );
         emit(
           LoadedAppState(
               listModel: event.listModel,
@@ -535,31 +512,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventListPanelOpenFromTaskView>((event, emit) async {
       final listsList = await getLists();
-      showMaterialModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-          borderRadius: commonBorderRadius,
-        ),
-        enableDrag: false,
+      CustomModalBottomSheet.showModalListsPanelWidgetFromTaskView(
         context: event.context,
-        builder: (context) =>
-            SingleChildScrollView(
-              controller: ModalScrollController.of(context),
-              child: ListsPanelWidget(
-                onButtonPressed: Navigator
-                    .of(context)
-                    .pop,
-                height: event.heightScreen,
-                width: event.widthScreen,
-                lists: listsList,
-                onTapClose: Navigator
-                    .of(context)
-                    .pop,
-                onAddNewListPressed: () {
-                  event.onAddNewList();
-                },
-              ),
-            ),
+        heightScreen: event.heightScreen,
+        widthScreen: event.widthScreen,
+        listsList: listsList,
+        onAddNewList: event.onAddNewList,
       );
+
       emit(
         SingleTaskAppState(
             isClosePanelTapped: currentUser.isClosePanelTapped,
@@ -576,20 +536,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) =>
-            SingleChildScrollView(
-              controller: ModalScrollController.of(context),
-              child: AddNewListPanelWidget(
-                height: event.heightScreen,
-                onTapClose: () {
-                  Navigator.of(event.context).pop();
-                },
-                width: event.widthScreen,
-                onBlackButtonTap: (controller) {
-                  event.onBlackButtonPressed(controller);
-                },
-              ),
-            ),
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: AddNewListPanelWidget(
+            height: event.heightScreen,
+            onTapClose: () {
+              Navigator.of(event.context).pop();
+            },
+            width: event.widthScreen,
+            onBlackButtonTap: (controller) {
+              event.onBlackButtonPressed(controller);
+            },
+          ),
+        ),
       );
       final listsList = await getLists();
       emit(
@@ -603,29 +562,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventAddNewListPanelOpenFromMainView>((event, emit) async {
       try {
+        CustomModalBottomSheet.showModalAddNewListPanelWidget(
+          context: event.context,
+          heightScreen: event.heightScreen,
+          widthScreen: event.widthScreen,
+          onBlackButtonPressed: (TextEditingController controller) {
+            event.onBlackButtonPressed(controller);
+          },
+        );
         final tasksList = await getTasks(listModel: event.listModel);
         final QuoteModel quote = await updateQuote();
-        showMaterialModalBottomSheet(
-          shape: const RoundedRectangleBorder(
-            borderRadius: commonBorderRadius,
-          ),
-          enableDrag: false,
-          context: event.context,
-          builder: (context) =>
-              SingleChildScrollView(
-                controller: ModalScrollController.of(context),
-                child: AddNewListPanelWidget(
-                  height: event.heightScreen,
-                  onTapClose: () {
-                    Navigator.of(event.context).pop();
-                  },
-                  width: event.widthScreen,
-                  onBlackButtonTap: (controller) {
-                    event.onBlackButtonPressed(controller);
-                  },
-                ),
-              ),
-        );
         final listsList = await getLists();
         emit(
           LoadedAppState(
@@ -645,20 +591,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) =>
-            SingleChildScrollView(
-              controller: ModalScrollController.of(context),
-              child: AddNewListPanelWidget(
-                height: event.heightScreen,
-                onTapClose: () {
-                  Navigator.of(event.context).pop();
-                },
-                width: event.widthScreen,
-                onBlackButtonTap: (controller) {
-                  event.onBlackButtonPressed(controller);
-                },
-              ),
-            ),
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: AddNewListPanelWidget(
+            height: event.heightScreen,
+            onTapClose: () {
+              Navigator.of(event.context).pop();
+            },
+            width: event.widthScreen,
+            onBlackButtonTap: (controller) {
+              event.onBlackButtonPressed(controller);
+            },
+          ),
+        ),
       );
       final listsList = await getLists();
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());
@@ -679,24 +624,21 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) =>
-            SingleChildScrollView(
-              controller: ModalScrollController.of(context),
-              child: ReminderPanelWidget(
-                height: event.heightScreen,
-                width: event.widthScreen,
-                onCloseTap: Navigator
-                    .of(event.context)
-                    .pop,
-                onSaveTap: (DateTime? chosenDateTime) {
-                  event.onSaveTap(chosenDateTime);
-                },
-                taskModel: event.taskModel,
-                onDeleteTap: () {
-                  event.onDeleteTap();
-                },
-              ),
-            ),
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: ReminderPanelWidget(
+            height: event.heightScreen,
+            width: event.widthScreen,
+            onCloseTap: Navigator.of(event.context).pop,
+            onSaveTap: (DateTime? chosenDateTime) {
+              event.onSaveTap(chosenDateTime);
+            },
+            taskModel: event.taskModel,
+            onDeleteTap: () {
+              event.onDeleteTap();
+            },
+          ),
+        ),
       );
       final listsList = await getLists();
       emit(SingleTaskAppState(
@@ -713,24 +655,21 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) =>
-            SingleChildScrollView(
-              controller: ModalScrollController.of(context),
-              child: ReminderPanelWidget(
-                height: event.heightScreen,
-                width: event.widthScreen,
-                onCloseTap: Navigator
-                    .of(event.context)
-                    .pop,
-                onSaveTap: (DateTime? chosenDateTime) {
-                  event.onSaveTap(chosenDateTime);
-                },
-                taskModel: event.taskModel,
-                onDeleteTap: () {
-                  event.onDeleteTap();
-                },
-              ),
-            ),
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: ReminderPanelWidget(
+            height: event.heightScreen,
+            width: event.widthScreen,
+            onCloseTap: Navigator.of(event.context).pop,
+            onSaveTap: (DateTime? chosenDateTime) {
+              event.onSaveTap(chosenDateTime);
+            },
+            taskModel: event.taskModel,
+            onDeleteTap: () {
+              event.onDeleteTap();
+            },
+          ),
+        ),
       );
       final listsList = await getLists();
       emit(AddNewTaskAppState(
@@ -740,31 +679,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventOnListsTapFromNewTaskView>((event, emit) async {
-      final listsList = await getLists();
-      showMaterialModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-          borderRadius: commonBorderRadius,
-        ),
-        enableDrag: false,
+      CustomModalBottomSheet.showModalColorsPanelWidget(
         context: event.context,
-        builder: (context) =>
-            SingleChildScrollView(
-              controller: ModalScrollController.of(context),
-              child: ColorsPanelWidget(
-                selectedTaskColorIndex: event.selectedIndex,
-                height: event.heightScreen,
-                width: event.widthScreen,
-                onTapClose: Navigator
-                    .of(context)
-                    .pop,
-                lists: listsList,
-                colorsList: event.buttonColors,
-                onAddNewListPressed: () {
-                  event.onAddNewListPressed();
-                },
-              ),
-            ),
+        heightScreen: event.heightScreen,
+        widthScreen: event.widthScreen,
+        listsList: event.lists,
+        selectedIndex: event.selectedIndex,
+        onAddNewListPressed: event.onAddNewListPressed,
       );
+
+      final listsList = await getLists();
       emit(AddNewTaskAppState(
           dateTimeReminder: event.taskModel.dateTimeReminder,
           listsList: listsList,
@@ -778,20 +702,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ),
         enableDrag: false,
         context: event.context,
-        builder: (context) =>
-            SingleChildScrollView(
-              controller: ModalScrollController.of(context),
-              child: AddNewListPanelWidget(
-                height: event.heightScreen,
-                onTapClose: () {
-                  Navigator.of(event.context).pop();
-                },
-                width: event.widthScreen,
-                onBlackButtonTap: (controller) {
-                  event.onBlackButtonPressed(controller);
-                },
-              ),
-            ),
+        builder: (context) => SingleChildScrollView(
+          controller: ModalScrollController.of(context),
+          child: AddNewListPanelWidget(
+            height: event.heightScreen,
+            onTapClose: () {
+              Navigator.of(event.context).pop();
+            },
+            width: event.widthScreen,
+            onBlackButtonTap: (controller) {
+              event.onBlackButtonPressed(controller);
+            },
+          ),
+        ),
       );
       final listsList = await getLists();
       emit(AddNewTaskAppState(
@@ -813,39 +736,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventOptionsPanelOpen>((event, emit) async {
+      CustomModalBottomSheet.showModalOptionsPanelWidget(
+          context: event.context,
+          heightScreen: event.heightScreen,
+          widthScreen: event.widthScreen,
+          onRenameTap: event.onRenameTap,
+          onDeleteTap: event.onDeleteTap,
+          onThumbnailTap: event.onThumbnailTap,
+          changeListColor: event.changeListColor,
+          listsList: event.listsList,
+          selectedIndex: event.selectedIndex);
+
       final listsList = await getLists();
-      showMaterialModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-          borderRadius: commonBorderRadius,
-        ),
-        enableDrag: false,
-        context: event.context,
-        builder: (context) =>
-            SingleChildScrollView(
-              controller: ModalScrollController.of(context),
-              child: OptionsPanelWidget(
-                selectedListColorIndex:
-                listsList[event.selectedIndex].listColorIndex,
-                height: event.heightScreen,
-                width: event.widthScreen,
-                onTapClose: () {
-                  Navigator.pop(context);
-                },
-                onRenameTap: () {
-                  event.onRenameTap();
-                },
-                onDeleteTap: () {
-                  event.onDeleteTap();
-                },
-                changeListColor: (int index) {
-                  event.changeListColor(index);
-                },
-                onThumbnailTap: () {
-                  event.onThumbnailTap();
-                },
-              ),
-            ),
-      );
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());
       controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
