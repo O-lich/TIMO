@@ -36,7 +36,7 @@ class _OptionsPanelWidgetState extends State<OptionsPanelWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: widget.width * 0.04,
+        left: widget.width * 0.07,
         right: widget.width * 0.04,
       ),
       child: Column(
@@ -59,7 +59,7 @@ class _OptionsPanelWidgetState extends State<OptionsPanelWidget> {
               S.of(context).color,
               style: TextStyle(
                 fontSize: 0.025 * widget.height,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -137,7 +137,7 @@ class OptionsWidget extends StatelessWidget {
             optionTitle,
             style: TextStyle(
               fontSize: 0.025 * height,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w500,
               color: textColor,
             ),
           ),

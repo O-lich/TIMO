@@ -8,9 +8,9 @@ import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:todo_app_main_screen/consts/strings.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/ui/widgets/black_button_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PremiumView extends StatefulWidget {
-
   const PremiumView({Key? key}) : super(key: key);
 
   @override
@@ -20,16 +20,11 @@ class PremiumView extends StatefulWidget {
 class _PremiumViewState extends State<PremiumView> {
   bool isWhitePlateSelected = false;
   bool isBluePlateSelected = false;
+
   @override
   Widget build(BuildContext context) {
-    double heightScreen = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double widthScreen = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -39,14 +34,13 @@ class _PremiumViewState extends State<PremiumView> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 25),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: ExpandTapWidget(
-                  tapPadding: const EdgeInsets.all(100),
-                  onTap: () =>
-                      context.read<AppBloc>().add(
-                        const AppEventGoToSettings(),
-                      ),
+              child: ExpandTapWidget(
+                tapPadding: const EdgeInsets.all(100),
+                onTap: () => context.read<AppBloc>().add(
+                      const AppEventGoToSettings(),
+                    ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
                   child: Image.asset(
                     AppIcons.close,
                     scale: 3,
@@ -68,9 +62,7 @@ class _PremiumViewState extends State<PremiumView> {
             ),
             Center(
               child: Text(
-                S
-                    .of(context)
-                    .getPremium,
+                S.of(context).getPremium,
                 style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -78,22 +70,12 @@ class _PremiumViewState extends State<PremiumView> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                left: 25,
-                right: 25),
+              padding: const EdgeInsets.only(left: 25, right: 25),
               child: ListView(shrinkWrap: true, children: [
-                pros(S
-                    .of(context)
-                    .premTasks),
-                pros(S
-                    .of(context)
-                    .premColorsQuotes),
-                pros(S
-                    .of(context)
-                    .premLists),
-                pros(S
-                    .of(context)
-                    .premFuture),
+                pros(S.of(context).premTasks),
+                pros(S.of(context).premColorsQuotes),
+                pros(S.of(context).premLists),
+                pros(S.of(context).premFuture),
               ]),
             ),
             SizedBox(
@@ -109,14 +91,17 @@ class _PremiumViewState extends State<PremiumView> {
                   GestureDetector(
                     onTap: () => setState(() {
                       isBluePlateSelected = false;
-                      isWhitePlateSelected =! isWhitePlateSelected;
+                      isWhitePlateSelected = !isWhitePlateSelected;
                     }),
                     child: Container(
                       height: heightScreen * 0.15,
                       width: heightScreen * 0.15,
-                      decoration:   BoxDecoration(
+                      decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: isWhitePlateSelected ? const AssetImage(AppIcons.whitePlateSelected) : const AssetImage(AppIcons.whitePlate),
+                              image: isWhitePlateSelected
+                                  ? const AssetImage(
+                                      AppIcons.whitePlateSelected)
+                                  : const AssetImage(AppIcons.whitePlate),
                               fit: BoxFit.fill)),
                       child: Stack(
                         children: [
@@ -135,9 +120,7 @@ class _PremiumViewState extends State<PremiumView> {
                               top: heightScreen * 0.09,
                               left: widthScreen * 0.08,
                               child: Text(
-                                S
-                                    .of(context)
-                                    .perMonth,
+                                S.of(context).perMonth,
                                 style: const TextStyle(fontSize: 16),
                               ))
                         ],
@@ -152,9 +135,13 @@ class _PremiumViewState extends State<PremiumView> {
                     child: Container(
                       height: heightScreen * 0.15,
                       width: heightScreen * 0.15,
-                      decoration:  BoxDecoration(
+                      decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: isBluePlateSelected ? const AssetImage(AppIcons.bluePlateSelected,) :const AssetImage(AppIcons.bluePlate),
+                              image: isBluePlateSelected
+                                  ? const AssetImage(
+                                      AppIcons.bluePlateSelected,
+                                    )
+                                  : const AssetImage(AppIcons.bluePlate),
                               fit: BoxFit.fill)),
                       child: Stack(
                         children: [
@@ -173,9 +160,7 @@ class _PremiumViewState extends State<PremiumView> {
                               top: heightScreen * 0.09,
                               left: widthScreen * 0.1,
                               child: Text(
-                                S
-                                    .of(context)
-                                    .perYear,
+                                S.of(context).perYear,
                                 style: const TextStyle(fontSize: 16),
                               )),
                           Positioned(
@@ -196,9 +181,7 @@ class _PremiumViewState extends State<PremiumView> {
             ),
             Center(
               child: Text(
-                S
-                    .of(context)
-                    .recurringPayment,
+                S.of(context).recurringPayment,
                 style: const TextStyle(
                   fontSize: 14,
                   color: recurringPaymentColor,
@@ -214,11 +197,8 @@ class _PremiumViewState extends State<PremiumView> {
                 height: heightScreen * 0.07,
                 borderRadius: BorderRadius.circular(20),
                 child: Center(
-
                   child: Text(
-                    S
-                        .of(context)
-                        .goPremium,
+                    S.of(context).goPremium,
                     style: const TextStyle(
                       fontSize: 20,
                       color: backgroundColor,
@@ -231,47 +211,52 @@ class _PremiumViewState extends State<PremiumView> {
             RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                    text: S
-                        .of(context)
-                        .bySubscribing,
+                    text: S.of(context).bySubscribing,
                     style: const TextStyle(
                       color: recurringPaymentColor,
                     ),
                     children: [
                       TextSpan(
-                        text: S
-                            .of(context)
-                            .privacyPolicyPremium,
+                        text: S.of(context).privacyPolicyPremium,
                         style: const TextStyle(
                           color: textColor,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w500,
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {},
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          _launchURL(S.of(context).linkPrivacyPolicy);
+                        },
                       ),
                       TextSpan(
-                          text: S
-                              .of(context)
-                              .and,
+                          text: S.of(context).and,
                           style: const TextStyle(
                             color: recurringPaymentColor,
                           )),
                       TextSpan(
-                        text: S
-                            .of(context)
-                            .terms,
+                        text: S.of(context).terms,
                         style: const TextStyle(
                           color: textColor,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w500,
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {},
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          _launchURL(S.of(context).linkTermsOfUsing);
+                        },
                       )
                     ]))
           ],
         ),
       ),
     );
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   Widget pros(String text) {

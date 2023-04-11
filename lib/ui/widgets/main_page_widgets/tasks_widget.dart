@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,8 +56,8 @@ class _TasksWidgetState extends State<TasksWidget> {
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(21),
-          topRight: Radius.circular(21),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
         ),
       ),
       padding: const EdgeInsets.only(

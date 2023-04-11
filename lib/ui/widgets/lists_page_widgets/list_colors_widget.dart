@@ -28,7 +28,7 @@ class _ListColorsWidgetState extends State<ListColorsWidget> {
     return SizedBox(
       height: 60,
       child: Padding(
-        padding: EdgeInsets.only(right: widget.width * 0.115),
+        padding: EdgeInsets.zero,
         child: ListView.builder(
           shrinkWrap: true,
           itemCount: buttonColors.length,
@@ -45,8 +45,8 @@ class _ListColorsWidgetState extends State<ListColorsWidget> {
                 widget.changeListColor(index);
               },
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: widget.width * 0.035,
+                padding: EdgeInsets.only(
+                  right: widget.width * 0.07,
                 ),
                 child: SingleColorWidget(
                   color: buttonColors[index],
