@@ -144,37 +144,46 @@ class _HomeViewState extends State<HomeView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             widget.isJustDeleted
-                ? FloatingActionButton(
-                    backgroundColor: textColor,
-                    onPressed: () {
-                      context.read<AppBloc>().add(
-                            AppEventUndoDeleteTask(
-                                listModel: widget.listModel,
-                                listsList: widget.listsList,
-                                taskModel: widget.deletedTask!,
-                                taskModels: widget.tasksList),
-                          );
-                    },
-                    heroTag: "fab1",
-                    child: Image.asset(
-                      AppIcons.undo,
+                ? Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: heightScreen * 0.036),
+                      child: FloatingActionButton(
+                        backgroundColor: textColor,
+                        onPressed: () {
+                          context.read<AppBloc>().add(
+                                AppEventUndoDeleteTask(
+                                    listModel: widget.listModel,
+                                    listsList: widget.listsList,
+                                    taskModel: widget.deletedTask!,
+                                    taskModels: widget.tasksList),
+                              );
+                        },
+                        heroTag: "fab1",
+                        child: Image.asset(
+                          AppIcons.undo,
+                        ),
+                      ),
                     ),
                   )
                 : Container(),
             isMoveTo
                 ? Container()
-                : FloatingActionButton(
-                    backgroundColor: textColor,
-                    onPressed: () {
-                      context.read<AppBloc>().add(
-                            AppEventGoToNewTask(
-                              listsList: widget.listsList,
-                            ),
-                          );
-                    },
-                    heroTag: "fab2",
-                    child: Image.asset(
-                      AppIcons.addButton,
+                : Align(
+                    alignment: Alignment.bottomRight,
+                    child: FloatingActionButton(
+                      backgroundColor: textColor,
+                      onPressed: () {
+                        context.read<AppBloc>().add(
+                              AppEventGoToNewTask(
+                                listsList: widget.listsList,
+                              ),
+                            );
+                      },
+                      heroTag: "fab2",
+                      child: Image.asset(
+                        AppIcons.addButton,
+                      ),
                     ),
                   ),
           ],

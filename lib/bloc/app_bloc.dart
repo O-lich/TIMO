@@ -486,7 +486,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventListPanelOpenFromMainView>((event, emit) async {
       try {
         final listsList = await getLists();
-
         CustomModalBottomSheet.showModalListsPanelWidgetFromMainView(
           context: event.context,
           heightScreen: event.heightScreen,
