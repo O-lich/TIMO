@@ -41,9 +41,11 @@ class _NewTaskViewState extends State<NewTaskView> {
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
+    double keyBoardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       body: NewTaskPageBackgroundWidget(
         height: heightScreen,
+        keyboardHeight: keyBoardHeight,
         isReminderActive: widget.isReminderActive,
         taskController: taskController,
         width: widthScreen,

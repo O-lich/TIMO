@@ -11,6 +11,7 @@ class NewTaskPageBackgroundWidget extends StatefulWidget {
   final TextEditingController taskController;
   final double height;
   final double width;
+  final double keyboardHeight;
   final void Function() onBlackButtonPressed;
   final void Function() onReminderTap;
   final void Function() onListsTap;
@@ -27,6 +28,7 @@ class NewTaskPageBackgroundWidget extends StatefulWidget {
     required this.onListsTap,
     required this.onCloseTap,
     required this.isReminderActive,
+    required this.keyboardHeight,
   }) : super(key: key);
 
   @override
@@ -84,7 +86,8 @@ class _NewTaskPageBackgroundWidgetState
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
                 onSubmitted: (_) {
-                  if (widget.taskController.text.isEmpty || widget.taskController.text.trim().isEmpty) {
+                  if (widget.taskController.text.isEmpty ||
+                      widget.taskController.text.trim().isEmpty) {
                     widget.taskController.text = '';
                     shakeKey.currentState?.shake();
                   }
@@ -93,7 +96,10 @@ class _NewTaskPageBackgroundWidgetState
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 0.02 * widget.height),
+            padding: EdgeInsets.only(
+              top: 0.02 * widget.height,
+              bottom: widget.keyboardHeight > 0 ? 0 : 20,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -123,7 +129,8 @@ class _NewTaskPageBackgroundWidgetState
                 BlackButtonWidget(
                   height: widget.height * 0.05,
                   onPressed: () {
-                    if (widget.taskController.text.isEmpty || widget.taskController.text.trim().isEmpty) {
+                    if (widget.taskController.text.isEmpty ||
+                        widget.taskController.text.trim().isEmpty) {
                       widget.taskController.text = '';
                       shakeKey.currentState?.shake();
                     } else {

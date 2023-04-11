@@ -21,4 +21,5 @@ const Color activeReminderText = Color(0xff646464);
 const Color lightBorderColor = Color(0xffE8E8E8);
 const Color recurringPaymentColor = Color(0xff979797);
 const Color allFeaturesColor = Color(0xff7c7c7c);
+const Color dividerColor = Color(0xfff0f0f0);
 

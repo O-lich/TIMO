@@ -3,7 +3,6 @@ import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class SettingsWidget extends StatelessWidget {
   final String title;
   final Widget trailing;
@@ -20,29 +19,37 @@ class SettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => url.isNotEmpty ? _launchURL(url) : navigateTo(),
-      child: Card(
-        color: Colors.transparent,
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w600,
-                  color: darkColor,
-                ),
+    return Column(
+      children: [
+        InkWell(
+          onTap: () => url.isNotEmpty ? _launchURL(url) : navigateTo(),
+          child: Card(
+            color: Colors.transparent,
+            elevation: 0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w600,
+                      color: darkColor,
+                    ),
+                  ),
+                  trailing,
+                ],
               ),
-              trailing,
-            ],
+            ),
           ),
         ),
-      ),
+        const Divider(
+          color: dividerColor,
+          thickness: 1,
+        ),
+      ],
     );
   }
 }
