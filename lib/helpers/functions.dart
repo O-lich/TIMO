@@ -519,7 +519,7 @@ Future<void> updateTask({
     final updates = <String, dynamic>{
       'task': textController.text,
       'colorIndex': (taskCurrentColorIndex == -1)
-          ? updatedTask.colorIndex
+          ? -1
           : taskCurrentColorIndex,
     };
     docRef.update(updates);
