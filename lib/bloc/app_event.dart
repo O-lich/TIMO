@@ -12,7 +12,8 @@ class AppEventGetUser implements AppEvent {
 
 @immutable
 class AppEventGoToLists implements AppEvent {
-  const AppEventGoToLists() : super();
+   QuoteModel? quote;
+   AppEventGoToLists({this.quote}) : super();
 }
 
 @immutable
@@ -82,9 +83,11 @@ class AppEventGetTasks implements AppEvent {
 @immutable
 class AppEventDeleteList implements AppEvent {
   final ListModel listModel;
+  final QuoteModel quote;
 
   const AppEventDeleteList({
     required this.listModel,
+    required this.quote
   });
 }
 
@@ -92,10 +95,12 @@ class AppEventDeleteList implements AppEvent {
 class AppEventUpdateListColor implements AppEvent {
   final ListModel listModel;
   final int listColorIndex;
+  final QuoteModel quote;
 
   const AppEventUpdateListColor({
     required this.listModel,
     required this.listColorIndex,
+    required this.quote,
   });
 }
 
@@ -103,10 +108,12 @@ class AppEventUpdateListColor implements AppEvent {
 class AppEventUpdateListText implements AppEvent {
   final ListModel listModel;
   final String listText;
+  final QuoteModel quote;
 
   const AppEventUpdateListText({
     required this.listModel,
     required this.listText,
+    required this.quote,
   });
 }
 
@@ -201,9 +208,11 @@ class AppEventAddNewTask implements AppEvent {
 @immutable
 class AppEventAddNewListFromListScreen implements AppEvent {
   final TextEditingController listController;
+  final QuoteModel quote;
 
   const AppEventAddNewListFromListScreen({
     required this.listController,
+    required this.quote,
   });
 }
 
@@ -258,8 +267,9 @@ class AppEventOpenListPanel implements AppEvent {
 @immutable
 class AppEventGoToMainView implements AppEvent {
   final ListModel listModel;
+  QuoteModel? quote;
 
-  const AppEventGoToMainView({required this.listModel}) : super();
+  AppEventGoToMainView({required this.listModel, this.quote}) : super();
 }
 
 @immutable
@@ -407,12 +417,14 @@ class AppEventAddNewListPanelOpenFromListView implements AppEvent {
   final double heightScreen;
   final double widthScreen;
   final void Function(TextEditingController controller) onBlackButtonPressed;
+  final QuoteModel quote;
 
   const AppEventAddNewListPanelOpenFromListView({
     required this.context,
     required this.heightScreen,
     required this.widthScreen,
     required this.onBlackButtonPressed,
+    required this.quote,
   }) : super();
 }
 
@@ -520,6 +532,7 @@ class AppEventOptionsPanelOpen implements AppEvent {
   final void Function() onDeleteTap;
   final void Function() onThumbnailTap;
   final void Function(int index) changeListColor;
+  final QuoteModel quote;
 
   const AppEventOptionsPanelOpen({
     required this.context,
@@ -531,6 +544,7 @@ class AppEventOptionsPanelOpen implements AppEvent {
     required this.changeListColor,
     required this.onThumbnailTap,
     required this.listsList,
+    required this.quote,
   }) : super();
 }
 
@@ -538,9 +552,12 @@ class AppEventOptionsPanelOpen implements AppEvent {
 class AppEventUpdateListImage implements AppEvent {
   final ListModel listModel;
   final BuildContext context;
+  final QuoteModel quote;
+
 
   const AppEventUpdateListImage({
     required this.context,
     required this.listModel,
+    required this.quote,
   }) : super();
 }

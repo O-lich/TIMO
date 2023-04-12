@@ -50,11 +50,13 @@ class LoadedListsAppState extends AppState {
   final List<ListModel> listsList;
   final List<FocusNode> focusNodeList;
   final List<TextEditingController> controllerList;
+  final QuoteModel quote;
 
   const LoadedListsAppState(
       {required this.listsList,
       required this.focusNodeList,
-      required this.controllerList});
+      required this.controllerList,
+      required this.quote});
 }
 
 @immutable

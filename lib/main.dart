@@ -100,6 +100,7 @@ class MyApp extends StatelessWidget {
                       listsList: appState.listsList,
                       focusNodeList: appState.focusNodeList,
                       controllerList: appState.controllerList,
+                      quote: appState.quote,
                     );
                   } else if (appState is AddNewTaskAppState) {
                     return NewTaskView(

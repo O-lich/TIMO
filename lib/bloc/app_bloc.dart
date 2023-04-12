@@ -48,6 +48,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
     on<AppEventGoToLists>((event, emit) async {
       final listsList = await getLists();
+      final QuoteModel quote = await updateQuote();
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());
       controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
@@ -56,9 +57,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
       emit(
         LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList,
-            controllerList: controllerList),
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+          controllerList: controllerList,
+          quote: event.quote ?? quote,
+        ),
       );
     });
     on<AppEventGoToNewTask>((event, emit) async {
@@ -81,14 +84,24 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final tasksList = await getTasks(
           listModel: listsList[selectedListIndex],
         );
-        final QuoteModel quote = await updateQuote();
-        emit(
-          LoadedAppState(
-              tasksList: tasksList,
-              quoteModel: quote,
-              listModel: event.listModel,
-              listsList: listsList),
-        );
+        if (event.quote == null) {
+          QuoteModel quote = await updateQuote();
+          emit(
+            LoadedAppState(
+                tasksList: tasksList,
+                quoteModel: quote,
+                listModel: event.listModel,
+                listsList: listsList),
+          );
+        } else {
+          emit(
+            LoadedAppState(
+                tasksList: tasksList,
+                quoteModel: event.quote!,
+                listModel: event.listModel,
+                listsList: listsList),
+          );
+        }
       } on Exception {
         emit(const ErrorAppState());
       }
@@ -282,9 +295,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
       emit(
         LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList,
-            controllerList: controllerList),
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+          controllerList: controllerList,
+          quote: event.quote,
+        ),
       );
     });
     on<AppEventUpdateListColor>((event, emit) async {
@@ -301,9 +316,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
       emit(
         LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList,
-            controllerList: controllerList),
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+          controllerList: controllerList,
+          quote: event.quote,
+        ),
       );
     });
     on<AppEventUpdateListText>((event, emit) async {
@@ -320,9 +337,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
       emit(
         LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList,
-            controllerList: controllerList),
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+          controllerList: controllerList,
+          quote: event.quote,
+        ),
       );
     });
     on<AppEventChangeList>((event, emit) async {
@@ -361,7 +380,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         LoadedListsAppState(
             listsList: listsList,
             focusNodeList: focusNodeList,
-            controllerList: controllerList),
+            controllerList: controllerList,
+            quote: event.quote),
       );
     });
 
@@ -612,9 +632,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         controllerList[i].text = listsList[i].list;
       }
       emit(LoadedListsAppState(
-          listsList: listsList,
-          focusNodeList: focusNodeList,
-          controllerList: controllerList));
+        listsList: listsList,
+        focusNodeList: focusNodeList,
+        controllerList: controllerList,
+        quote: event.quote,
+      ));
     });
     on<AppEventOpenReminderPanelFromTaskView>((event, emit) async {
       showMaterialModalBottomSheet(
@@ -754,9 +776,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         controllerList[i].text = listsList[i].list;
       }
       emit(LoadedListsAppState(
-          listsList: listsList,
-          focusNodeList: focusNodeList,
-          controllerList: controllerList));
+        listsList: listsList,
+        focusNodeList: focusNodeList,
+        controllerList: controllerList,
+        quote: event.quote,
+      ));
     });
 
     on<AppEventUndoDeleteTask>((event, emit) async {
@@ -799,9 +823,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         }
         emit(
           LoadedListsAppState(
-              listsList: listsList,
-              focusNodeList: focusNodeList,
-              controllerList: controllerList),
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList,
+            quote: event.quote,
+          ),
         );
       } else if (variable == 1) {
         deleteListImage(oldList: event.listModel);
@@ -814,9 +840,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         }
         emit(
           LoadedListsAppState(
-              listsList: listsList,
-              focusNodeList: focusNodeList,
-              controllerList: controllerList),
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList,
+            quote: event.quote,
+          ),
         );
       } else if (variable == 2) {
         final File? imageFile = await chooseFileToListImage();
@@ -837,9 +865,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           }
           emit(
             LoadedListsAppState(
-                listsList: listsList,
-                focusNodeList: focusNodeList,
-                controllerList: controllerList),
+              listsList: listsList,
+              focusNodeList: focusNodeList,
+              controllerList: controllerList,
+              quote: event.quote,
+            ),
           );
         } //else if (variable == 3) {
         //   final XFile? takenPhoto = await takePhotoToListImage();
