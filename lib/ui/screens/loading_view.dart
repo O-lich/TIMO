@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
-import 'package:todo_app_main_screen/ui/style.dart';
 
 class LoadingView extends StatefulWidget {
   final ListModel listModel;
@@ -57,7 +56,10 @@ class _LoadingViewState extends State<LoadingView>
                 width: widthScreen,
                 height: heightScreen * 0.58,
                 decoration: const BoxDecoration(
-                    borderRadius: commonBorderRadius,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(21),
+                      topLeft: Radius.circular(21),
+                    ),
                     color: Colors.white),
               ),
             ),

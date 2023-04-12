@@ -83,7 +83,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
               height: heightScreen,
               onPressed: () {
                 context.read<AppBloc>().add(
-                        AppEventGoToLists(quote: widget.quoteModel),
+                      const AppEventGoToLists(),
                     );
               },
               quoteModel: widget.quoteModel,

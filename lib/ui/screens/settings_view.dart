@@ -41,7 +41,7 @@ class _SettingsViewState extends State<SettingsView> {
                     tapPadding: const EdgeInsets.all(100.0),
                     onTap: () {
                       context.read<AppBloc>().add(
-                        AppEventGoToLists(),
+                        const AppEventGoToLists(),
                       );
                     },
                     child: Image.asset(

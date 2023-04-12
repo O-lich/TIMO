@@ -28,7 +28,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           const AppStateSplashScreen(),
         );
         try {
-          final QuoteModel quote = await updateQuote();
+          quote = await updateQuote();
           await getUsers();
           final listsList = await getLists();
           final tasksList = await getTasks(
@@ -48,7 +48,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
     on<AppEventGoToLists>((event, emit) async {
       final listsList = await getLists();
-      final QuoteModel quote = await updateQuote();
       focusNodeList = List.generate(listsList.length, (index) => FocusNode());
       controllerList =
           List.generate(listsList.length, (index) => TextEditingController());
@@ -57,11 +56,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
       emit(
         LoadedListsAppState(
-          listsList: listsList,
-          focusNodeList: focusNodeList,
-          controllerList: controllerList,
-          quote: event.quote ?? quote,
-        ),
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList),
       );
     });
     on<AppEventGoToNewTask>((event, emit) async {
@@ -84,24 +81,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final tasksList = await getTasks(
           listModel: listsList[selectedListIndex],
         );
-        if (event.quote == null) {
-          QuoteModel quote = await updateQuote();
-          emit(
-            LoadedAppState(
-                tasksList: tasksList,
-                quoteModel: quote,
-                listModel: event.listModel,
-                listsList: listsList),
-          );
-        } else {
-          emit(
-            LoadedAppState(
-                tasksList: tasksList,
-                quoteModel: event.quote!,
-                listModel: event.listModel,
-                listsList: listsList),
-          );
-        }
+        emit(
+          LoadedAppState(
+              tasksList: tasksList,
+              quoteModel: quote,
+              listModel: event.listModel,
+              listsList: listsList),
+        );
       } on Exception {
         emit(const ErrorAppState());
       }
@@ -120,7 +106,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final tasksList = await getTasks(
           listModel: event.listModel,
         );
-        final QuoteModel quote = await updateQuote();
         emit(
           LoadedAppState(
               tasksList: tasksList,
@@ -214,7 +199,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventShowUndoButtonAndDelete>((event, emit) async {
       try {
-        final QuoteModel quote = await updateQuote();
         await deleteTask(oldTask: event.taskModel);
         final listsList = await getLists();
         final tasksListBefore = await getTasks(
@@ -245,7 +229,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     on<AppEventDeleteTask>((event, emit) async {
       try {
-        final QuoteModel quote = await updateQuote();
         await deleteTask(oldTask: event.taskModel);
         final listsList = await getLists();
         final tasksList = await getTasks(
@@ -272,7 +255,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final tasksList = await getTasks(
           listModel: listsList[selectedListIndex],
         );
-        final QuoteModel quote = await updateQuote();
         emit(
           LoadedAppState(
               tasksList: tasksList,
@@ -295,11 +277,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
       emit(
         LoadedListsAppState(
-          listsList: listsList,
-          focusNodeList: focusNodeList,
-          controllerList: controllerList,
-          quote: event.quote,
-        ),
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList),
       );
     });
     on<AppEventUpdateListColor>((event, emit) async {
@@ -316,11 +296,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
       emit(
         LoadedListsAppState(
-          listsList: listsList,
-          focusNodeList: focusNodeList,
-          controllerList: controllerList,
-          quote: event.quote,
-        ),
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList),
       );
     });
     on<AppEventUpdateListText>((event, emit) async {
@@ -337,11 +315,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
       emit(
         LoadedListsAppState(
-          listsList: listsList,
-          focusNodeList: focusNodeList,
-          controllerList: controllerList,
-          quote: event.quote,
-        ),
+            listsList: listsList,
+            focusNodeList: focusNodeList,
+            controllerList: controllerList),
       );
     });
     on<AppEventChangeList>((event, emit) async {
@@ -355,7 +331,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final tasksList = await getTasks(
           listModel: event.listModel,
         );
-        final QuoteModel quote = await updateQuote();
         emit(
           LoadedAppState(
               tasksList: tasksList,
@@ -380,8 +355,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         LoadedListsAppState(
             listsList: listsList,
             focusNodeList: focusNodeList,
-            controllerList: controllerList,
-            quote: event.quote),
+            controllerList: controllerList),
       );
     });
 
@@ -392,7 +366,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final tasksList = await getTasks(
           listModel: listsList[selectedListIndex],
         );
-        final QuoteModel quote = await updateQuote();
         emit(
           LoadedAppState(
               tasksList: tasksList,
@@ -490,7 +463,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final tasksList = await getTasks(
           listModel: event.listModel,
         );
-        final QuoteModel quote = await updateQuote();
         emit(
           LoadedAppState(
               tasksList: tasksList,
@@ -516,7 +488,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         );
 
         final tasksList = await getTasks(listModel: event.listModel);
-        final QuoteModel quote = await updateQuote();
         emit(
           LoadedAppState(
               listModel: event.listModel,
@@ -590,7 +561,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           },
         );
         final tasksList = await getTasks(listModel: event.listModel);
-        final QuoteModel quote = await updateQuote();
         final listsList = await getLists();
         emit(
           LoadedAppState(
@@ -632,11 +602,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         controllerList[i].text = listsList[i].list;
       }
       emit(LoadedListsAppState(
-        listsList: listsList,
-        focusNodeList: focusNodeList,
-        controllerList: controllerList,
-        quote: event.quote,
-      ));
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+          controllerList: controllerList));
     });
     on<AppEventOpenReminderPanelFromTaskView>((event, emit) async {
       showMaterialModalBottomSheet(
@@ -776,11 +744,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         controllerList[i].text = listsList[i].list;
       }
       emit(LoadedListsAppState(
-        listsList: listsList,
-        focusNodeList: focusNodeList,
-        controllerList: controllerList,
-        quote: event.quote,
-      ));
+          listsList: listsList,
+          focusNodeList: focusNodeList,
+          controllerList: controllerList));
     });
 
     on<AppEventUndoDeleteTask>((event, emit) async {
@@ -797,7 +763,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         final tasksList = await getTasks(
           listModel: event.listModel,
         );
-        final QuoteModel quote = await updateQuote();
         emit(
           LoadedAppState(
               tasksList: tasksList,
@@ -823,11 +788,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         }
         emit(
           LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList,
-            controllerList: controllerList,
-            quote: event.quote,
-          ),
+              listsList: listsList,
+              focusNodeList: focusNodeList,
+              controllerList: controllerList),
         );
       } else if (variable == 1) {
         deleteListImage(oldList: event.listModel);
@@ -840,11 +803,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         }
         emit(
           LoadedListsAppState(
-            listsList: listsList,
-            focusNodeList: focusNodeList,
-            controllerList: controllerList,
-            quote: event.quote,
-          ),
+              listsList: listsList,
+              focusNodeList: focusNodeList,
+              controllerList: controllerList),
         );
       } else if (variable == 2) {
         final File? imageFile = await chooseFileToListImage();
@@ -865,11 +826,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           }
           emit(
             LoadedListsAppState(
-              listsList: listsList,
-              focusNodeList: focusNodeList,
-              controllerList: controllerList,
-              quote: event.quote,
-            ),
+                listsList: listsList,
+                focusNodeList: focusNodeList,
+                controllerList: controllerList),
           );
         } //else if (variable == 3) {
         //   final XFile? takenPhoto = await takePhotoToListImage();
