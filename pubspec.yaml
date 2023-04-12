@@ -56,6 +56,7 @@ dependencies:
   flutter_bloc: ^8.1.2
   bloc: ^8.1.1
   image_picker: ^0.8.7+1
+  cached_network_image: ^3.2.1
   #camera: ^0.10.3+2
 
 

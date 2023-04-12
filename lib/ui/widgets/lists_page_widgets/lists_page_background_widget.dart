@@ -110,6 +110,7 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                       children: [
                         ...widget.lists.asMap().entries.map(
                               (list) => SingleListWidget(
+                                imageFile: widget.imageFile,
                                 onListTap: () {
                                   widget.onListTap(list.key);
                                 },
