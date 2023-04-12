@@ -37,17 +37,28 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   bool isMoveTo = false; //manage add floating action button visibility
   final scrollController = ScrollController();
   final listController = TextEditingController();
   final dragController = DraggableScrollableController();
   bool isPanelDraggable = true;
   bool fabVisibility = true;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -139,7 +150,7 @@ class _HomeViewState extends State<HomeView> {
             ),
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        //floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -148,20 +159,28 @@ class _HomeViewState extends State<HomeView> {
                     alignment: Alignment.bottomLeft,
                     child: Padding(
                       padding: EdgeInsets.only(left: heightScreen * 0.036),
-                      child: FloatingActionButton(
-                        backgroundColor: textColor,
-                        onPressed: () {
-                          context.read<AppBloc>().add(
-                                AppEventUndoDeleteTask(
-                                    listModel: widget.listModel,
-                                    listsList: widget.listsList,
-                                    taskModel: widget.deletedTask!,
-                                    taskModels: widget.tasksList),
-                              );
-                        },
-                        heroTag: "fab1",
-                        child: Image.asset(
-                          AppIcons.undo,
+                      child: ScaleTransition(
+                        scale: Tween<double>(begin: 1, end: 0.0).animate(_controller),
+                        child: FloatingActionButton(
+                          backgroundColor: textColor,
+                          onPressed: () {
+                            _controller.forward().whenComplete(() {
+                              setState(() {
+                                _controller.reset();
+                              });
+                            });
+                            context.read<AppBloc>().add(
+                                  AppEventUndoDeleteTask(
+                                      listModel: widget.listModel,
+                                      listsList: widget.listsList,
+                                      taskModel: widget.deletedTask!,
+                                      taskModels: widget.tasksList),
+                                );
+                          },
+                          heroTag: "fab1",
+                          child: Image.asset(
+                            AppIcons.undo,
+                          ),
                         ),
                       ),
                     ),
