@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
@@ -19,6 +20,7 @@ class SingleListWidget extends StatefulWidget {
   final FocusNode focusNode;
   ListModel listModel;
   final TextEditingController controller;
+  final File? imageFile;
 
   SingleListWidget({
     Key? key,
@@ -32,6 +34,7 @@ class SingleListWidget extends StatefulWidget {
     required this.focusNode,
     required this.controller,
     required this.onListRenameSubmitted,
+    required this.imageFile,
   }) : super(key: key);
 
   @override
@@ -59,13 +62,15 @@ class _SingleListWidgetState extends State<SingleListWidget> {
         child: Column(
           children: [
             Container(
+              width: widget.height * 0.15,
               height: widget.height * 0.20,
               decoration: BoxDecoration(
                 color: buttonColors[widget.listModel.listColorIndex],
                 borderRadius: BorderRadius.circular(26),
                 image: widget.listModel.listImageUrl != ''
                     ? DecorationImage(
-                        image: NetworkImage(widget.listModel.listImageUrl),
+                        image: CachedNetworkImageProvider(
+                            widget.listModel.listImageUrl),
                         fit: BoxFit.cover)
                     : null,
               ),

@@ -11,6 +11,7 @@ class ListsView extends StatefulWidget {
   final List<ListModel> listsList;
   final List<FocusNode> focusNodeList;
   final List<TextEditingController> controllerList;
+  final File? imageFile;
 
   static const routeName = '/lists_page';
 
@@ -18,7 +19,7 @@ class ListsView extends StatefulWidget {
     Key? key,
     required this.listsList,
     required this.focusNodeList,
-    required this.controllerList,
+    required this.controllerList, this.imageFile,
   }) : super(key: key);
 
   @override
@@ -26,7 +27,7 @@ class ListsView extends StatefulWidget {
 }
 
 class _ListsViewState extends State<ListsView> {
-  File? _imageFile;
+
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _ListsViewState extends State<ListsView> {
     double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       body: ListsPageBackgroundWidget(
-        imageFile: _imageFile,
+        imageFile: widget.imageFile,
         height: heightScreen,
         width: widthScreen,
         lists: widget.listsList,

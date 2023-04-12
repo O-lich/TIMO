@@ -24,7 +24,7 @@ class _LoadingViewState extends State<LoadingView>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+        vsync: this, duration: const Duration(milliseconds: 100));
     _animationController.forward();
   }
 
