@@ -193,9 +193,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventChangeLocale>((event, emit) async {
       final int locale =
           changeLocale(context: event.context, index: event.index);
+
       emit(
         LanguageAppState(locale: locale),
       );
+      quote = await updateQuote();
     });
     on<AppEventShowUndoButtonAndDelete>((event, emit) async {
       try {
@@ -779,7 +781,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final int variable = await updateOrDeleteImageDialog(
           context: event.context, listModel: event.listModel);
       if (variable == 0) {
-
         emit(
           LoadedListsAppState(
               listsList: event.listsList,
@@ -809,9 +810,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
           emit(
             LoadedListsAppState(
-                listsList: listsList,
-                focusNodeList: event.focusNodeList,
-                controllerList: event.controllerList),
+              listsList: listsList,
+              focusNodeList: event.focusNodeList,
+              controllerList: event.controllerList,
+            ),
           );
         } //else if (variable == 3) {
         //   final XFile? takenPhoto = await takePhotoToListImage();
