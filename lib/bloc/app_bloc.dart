@@ -807,7 +807,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           await updateListImage(
               listModel: event.listModel, imageFile: imageFile);
           final listsList = await getLists();
-
           emit(
             LoadedListsAppState(
               listsList: listsList,
