@@ -779,33 +779,22 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final int variable = await updateOrDeleteImageDialog(
           context: event.context, listModel: event.listModel);
       if (variable == 0) {
-        final listsList = await getLists();
-        focusNodeList = List.generate(listsList.length, (index) => FocusNode());
-        controllerList =
-            List.generate(listsList.length, (index) => TextEditingController());
-        for (int i = 0; i < listsList.length; i++) {
-          controllerList[i].text = listsList[i].list;
-        }
+
         emit(
           LoadedListsAppState(
-              listsList: listsList,
-              focusNodeList: focusNodeList,
-              controllerList: controllerList),
+              listsList: event.listsList,
+              focusNodeList: event.focusNodeList,
+              controllerList: event.controllerList),
         );
       } else if (variable == 1) {
         deleteListImage(oldList: event.listModel);
         final listsList = await getLists();
-        focusNodeList = List.generate(listsList.length, (index) => FocusNode());
-        controllerList =
-            List.generate(listsList.length, (index) => TextEditingController());
-        for (int i = 0; i < listsList.length; i++) {
-          controllerList[i].text = listsList[i].list;
-        }
+
         emit(
           LoadedListsAppState(
               listsList: listsList,
-              focusNodeList: focusNodeList,
-              controllerList: controllerList),
+              focusNodeList: event.focusNodeList,
+              controllerList: event.controllerList),
         );
       } else if (variable == 2) {
         final File? imageFile = await chooseFileToListImage();
@@ -817,18 +806,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           await updateListImage(
               listModel: event.listModel, imageFile: imageFile);
           final listsList = await getLists();
-          focusNodeList =
-              List.generate(listsList.length, (index) => FocusNode());
-          controllerList = List.generate(
-              listsList.length, (index) => TextEditingController());
-          for (int i = 0; i < listsList.length; i++) {
-            controllerList[i].text = listsList[i].list;
-          }
+
           emit(
             LoadedListsAppState(
                 listsList: listsList,
-                focusNodeList: focusNodeList,
-                controllerList: controllerList),
+                focusNodeList: event.focusNodeList,
+                controllerList: event.controllerList),
           );
         } //else if (variable == 3) {
         //   final XFile? takenPhoto = await takePhotoToListImage();

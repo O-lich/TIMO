@@ -19,7 +19,8 @@ class ListsView extends StatefulWidget {
     Key? key,
     required this.listsList,
     required this.focusNodeList,
-    required this.controllerList, this.imageFile,
+    required this.controllerList,
+    this.imageFile,
   }) : super(key: key);
 
   @override
@@ -27,8 +28,6 @@ class ListsView extends StatefulWidget {
 }
 
 class _ListsViewState extends State<ListsView> {
-
-
   @override
   void initState() {
     super.initState();
@@ -54,7 +53,7 @@ class _ListsViewState extends State<ListsView> {
         },
         onSettingsButtonTap: () {
           context.read<AppBloc>().add(
-                 const AppEventGoToSettings(),
+                const AppEventGoToSettings(),
               );
         },
         onListTap: (int selectedIndex) {
@@ -72,13 +71,12 @@ class _ListsViewState extends State<ListsView> {
               widthScreen: widthScreen,
               onBlackButtonPressed: (TextEditingController controller) {
                 context.read<AppBloc>().add(
-                  AppEventAddNewListFromListScreen(
-                    listController: controller,
-                  ),
-                );
+                      AppEventAddNewListFromListScreen(
+                        listController: controller,
+                      ),
+                    );
                 Navigator.pop(context);
-              }
-          ));
+              }));
         },
         onListRenameSubmitted: (String text, int selectedIndex) {
           context.read<AppBloc>().add(
@@ -90,46 +88,48 @@ class _ListsViewState extends State<ListsView> {
         },
         onOptionsTap: (int selectedIndex, BuildContext context) {
           context.read<AppBloc>().add(
-            AppEventOptionsPanelOpen(
-              listsList: widget.listsList,
-              context: context,
-              selectedIndex: selectedIndex,
-              heightScreen: heightScreen,
-              widthScreen: widthScreen,
-              onRenameTap: () {
-                FocusScope.of(context)
-                    .requestFocus(widget.focusNodeList[selectedIndex]);
-                Navigator.pop(context);
-              },
-              onDeleteTap: () {
-                Navigator.pop(context);
-                context.read<AppBloc>().add(
-                  AppEventDeleteList(
-                    listModel: widget.listsList[selectedIndex],
-                  ),
-                );
-              },
-              changeListColor: (int index) {
-                context.read<AppBloc>().add(
-                  AppEventUpdateListColor(
-                    listModel: widget.listsList[selectedIndex],
-                    listColorIndex: index,
-                  ),
-                );
-              },
-              onThumbnailTap: () {
-                context.read<AppBloc>().add(
-                  AppEventUpdateListImage(
-                    listModel: widget.listsList[selectedIndex],
-                    context: context,
-                  ),
-                );
-            },
-            ),
-          );
+                AppEventOptionsPanelOpen(
+                  listsList: widget.listsList,
+                  context: context,
+                  selectedIndex: selectedIndex,
+                  heightScreen: heightScreen,
+                  widthScreen: widthScreen,
+                  onRenameTap: () {
+                    FocusScope.of(context)
+                        .requestFocus(widget.focusNodeList[selectedIndex]);
+                    Navigator.pop(context);
+                  },
+                  onDeleteTap: () {
+                    Navigator.pop(context);
+                    context.read<AppBloc>().add(
+                          AppEventDeleteList(
+                            listModel: widget.listsList[selectedIndex],
+                          ),
+                        );
+                  },
+                  changeListColor: (int index) {
+                    context.read<AppBloc>().add(
+                          AppEventUpdateListColor(
+                            listModel: widget.listsList[selectedIndex],
+                            listColorIndex: index,
+                          ),
+                        );
+                  },
+                  onThumbnailTap: () {
+                    context.read<AppBloc>().add(
+                          AppEventUpdateListImage(
+                            listModel: widget.listsList[selectedIndex],
+                            context: context,
+                            listsList: widget.listsList,
+                            focusNodeList: widget.focusNodeList,
+                            controllerList: widget.controllerList,
+                          ),
+                        );
+                  },
+                ),
+              );
         },
       ),
     );
   }
-
 }

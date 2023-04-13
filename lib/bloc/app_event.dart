@@ -374,7 +374,8 @@ class AppEventListPanelOpenFromMainView implements AppEvent {
   final void Function() onAddNewList;
   final void Function() onMoveToButtonPressed;
 
-  const AppEventListPanelOpenFromMainView( {required this.listsList,
+  const AppEventListPanelOpenFromMainView({
+    required this.listsList,
     required this.onMoveToButtonPressed,
     required this.context,
     required this.listModel,
@@ -538,8 +539,14 @@ class AppEventOptionsPanelOpen implements AppEvent {
 class AppEventUpdateListImage implements AppEvent {
   final ListModel listModel;
   final BuildContext context;
+  final List<ListModel> listsList;
+  final List<FocusNode> focusNodeList;
+  final List<TextEditingController> controllerList;
 
   const AppEventUpdateListImage({
+    required this.listsList,
+    required this.focusNodeList,
+    required this.controllerList,
     required this.context,
     required this.listModel,
   }) : super();
