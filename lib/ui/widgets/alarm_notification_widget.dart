@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:todo_app_main_screen/consts/app_icons.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
 
-class AlarmNotifWidget extends StatelessWidget {
+class AlarmNotifWidget extends StatefulWidget {
   final String content;
-  final double? height;
-  final double? width;
 
   const AlarmNotifWidget({
     Key? key,
     required this.content,
-    this.height,
-    this.width,
   }) : super(key: key);
 
   @override
+  State<AlarmNotifWidget> createState() => _AlarmNotifWidgetState();
+}
+
+class _AlarmNotifWidgetState extends State<AlarmNotifWidget> {
+  @override
+  void initState() {
+    super.initState();
+
+  }
+  @override
   Widget build(BuildContext context) {
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Container(
-      height: height! * 0.07,
+      height: heightScreen * 0.07,
+      width: widthScreen * 0.9,
       decoration: BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.circular(14),
@@ -29,7 +39,7 @@ class AlarmNotifWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                content,
+                widget.content,
                 style: const TextStyle(
                   color: paleTextColor,
                   fontSize: 17,

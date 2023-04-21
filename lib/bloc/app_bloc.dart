@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todo_app_main_screen/helpers/functions.dart';
 import 'package:todo_app_main_screen/main.dart';
@@ -722,6 +723,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             dateTimeReminder: taskModel.dateTimeReminder,
             isReminderActive: taskModel.isReminderActive),
       );
+    });
+
+    on<AppEventNotification>((event, emit) async {
+      final localNotifications = FlutterLocalNotificationsPlugin();
+      //final firebaseMessaging = FirebaseMessaging();
+      const androidInitialize = AndroidInitializationSettings('ic_launcher');
+      const iOSInitialize = DarwinInitializationSettings(
+        requestSoundPermission: true,
+        requestBadgePermission: true,
+        requestAlertPermission: true,
+      );
+      const initializationSettings = InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+      localNotifications.initialize(initializationSettings);
+      showNotification(localNotifications);
     });
 
     on<AppEventOptionsPanelOpen>((event, emit) async {

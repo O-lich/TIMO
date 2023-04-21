@@ -374,7 +374,7 @@ class AppEventListPanelOpenFromMainView implements AppEvent {
   final void Function() onAddNewList;
   final void Function() onMoveToButtonPressed;
 
-  const AppEventListPanelOpenFromMainView( {required this.listsList,
+  const AppEventListPanelOpenFromMainView({required this.listsList,
     required this.onMoveToButtonPressed,
     required this.context,
     required this.listModel,
@@ -543,4 +543,15 @@ class AppEventUpdateListImage implements AppEvent {
     required this.context,
     required this.listModel,
   }) : super();
+}
+
+@immutable
+class AppEventNotification implements AppEvent {
+  const AppEventNotification();
+
+}
+@immutable
+class NotificationErrorEvent implements AppEvent {
+  final String error;
+  const NotificationErrorEvent(this.error);
 }

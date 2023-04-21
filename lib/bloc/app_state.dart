@@ -113,5 +113,11 @@ class OpenListPanelAppState extends AppState {
 
 @immutable
 class AppTestAppState extends AppState {
-  const AppTestAppState();
+ final FlutterLocalNotificationsPlugin localNotifications;
+  const AppTestAppState({required this.localNotifications});
+}
+@immutable
+class AppNotificationAppState extends AppState {
+  final FlutterLocalNotificationsPlugin localNotifications;
+  const AppNotificationAppState({required this.localNotifications});
 }

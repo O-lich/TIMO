@@ -160,7 +160,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                     child: Padding(
                       padding: EdgeInsets.only(left: heightScreen * 0.036),
                       child: ScaleTransition(
-                        scale: Tween<double>(begin: 1, end: 0.0).animate(_controller),
+                        scale: Tween<double>(begin: 1, end: 0.0)
+                            .animate(_controller),
                         child: FloatingActionButton(
                           backgroundColor: textColor,
                           onPressed: () {
@@ -205,6 +206,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
+            FloatingActionButton(
+                onPressed: () =>
+                    context.read<AppBloc>().add(const AppEventNotification())),
           ],
         ),
         // floatingActionButton: isMoveTo

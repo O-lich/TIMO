@@ -18,9 +18,11 @@ import 'package:todo_app_main_screen/ui/screens/premium_view.dart';
 import 'package:todo_app_main_screen/ui/screens/settings_view.dart';
 import 'package:todo_app_main_screen/ui/screens/splash_view.dart';
 import 'package:todo_app_main_screen/ui/screens/task_view.dart';
+import 'package:todo_app_main_screen/ui/widgets/alarm_notification_widget.dart';
 import 'bloc/app_bloc.dart';
 import 'firebase_options.dart';
 import 'generated/l10n.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 int taskCurrentColorIndex = -1;
@@ -36,6 +38,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   currentUser = await UserModel.getUserModel();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
   runApp(const MyApp());
 }
 
@@ -130,6 +136,10 @@ class MyApp extends StatelessWidget {
                     return const ErrorView();
                   } else if (appState is PremiumAppState) {
                     return const PremiumView();
+                  } else if (appState is AppNotificationAppState) {
+                    return AlarmNotifWidget(
+                      content: 'alarm',
+                    );
                   } else {
                     return Container();
                   }

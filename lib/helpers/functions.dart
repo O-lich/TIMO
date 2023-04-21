@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app_main_screen/generated/l10n.dart';
@@ -788,4 +789,16 @@ Future<void> deleteListImage({
       .child(currentUser.userID)
       .child('${oldList.listID}.jpg')
       .delete();
+}
+
+Future showNotification(FlutterLocalNotificationsPlugin localNotifications) async {
+  const androidDetails =  AndroidNotificationDetails(
+    "ID",
+    "Название уведомления",
+    importance: Importance.high,
+  );
+  const iosDetails = DarwinNotificationDetails();
+  const generalNotificationDetails = NotificationDetails(android: androidDetails, iOS: iosDetails);
+  await localNotifications.show(0, "Название", "Тело уведомления", generalNotificationDetails);
+
 }
