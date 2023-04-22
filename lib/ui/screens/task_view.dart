@@ -1,5 +1,3 @@
-//import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
@@ -35,10 +33,14 @@ class TaskView extends StatefulWidget {
 class _TaskViewState extends State<TaskView> {
   final listController = TextEditingController();
   final textController = TextEditingController();
+  late final void Function() onCountdownDone;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    onCountdownDone = () => context
+        .read<AppBloc>()
+        .add(AppEventNotification(title: S.of(context).reminder, subtitle: widget.taskModel.task));
+    super.didChangeDependencies();
   }
 
   @override
@@ -66,6 +68,9 @@ class _TaskViewState extends State<TaskView> {
                               taskModel: widget.taskModel,
                               dateTime: dateTime,
                               context: context,
+                              onCountdownDone: () {
+                                onCountdownDone();
+                              },
                             ),
                           );
                     },

@@ -1,8 +1,6 @@
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
-import 'package:todo_app_main_screen/consts/strings.dart';
-import 'package:todo_app_main_screen/generated/l10n.dart';
 
 class NavBarWidget extends StatelessWidget {
   final double height;
@@ -10,6 +8,7 @@ class NavBarWidget extends StatelessWidget {
   final void Function() onPressed;
   final Color titleColor;
   final Color buttonColor;
+  final String buttonTitle;
 
   const NavBarWidget({
     Key? key,
@@ -18,6 +17,7 @@ class NavBarWidget extends StatelessWidget {
     required this.width,
     required this.titleColor,
     required this.buttonColor,
+    required this.buttonTitle,
   }) : super(key: key);
 
   @override
@@ -49,7 +49,7 @@ class NavBarWidget extends StatelessWidget {
                 horizontal: 0.033 * width,
               ),
               child: Text(
-                S.of(context).lists,
+                buttonTitle,
                 style: TextStyle(color: titleColor, fontSize: 14),
               ),
             ),

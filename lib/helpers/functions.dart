@@ -791,7 +791,7 @@ Future<void> deleteListImage({
       .delete();
 }
 
-Future showNotification(FlutterLocalNotificationsPlugin localNotifications) async {
+Future showNotification(FlutterLocalNotificationsPlugin localNotifications, String title, String subtitle) async {
   const androidDetails =  AndroidNotificationDetails(
     "ID",
     "Название уведомления",
@@ -799,6 +799,5 @@ Future showNotification(FlutterLocalNotificationsPlugin localNotifications) asyn
   );
   const iosDetails = DarwinNotificationDetails();
   const generalNotificationDetails = NotificationDetails(android: androidDetails, iOS: iosDetails);
-  await localNotifications.show(0, "Название", "Тело уведомления", generalNotificationDetails);
-
+  await localNotifications.show(0, title, subtitle, generalNotificationDetails);
 }

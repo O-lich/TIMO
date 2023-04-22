@@ -287,11 +287,13 @@ class AppEventSetReminderFromTaskPage implements AppEvent {
   final TaskModel taskModel;
   final DateTime? dateTime;
   final BuildContext context;
+  final void Function() onCountdownDone;
 
-  const AppEventSetReminderFromTaskPage({
+  AppEventSetReminderFromTaskPage({
     required this.taskModel,
     required this.dateTime,
     required this.context,
+    required this.onCountdownDone,
   }) : super();
 }
 
@@ -547,7 +549,9 @@ class AppEventUpdateListImage implements AppEvent {
 
 @immutable
 class AppEventNotification implements AppEvent {
-  const AppEventNotification();
+  final String title;
+  final String subtitle;
+  const AppEventNotification({required this.title, required this.subtitle});
 
 }
 @immutable

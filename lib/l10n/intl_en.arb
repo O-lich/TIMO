@@ -223,5 +223,9 @@
   "save": "Save",
   "@save": {
     "description": "Save button"
+  },
+  "back": "back",
+  "@back": {
+    "description": "Back button"
   }
 }

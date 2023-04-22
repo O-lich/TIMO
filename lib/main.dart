@@ -43,6 +43,7 @@ void main() async {
   flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
       AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -137,7 +138,7 @@ class MyApp extends StatelessWidget {
                   } else if (appState is PremiumAppState) {
                     return const PremiumView();
                   } else if (appState is AppNotificationAppState) {
-                    return AlarmNotifWidget(
+                    return const AlarmNotifWidget(
                       content: 'alarm',
                     );
                   } else {

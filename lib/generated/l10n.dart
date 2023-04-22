@@ -579,6 +579,16 @@ class S {
       args: [],
     );
   }
+
+  /// `back`
+  String get back {
+    return Intl.message(
+      'back',
+      name: 'back',
+      desc: 'Back button',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

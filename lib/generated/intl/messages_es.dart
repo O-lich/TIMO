@@ -35,6 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "allFeatures": MessageLookupByLibrary.simpleMessage(
             "Todas las funciones sin límites"),
         "and": MessageLookupByLibrary.simpleMessage(" y "),
+        "back": MessageLookupByLibrary.simpleMessage("regresar"),
         "bySubscribing": MessageLookupByLibrary.simpleMessage(
             "Al suscribirte aceptas nuestra"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),

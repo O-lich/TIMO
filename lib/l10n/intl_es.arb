@@ -52,5 +52,6 @@
   "linkAboutUs": "https://timodo.app",
   "linkTermsOfUsing": "https://timodo.app/terms-esp",
   "linkPrivacyPolicy": "https://timodo.app/policy-esp",
-  "save": "Guardar"
+  "save": "Guardar",
+  "back": "regresar"
 }

@@ -206,9 +206,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-            FloatingActionButton(
-                onPressed: () =>
-                    context.read<AppBloc>().add(const AppEventNotification())),
           ],
         ),
         // floatingActionButton: isMoveTo

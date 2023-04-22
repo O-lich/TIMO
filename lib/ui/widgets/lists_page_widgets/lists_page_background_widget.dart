@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_main_screen/consts/colors.dart';
+import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/ui/widgets/lists_page_widgets/single_list_widget.dart';
@@ -79,6 +80,7 @@ class _ListsPageBackgroundWidgetState extends State<ListsPageBackgroundWidget> {
                   width: widget.width,
                   titleColor: backgroundColor,
                   buttonColor: darkColor,
+                  buttonTitle: S.of(context).back,
                 ),
               ],
             ),
