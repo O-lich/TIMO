@@ -92,6 +92,9 @@ class _TaskViewState extends State<TaskView> {
           context.read<AppBloc>().add(
                 AppEventGoToMainView(listModel: widget.listModel),
               );
+          setState(() {
+            taskCurrentColorIndex = -1;
+          });
         },
         onClosePanelTap: () {
           context.read<AppBloc>().add(
