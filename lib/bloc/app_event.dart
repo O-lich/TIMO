@@ -287,11 +287,13 @@ class AppEventSetReminderFromTaskPage implements AppEvent {
   final TaskModel taskModel;
   final DateTime? dateTime;
   final BuildContext context;
+  final void Function() onCountdownDone;
 
   const AppEventSetReminderFromTaskPage({
     required this.taskModel,
     required this.dateTime,
     required this.context,
+    required this.onCountdownDone
   }) : super();
 }
 
