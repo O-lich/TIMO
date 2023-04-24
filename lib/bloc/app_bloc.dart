@@ -395,10 +395,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             isClosePanelTapped: currentUser.isClosePanelTapped,
             listModel: listsList[selectedListIndex]),
       );
-      int? endTime = event.dateTime?.millisecondsSinceEpoch;
-      int finalTime = endTime! - DateTime.now().millisecondsSinceEpoch;
-      Future.delayed(Duration(milliseconds: finalTime), () {
-      }).then((value) => event.onCountdownDone());
     });
 
     on<AppEventSetReminderFromNewTaskPage>((event, emit) async {
@@ -733,16 +729,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventNotification>((event, emit) async {
       final localNotifications = FlutterLocalNotificationsPlugin();
-      //final firebaseMessaging = FirebaseMessaging();
       const androidInitialize = AndroidInitializationSettings('ic_launcher');
       const iOSInitialize = DarwinInitializationSettings(
         requestSoundPermission: true,
         requestBadgePermission: true,
         requestAlertPermission: true,
       );
-      const initializationSettings = InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+      const initializationSettings = InitializationSettings(
+          android: androidInitialize, iOS: iOSInitialize);
       localNotifications.initialize(initializationSettings);
-      showNotification(localNotifications, event.title, event.subtitle);
+
+      int? endTime = event.dateTime?.millisecondsSinceEpoch;
+      int finalTime = endTime! - DateTime.now().millisecondsSinceEpoch;
+      Future.delayed(Duration(milliseconds: finalTime), () {}).then((value) =>
+          showNotification(localNotifications, event.title, event.subtitle));
     });
 
     on<AppEventOptionsPanelOpen>((event, emit) async {
