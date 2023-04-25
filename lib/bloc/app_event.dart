@@ -557,13 +557,22 @@ class AppEventNotification implements AppEvent {
   final String title;
   final String subtitle;
   final DateTime? dateTime;
-  final TaskModel taskModel;
+  final int notificationID;
 
   const AppEventNotification({
     required this.title,
     required this.subtitle,
     required this.dateTime,
-    required this.taskModel
+    required this.notificationID,
+  });
+}
+
+@immutable
+class AppEventCancelNotification implements AppEvent {
+  final int notificationID;
+
+  const AppEventCancelNotification({
+    required this.notificationID,
   });
 }
 

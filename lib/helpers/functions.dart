@@ -519,9 +519,7 @@ Future<void> updateTask({
 
     final updates = <String, dynamic>{
       'task': textController.text,
-      'colorIndex': (taskCurrentColorIndex == -1)
-          ? -1
-          : taskCurrentColorIndex,
+      'colorIndex': (taskCurrentColorIndex == -1) ? -1 : taskCurrentColorIndex,
     };
     docRef.update(updates);
   } else {
@@ -791,13 +789,27 @@ Future<void> deleteListImage({
       .delete();
 }
 
-Future showNotification(FlutterLocalNotificationsPlugin localNotifications, String title, String subtitle) async {
-  const androidDetails =  AndroidNotificationDetails(
+Future showNotification({
+  required FlutterLocalNotificationsPlugin localNotifications,
+  required int notificationID,
+  required String title,
+  required String subtitle,
+}) async {
+  const androidDetails = AndroidNotificationDetails(
     "ID",
     "Название уведомления",
     importance: Importance.high,
   );
   const iosDetails = DarwinNotificationDetails();
-  const generalNotificationDetails = NotificationDetails(android: androidDetails, iOS: iosDetails);
-  await localNotifications.show(0, title, subtitle, generalNotificationDetails);
+  const generalNotificationDetails =
+      NotificationDetails(android: androidDetails, iOS: iosDetails);
+  await localNotifications.show(
+      notificationID, title, subtitle, generalNotificationDetails);
+}
+
+Future cancelNotification({
+  required FlutterLocalNotificationsPlugin localNotifications,
+  required int notificationID,
+}) async {
+  await localNotifications.cancel(notificationID);
 }

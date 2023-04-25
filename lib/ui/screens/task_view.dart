@@ -33,6 +33,13 @@ class TaskView extends StatefulWidget {
 class _TaskViewState extends State<TaskView> {
   final listController = TextEditingController();
   final textController = TextEditingController();
+  late final void Function() onCountdownDone;
+
+  // @override
+  // void didChangeDependencies() {
+  //   onCountdownDone = () =>
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +68,29 @@ class _TaskViewState extends State<TaskView> {
                               context: context,
                             ),
                           );
-                        context.read<AppBloc>().add(AppEventNotification(
-                          taskModel: widget.taskModel,
-                            title: S.of(context).reminder,
-                            subtitle: widget.taskModel.task,
-                            dateTime: dateTime));
+                      if (dateTime != null && dateTime.isAfter(DateTime.now())) {
+                        context.read<AppBloc>().add(
+                              AppEventNotification(
+                                title: S.of(context).reminder,
+                                subtitle: widget.taskModel.task,
+                                dateTime: dateTime,
+                                notificationID:
+                                    int.parse(widget.taskModel.taskID),
+                              ),
+                            );
+                      }
                     },
                     onDeleteTap: () {
                       context.read<AppBloc>().add(
                             AppEventDeleteReminderFromTaskPage(
                               taskModel: widget.taskModel,
                               context: context,
+                            ),
+                          );
+                      context.read<AppBloc>().add(
+                            AppEventCancelNotification(
+                              notificationID:
+                                  int.parse(widget.taskModel.taskID),
                             ),
                           );
                       Navigator.pop(context);

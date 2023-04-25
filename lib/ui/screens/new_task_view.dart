@@ -83,17 +83,25 @@ class _NewTaskViewState extends State<NewTaskView> {
                               dateTime: dateTime,
                               context: context),
                         );
-                    context.read<AppBloc>().add(AppEventNotification(
-                        taskModel: taskModel,
-                        title: S.of(context).reminder,
-                        subtitle: taskController.text,
-                        dateTime: dateTime));
+                    if (dateTime != null && dateTime.isAfter(DateTime.now())) {
+                      context.read<AppBloc>().add(AppEventNotification(
+                          title: S.of(context).reminder,
+                          subtitle: taskController.text,
+                          dateTime: dateTime,
+                          notificationID: int.parse(taskModel.taskID)));
+                    }
                   },
                   onDeleteTap: () {
                     context.read<AppBloc>().add(
                           AppEventDeleteReminderFromNewTaskPage(
                               taskModel: taskModel, context: context),
                         );
+                    context.read<AppBloc>().add(
+                      AppEventCancelNotification(
+                        notificationID:
+                        int.parse(taskModel.taskID),
+                      ),
+                    );
                   },
                 ),
               );
