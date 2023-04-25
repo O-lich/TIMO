@@ -738,11 +738,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       const initializationSettings = InitializationSettings(
           android: androidInitialize, iOS: iOSInitialize);
       localNotifications.initialize(initializationSettings);
-
-      int? endTime = event.dateTime?.millisecondsSinceEpoch;
-      int finalTime = endTime! - DateTime.now().millisecondsSinceEpoch;
-      Future.delayed(Duration(milliseconds: finalTime), () {}).then((value) =>
-          showNotification(localNotifications, event.title, event.subtitle));
+      int endTime = event.dateTime!.millisecondsSinceEpoch;
+      int finalTime = endTime - DateTime.now().millisecondsSinceEpoch;
+      if (event.dateTime == null || event.dateTime!.isBefore(DateTime.now())) {
+        return;
+      } else {
+        Future.delayed(Duration(milliseconds: finalTime), () {}).then((value) =>
+            showNotification(localNotifications, event.title, event.subtitle));
+      }
     });
 
     on<AppEventOptionsPanelOpen>((event, emit) async {

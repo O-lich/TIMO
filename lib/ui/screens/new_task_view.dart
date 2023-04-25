@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
 import 'package:todo_app_main_screen/consts/button_colors.dart';
+import 'package:todo_app_main_screen/generated/l10n.dart';
 import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
@@ -82,6 +83,11 @@ class _NewTaskViewState extends State<NewTaskView> {
                               dateTime: dateTime,
                               context: context),
                         );
+                    context.read<AppBloc>().add(AppEventNotification(
+                        taskModel: taskModel,
+                        title: S.of(context).reminder,
+                        subtitle: taskController.text,
+                        dateTime: dateTime));
                   },
                   onDeleteTap: () {
                     context.read<AppBloc>().add(

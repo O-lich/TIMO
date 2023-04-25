@@ -33,13 +33,6 @@ class TaskView extends StatefulWidget {
 class _TaskViewState extends State<TaskView> {
   final listController = TextEditingController();
   final textController = TextEditingController();
-  late final void Function() onCountdownDone;
-
-  // @override
-  // void didChangeDependencies() {
-  //   onCountdownDone = () =>
-  //   super.didChangeDependencies();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +61,11 @@ class _TaskViewState extends State<TaskView> {
                               context: context,
                             ),
                           );
-                      context.read<AppBloc>().add(AppEventNotification(
-                          title: S.of(context).reminder,
-                          subtitle: widget.taskModel.task, dateTime: dateTime));
+                        context.read<AppBloc>().add(AppEventNotification(
+                          taskModel: widget.taskModel,
+                            title: S.of(context).reminder,
+                            subtitle: widget.taskModel.task,
+                            dateTime: dateTime));
                     },
                     onDeleteTap: () {
                       context.read<AppBloc>().add(

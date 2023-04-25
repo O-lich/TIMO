@@ -557,11 +557,13 @@ class AppEventNotification implements AppEvent {
   final String title;
   final String subtitle;
   final DateTime? dateTime;
+  final TaskModel taskModel;
 
   const AppEventNotification({
     required this.title,
     required this.subtitle,
     required this.dateTime,
+    required this.taskModel
   });
 }
 
