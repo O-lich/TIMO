@@ -48,6 +48,6 @@ class NotificationHelper {
   Future cancelNotification({
     required int notificationID,
   }) async {
-    await localNotifications.cancelAll();
+    await localNotifications.cancel(notificationID);
   }
 }
