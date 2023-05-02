@@ -788,28 +788,3 @@ Future<void> deleteListImage({
       .child('${oldList.listID}.jpg')
       .delete();
 }
-
-Future showNotification({
-  required FlutterLocalNotificationsPlugin localNotifications,
-  required int notificationID,
-  required String title,
-  required String subtitle,
-}) async {
-  const androidDetails = AndroidNotificationDetails(
-    "ID",
-    "Название уведомления",
-    importance: Importance.high,
-  );
-  const iosDetails = DarwinNotificationDetails();
-  const generalNotificationDetails =
-      NotificationDetails(android: androidDetails, iOS: iosDetails);
-  await localNotifications.show(
-      notificationID, title, subtitle, generalNotificationDetails);
-}
-
-Future cancelNotification({
-  required FlutterLocalNotificationsPlugin localNotifications,
-  required int notificationID,
-}) async {
-  await localNotifications.cancel(notificationID);
-}

@@ -8,6 +8,7 @@ import 'package:todo_app_main_screen/l10n/locales.dart';
 import 'package:todo_app_main_screen/models/quote_model.dart';
 import 'package:todo_app_main_screen/models/user_model.dart';
 import 'package:todo_app_main_screen/service/locale_provider.dart';
+import 'package:todo_app_main_screen/service/notification_helper.dart';
 import 'package:todo_app_main_screen/ui/screens/error_view.dart';
 import 'package:todo_app_main_screen/ui/screens/language_view.dart';
 import 'package:todo_app_main_screen/ui/screens/lists_view.dart';
@@ -38,9 +39,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   currentUser = await UserModel.getUserModel();
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+  NotificationHelper().initialize();
+  NotificationHelper().localNotifications.resolvePlatformSpecificImplementation<
       AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
   runApp(const MyApp());
 

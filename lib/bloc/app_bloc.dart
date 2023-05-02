@@ -9,6 +9,7 @@ import 'package:todo_app_main_screen/main.dart';
 import 'package:todo_app_main_screen/models/list_model.dart';
 import 'package:todo_app_main_screen/models/quote_model.dart';
 import 'package:todo_app_main_screen/models/single_task_model.dart';
+import 'package:todo_app_main_screen/service/notification_helper.dart';
 import 'package:todo_app_main_screen/ui/style.dart';
 import 'package:todo_app_main_screen/ui/widgets/add_new_list_panel_widget.dart';
 import 'package:todo_app_main_screen/ui/widgets/modal_bottom_sheet.dart';
@@ -728,41 +729,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventNotification>((event, emit) async {
-      final localNotifications = FlutterLocalNotificationsPlugin();
-      const androidInitialize = AndroidInitializationSettings('ic_launcher');
-      const iOSInitialize = DarwinInitializationSettings(
-        requestSoundPermission: true,
-        requestBadgePermission: true,
-        requestAlertPermission: true,
-      );
-      const initializationSettings = InitializationSettings(
-          android: androidInitialize, iOS: iOSInitialize);
-      localNotifications.initialize(initializationSettings);
-
       int? endTime = event.dateTime?.millisecondsSinceEpoch;
       int finalTime = endTime! - DateTime.now().millisecondsSinceEpoch;
       Future.delayed(Duration(milliseconds: finalTime), () {}).then((value) =>
-          showNotification(
-              localNotifications: localNotifications,
+          NotificationHelper().showNotification(
               notificationID: event.notificationID,
               title: event.title,
               subtitle: event.subtitle));
     });
 
     on<AppEventCancelNotification>((event, emit) async {
-      final localNotifications = FlutterLocalNotificationsPlugin();
-      const androidInitialize = AndroidInitializationSettings('ic_launcher');
-      const iOSInitialize = DarwinInitializationSettings(
-        requestSoundPermission: true,
-        requestBadgePermission: true,
-        requestAlertPermission: true,
-      );
-      const initializationSettings = InitializationSettings(
-          android: androidInitialize, iOS: iOSInitialize);
-      localNotifications.initialize(initializationSettings);
-
-      cancelNotification(
-        localNotifications: localNotifications,
+      NotificationHelper().cancelNotification(
         notificationID: event.notificationID,
       );
     });

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,7 +90,8 @@ class _NewTaskViewState extends State<NewTaskView> {
                           title: S.of(context).reminder,
                           subtitle: taskController.text,
                           dateTime: dateTime,
-                          notificationID: int.parse(taskModel.taskID)));
+                          notificationID: int.parse(taskModel.taskID) - 1680800000000));
+                      log((int.parse(taskModel.taskID) - 1680800000000).toString());
                     }
                   },
                   onDeleteTap: () {
@@ -96,10 +99,11 @@ class _NewTaskViewState extends State<NewTaskView> {
                           AppEventDeleteReminderFromNewTaskPage(
                               taskModel: taskModel, context: context),
                         );
+                    log((int.parse(taskModel.taskID) - 1680800000000).toString());
                     context.read<AppBloc>().add(
                       AppEventCancelNotification(
                         notificationID:
-                        int.parse(taskModel.taskID),
+                        int.parse(taskModel.taskID) - 1680800000000,
                       ),
                     );
                   },

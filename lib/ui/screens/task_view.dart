@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_main_screen/bloc/app_bloc.dart';
@@ -74,23 +76,24 @@ class _TaskViewState extends State<TaskView> {
                                 title: S.of(context).reminder,
                                 subtitle: widget.taskModel.task,
                                 dateTime: dateTime,
-                                notificationID:
-                                    int.parse(widget.taskModel.taskID),
+                                notificationID: int.parse(widget.taskModel.taskID) - 1680800000000,
                               ),
                             );
+                        log((int.parse(widget.taskModel.taskID) - 1680800000000).toString());
                       }
                     },
                     onDeleteTap: () {
                       context.read<AppBloc>().add(
+                        AppEventCancelNotification(
+                          notificationID:
+                          int.parse(widget.taskModel.taskID) - 1680800000000,
+                        ),
+                      );
+                      log((int.parse(widget.taskModel.taskID) - 1680800000000).toString());
+                      context.read<AppBloc>().add(
                             AppEventDeleteReminderFromTaskPage(
                               taskModel: widget.taskModel,
                               context: context,
-                            ),
-                          );
-                      context.read<AppBloc>().add(
-                            AppEventCancelNotification(
-                              notificationID:
-                                  int.parse(widget.taskModel.taskID),
                             ),
                           );
                       Navigator.pop(context);
