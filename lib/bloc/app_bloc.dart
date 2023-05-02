@@ -731,11 +731,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventNotification>((event, emit) async {
       int? endTime = event.dateTime?.millisecondsSinceEpoch;
       int finalTime = endTime! - DateTime.now().millisecondsSinceEpoch;
-      Future.delayed(Duration(milliseconds: finalTime), () {}).then((value) =>
-          NotificationHelper().showNotification(
-              notificationID: event.notificationID,
-              title: event.title,
-              subtitle: event.subtitle));
+      NotificationHelper().showNotification(
+          notificationID: event.notificationID,
+          title: event.title,
+          subtitle: event.subtitle,
+          finalTime: finalTime);
     });
 
     on<AppEventCancelNotification>((event, emit) async {

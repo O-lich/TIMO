@@ -1,7 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:flutter_timezone/flutter_timezone.dart';
 
 class NotificationHelper {
   final FlutterLocalNotificationsPlugin localNotifications =
@@ -18,10 +17,12 @@ class NotificationHelper {
         InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
     localNotifications.initialize(initializationSettings);
   }
+
   Future showNotification({
     required int notificationID,
     required String title,
     required String subtitle,
+    required int finalTime,
   }) async {
     const androidDetails = AndroidNotificationDetails(
       "ID",
@@ -30,15 +31,20 @@ class NotificationHelper {
     );
     const iosDetails = DarwinNotificationDetails();
     const generalNotificationDetails =
-    NotificationDetails(android: androidDetails, iOS: iosDetails);
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
     tz.initializeTimeZones();
-    //final String? timeZoneName = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation('America/Detroit'));
+
     await localNotifications.zonedSchedule(
-        notificationID, title, subtitle, tz.TZDateTime.now(tz.local).add(const Duration(seconds: 30)), generalNotificationDetails,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        notificationID,
+        title,
+        subtitle,
+        tz.TZDateTime.now(tz.local).add(Duration(milliseconds: finalTime)),
+        generalNotificationDetails,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
   }
+
   Future cancelNotification({
     required int notificationID,
   }) async {
