@@ -452,7 +452,6 @@ Future<TaskModel> singleTaskReminderDelete({
       )
       .get();
   updatedTaskModel = ref.data()!;
-
   return updatedTaskModel;
 }
 

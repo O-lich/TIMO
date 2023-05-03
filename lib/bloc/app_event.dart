@@ -568,6 +568,19 @@ class AppEventNotification implements AppEvent {
 }
 
 @immutable
+class AppEventSetDefaultReminder implements AppEvent {
+  final TaskModel taskModel;
+  final BuildContext context;
+  final DateTime dateTime;
+
+  const AppEventSetDefaultReminder({
+    required this.taskModel,
+    required this.context,
+    required this.dateTime,
+});
+}
+
+@immutable
 class AppEventCancelNotification implements AppEvent {
   final int notificationID;
 

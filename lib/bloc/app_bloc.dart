@@ -859,7 +859,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         // }
       }
     });
-  }
+
+    on<AppEventSetDefaultReminder>((event, emit) async {
+      int? endTime = event.dateTime.millisecondsSinceEpoch;
+      int finalTime = endTime - DateTime.now().millisecondsSinceEpoch;
+      Future.delayed(Duration(milliseconds: finalTime), () {
+        (singleTaskReminderDelete(
+            taskModel: event.taskModel, context: event.context));
+      });
+    });
 
   @override
   Future<void> close() {
@@ -871,4 +879,4 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
     return super.close();
   }
-}
+}}
