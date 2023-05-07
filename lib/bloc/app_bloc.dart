@@ -103,6 +103,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           dateTimeReminder: event.dateTimeReminder,
           isReminderActive: event.isReminderActive,
           taskColorIndex: event.taskColorIndex,
+          notificationId: event.notificationId,
         );
         final listsList = await getLists();
         final tasksList = await getTasks(
@@ -118,6 +119,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       } on Exception {
         emit(const ErrorAppState());
       }
+      globalNotificationId = 0;
     });
 
     // on<AppEventGoToSettingsFromPremiumView>((event, emit) async {
@@ -384,6 +386,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventSetReminderFromTaskPage>((event, emit) async {
       final updatedTaskModel = await singleTaskReminderSet(
+        notificationId: DateTime.now().millisecondsSinceEpoch - DateTime(2023, 05, 06).millisecondsSinceEpoch,
         chosenDateTime: event.dateTime,
         taskModel: event.taskModel,
         context: event.context,
@@ -405,6 +408,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         context: event.context,
       );
       final listsList = await getLists();
+      globalNotificationId = DateTime.now().millisecondsSinceEpoch - DateTime(2023, 05, 06).millisecondsSinceEpoch;
       emit(
         AddNewTaskAppState(
           listsList: listsList,
@@ -736,6 +740,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           title: event.title,
           subtitle: event.subtitle,
           finalTime: finalTime);
+      await Future.delayed(Duration(milliseconds: finalTime));
+      singleTaskReminderDelete(taskModel: event.taskModel, context: event.context);
     });
 
     on<AppEventCancelNotification>((event, emit) async {
@@ -778,6 +784,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           listID: event.taskModel.listID,
           dateTimeReminder: event.taskModel.dateTimeReminder,
           isReminderActive: event.taskModel.isReminderActive,
+          notificationId: event.taskModel.notificationId,
         );
         final listsList = await getLists();
         final tasksList = await getTasks(

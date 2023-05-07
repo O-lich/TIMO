@@ -55,6 +55,7 @@ class _NewTaskViewState extends State<NewTaskView> {
         onBlackButtonPressed: () {
           context.read<AppBloc>().add(
                 AppEventAddNewTask(
+                  notificationId: globalNotificationId,
                   taskColorIndex: taskCurrentColorIndex,
                   taskController: taskController,
                   listModel: moveToListIndex >= 0
@@ -87,11 +88,13 @@ class _NewTaskViewState extends State<NewTaskView> {
                         );
                     if (dateTime != null && dateTime.isAfter(DateTime.now())) {
                       context.read<AppBloc>().add(AppEventNotification(
+                          context: context,
+                          taskModel: taskModel,
                           title: S.of(context).reminder,
                           subtitle: taskController.text,
                           dateTime: dateTime,
-                          notificationID: int.parse(taskModel.taskID) - 1680800000000));
-                      log((int.parse(taskModel.taskID) - 1680800000000).toString());
+                          notificationID: globalNotificationId));
+                      log((globalNotificationId).toString());
                     }
                   },
                   onDeleteTap: () {
@@ -99,13 +102,12 @@ class _NewTaskViewState extends State<NewTaskView> {
                           AppEventDeleteReminderFromNewTaskPage(
                               taskModel: taskModel, context: context),
                         );
-                    log((int.parse(taskModel.taskID) - 1680800000000).toString());
+                    log((globalNotificationId).toString());
                     context.read<AppBloc>().add(
-                      AppEventCancelNotification(
-                        notificationID:
-                        int.parse(taskModel.taskID) - 1680800000000,
-                      ),
-                    );
+                          AppEventCancelNotification(
+                            notificationID: globalNotificationId,
+                          ),
+                        );
                   },
                 ),
               );

@@ -8,6 +8,7 @@ class TaskModel {
   String userID;
   String taskID;
   String dateTimeReminder;
+  int notificationId;
 
   TaskModel({
     this.dateTimeReminder = '2000-01-01 00:00:00',
@@ -17,6 +18,7 @@ class TaskModel {
     this.isReminderActive = false,
     required this.task,
     this.listID = "ToDo",
+    this.notificationId = 0,
   });
 
   factory TaskModel.fromFirestore(
@@ -32,6 +34,7 @@ class TaskModel {
       listID: data?['listID'],
       userID: data?['userID'],
       taskID: data?['taskID'],
+      notificationId: data?['notificationId'],
     );
   }
 
@@ -44,6 +47,7 @@ class TaskModel {
       "listID": listID,
       "userID": userID,
       "taskID": taskID,
+      "notificationId": notificationId,
     };
   }
 }

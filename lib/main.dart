@@ -32,6 +32,7 @@ int selectedListIndex = 0;
 int selectedTaskIndex = -1;
 int moveToListIndex = -1;
 QuoteModel quote = QuoteModel(author: 'author', content: 'content');
+int globalNotificationId = 0;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -75,36 +75,34 @@ class _TaskViewState extends State<TaskView> {
                         if (widget.taskModel.isReminderActive == true) {
                           context.read<AppBloc>().add(
                                 AppEventCancelNotification(
-                                  notificationID:
-                                      int.parse(widget.taskModel.taskID) -
-                                          1680800000000,
+                                  notificationID: widget.taskModel.notificationId,
                                 ),
                               );
                           context.read<AppBloc>().add(
                                 AppEventNotification(
+                                  context: context,
+                                  taskModel: widget.taskModel,
                                   title: S.of(context).reminder,
                                   subtitle: widget.taskModel.task,
                                   dateTime: dateTime,
-                                  notificationID:
-                                      int.parse(widget.taskModel.taskID) -
-                                          1680800000000,
+                                  notificationID: widget.taskModel.notificationId,
                                 ),
                               );
                           context.read<AppBloc>().add(
-                            AppEventSetDefaultReminder(
-                                taskModel: widget.taskModel,
-                                context: context,
-                                dateTime: dateTime)
-                          );
+                              AppEventSetDefaultReminder(
+                                  taskModel: widget.taskModel,
+                                  context: context,
+                                  dateTime: dateTime));
                         } else {
                           context.read<AppBloc>().add(
                                 AppEventNotification(
+                                  context: context,
+                                  taskModel: widget.taskModel,
                                   title: S.of(context).reminder,
                                   subtitle: widget.taskModel.task,
                                   dateTime: dateTime,
                                   notificationID:
-                                      int.parse(widget.taskModel.taskID) -
-                                          1680800000000,
+                                      widget.taskModel.notificationId,
                                 ),
                               );
                         }
@@ -113,9 +111,7 @@ class _TaskViewState extends State<TaskView> {
                     onDeleteTap: () {
                       context.read<AppBloc>().add(
                             AppEventCancelNotification(
-                              notificationID:
-                                  int.parse(widget.taskModel.taskID) -
-                                      1680800000000,
+                              notificationID: widget.taskModel.notificationId,
                             ),
                           );
                       context.read<AppBloc>().add(

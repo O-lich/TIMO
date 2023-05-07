@@ -122,7 +122,9 @@ void createNewTask(
     required ListModel currentList,
     required String dateTimeReminder,
     required bool isReminderActive,
-    required int taskColorIndex}) {
+    required int taskColorIndex,
+   required int notificationId,
+    }) {
   if (taskController.text.isNotEmpty) {
     addNewTask(
       text: taskController.text,
@@ -131,6 +133,7 @@ void createNewTask(
       colorIndex: taskColorIndex,
       dateTimeReminder: dateTimeReminder,
       isReminderActive: isReminderActive,
+      notificationId: notificationId,
     );
   }
   moveToListIndex = -1;
@@ -192,6 +195,7 @@ Future<void> addNewTask({
   required String listID,
   required String dateTimeReminder,
   bool? isReminderActive,
+  required int notificationId,
 }) async {
   final newTask = TaskModel(
     task: text,
@@ -201,6 +205,7 @@ Future<void> addNewTask({
     colorIndex: colorIndex,
     dateTimeReminder: dateTimeReminder,
     isReminderActive: isReminderActive ?? false,
+    notificationId: notificationId,
   );
   final docRef = db
       .collection("users")
@@ -403,6 +408,7 @@ Future<TaskModel> singleTaskReminderSet({
   required DateTime? chosenDateTime,
   required TaskModel taskModel,
   required BuildContext context,
+  required int notificationId,
 }) async {
   TaskModel updatedTaskModel = taskModel;
   if (chosenDateTime == null || chosenDateTime.isBefore(DateTime.now())) {
@@ -410,6 +416,7 @@ Future<TaskModel> singleTaskReminderSet({
   } else if (chosenDateTime.isAfter(DateTime.now())) {
     Navigator.pop(context);
     await updateTaskReminder(
+      notificationId: notificationId,
         updatedTask: taskModel,
         dateTimeReminder: chosenDateTime.toString(),
         isReminderActive: true);
@@ -436,6 +443,7 @@ Future<TaskModel> singleTaskReminderDelete({
 }) async {
   TaskModel updatedTaskModel = taskModel;
   await updateTaskReminder(
+      notificationId: 0,
       updatedTask: taskModel,
       dateTimeReminder: '2000-01-01 00:00:00',
       isReminderActive: false);
@@ -486,6 +494,7 @@ Future<void> updateTaskReminder({
   required TaskModel updatedTask,
   required dateTimeReminder,
   required isReminderActive,
+  required notificationId,
 }) async {
   final docRef = db
       .collection("users")
@@ -498,6 +507,7 @@ Future<void> updateTaskReminder({
   final updates = <String, dynamic>{
     "dateTimeReminder": dateTimeReminder,
     "isReminderActive": isReminderActive,
+    "notificationId": notificationId,
   };
   docRef.update(updates);
 }

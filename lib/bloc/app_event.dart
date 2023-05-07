@@ -188,6 +188,7 @@ class AppEventAddNewTask implements AppEvent {
   final bool isReminderActive;
   final String dateTimeReminder;
   final int taskColorIndex;
+  final int notificationId;
 
   const AppEventAddNewTask({
     required this.isReminderActive,
@@ -195,6 +196,7 @@ class AppEventAddNewTask implements AppEvent {
     required this.listModel,
     required this.taskController,
     required this.taskColorIndex,
+    required this.notificationId,
   });
 }
 
@@ -558,12 +560,16 @@ class AppEventNotification implements AppEvent {
   final String subtitle;
   final DateTime? dateTime;
   final int notificationID;
+  final TaskModel taskModel;
+  final BuildContext context;
 
   const AppEventNotification({
     required this.title,
     required this.subtitle,
     required this.dateTime,
     required this.notificationID,
+    required this.taskModel,
+    required this.context,
   });
 }
 
