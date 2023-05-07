@@ -45,7 +45,7 @@ class _ListsWidgetState extends State<ListsWidget> {
         Padding(
           padding: EdgeInsets.symmetric(vertical: 0.01 * widget.height),
           child: SizedBox(
-            height: 0.05 * widget.height,
+            height: 0.07 * widget.height,
             child: ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: widget.lists.length,
